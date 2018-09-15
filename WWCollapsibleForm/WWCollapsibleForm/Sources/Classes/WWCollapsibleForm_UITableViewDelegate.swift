@@ -14,28 +14,24 @@ extension WWCollapsibleForm : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header : UIView = self.sections[section].getHeader()
-        (header as? WWHeaderFooterView)?.reference = self
-        (header as? WWHeaderFooterView)?.section = section
+        let header : UIView = self.sections[section].getHeader(section: section, form: self)
         return header
     }
     
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footer : UIView? = self.sections[section].getFooter()
-        (footer as? WWHeaderFooterView)?.reference = self
-        (footer as? WWHeaderFooterView)?.section = section
+        let footer : UIView? = self.sections[section].getFooter(section: section, form: self)
         return footer ?? UIView(frame: CGRect.zero)
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.sections[section].header?.height ?? UITableViewAutomaticDimension
+        return self.sections[section].header?.height ?? UITableViewAutomaticDimension // Improve
     }
     
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if (self.sections[section].status != .selected) {
-            return self.sections[section].footer?.height ?? minimumFooterHeight
+            return self.sections[section].footer?.height ?? minimumFooterHeight // Improve
         }
-        return 1
+        return 0.000001 //Well it worked
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -43,8 +39,7 @@ extension WWCollapsibleForm : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("hello")
-        if (self.sections[indexPath.section].data[indexPath.row].autoCollapse) {
+        if (self.sections[indexPath.section].shouldAutoCollapse(row: indexPath.row)) {
             self.collapse(indexPath: indexPath)
         }
     }
