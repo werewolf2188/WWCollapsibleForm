@@ -1,0 +1,95 @@
+
+
+{
+    "menu" : {
+        "combos" : [{
+                    "id": "BIG_MAC",
+                    "name": "Big Mac",
+                    "image" : "",
+                    "price" : 10.99
+                    },
+                    {
+                    "id": "QUARTER_POUNDER",
+                    "name": "Quarter Pounder",
+                    "image" : "",
+                    "price" : 8.99
+                    },
+                    {
+                    "id": "CHICKEN_SANDWICH",
+                    "name": "Chicken Grilled Sandwich",
+                    "image" : "",
+                    "price" : 7.99
+                    }],
+        "sides" : [{
+                   "id" : "FRIES",
+                   "name" : "Fries",
+                   "image": "",
+                   "children": [{
+                                "id" : "SMALL",
+                                "name" : "Small",
+                                "price" : 1.00
+                                },
+                                {
+                                "id" : "MEDIUM",
+                                "name" : "Medium",
+                                "price" : 1.50
+                                },
+                                {
+                                "id" : "LARGE",
+                                "name" : "Large",
+                                "price" : 2.00
+                                }]
+                   }, {
+                   "id" : "SALAD",
+                   "name" : "Salad",
+                   "image": "",
+                   "children": [{
+                                "id" : "CEASAR",
+                                "name" : "Ceasar Salad",
+                                "price" : 3.00
+                                },
+                                {
+                                "id" : "MEDITERRENEAN",
+                                "name" : "Mediterrenean",
+                                "price" : 2.50
+                                }]
+                   }],
+        "desserts" : [{
+                      "id": "VANILLA",
+                      "name": "Vanilla Ice Cream",
+                      "image" : "",
+                      "price" : 1.00
+                      },
+                      {
+                      "id": "CHOCOLATE",
+                      "name": "Chocolate Ice Cream",
+                      "image" : "",
+                      "price" : 8.99
+                      }],
+        
+    },
+    "user": {
+        "name" : "Jesus Enrique Ricalde Moises",
+        "accounts" : [{
+                      "id": "ACCOUNT1",
+                      "name" : "Account 1",
+                      "type" : "ACCOUNT",
+                      "image" : "",
+                      "balance" : 3000.00
+                      },
+                      {
+                      "id": "ACCOUNT2",
+                      "name" : "Account 2",
+                      "type" : "ACCOUNT",
+                      "image" : "",
+                      "balance" : 20000.00
+                      },
+                      {
+                      "id": "CREDITCARD1",
+                      "name" : "Credit Card 1",
+                      "type" : "CREDITCARD",
+                      "image" : "",
+                      "balance" : 11000.00
+                      }]
+    }
+}

@@ -1,0 +1,604 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B017E722214A187E00353957 /* CreditCardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E721214A187E00353957 /* CreditCardHeader.swift */; };
+		B017E724214A195E00353957 /* CreditCardHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B017E723214A195E00353957 /* CreditCardHeader.xib */; };
+		B017E726214A19D900353957 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E725214A19D900353957 /* CreditCard.swift */; };
+		B017E728214A1A7700353957 /* CreditCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B017E727214A1A7700353957 /* CreditCard.xib */; };
+		B017E72A214A1BA600353957 /* SelectedCreditCardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E729214A1BA600353957 /* SelectedCreditCardHeader.swift */; };
+		B017E72C214A1C0600353957 /* SelectedCreditCardHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B017E72B214A1C0600353957 /* SelectedCreditCardHeader.xib */; };
+		B0672A04214C303C008D123C /* mcdonalds_menu.json in Resources */ = {isa = PBXBuildFile; fileRef = B0672A03214C303C008D123C /* mcdonalds_menu.json */; };
+		B075F5C82149BD1E00659691 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075F5C72149BD1E00659691 /* AppDelegate.swift */; };
+		B075F5CA2149BD1E00659691 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075F5C92149BD1E00659691 /* TableViewController.swift */; };
+		B075F5CD2149BD1E00659691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B075F5CB2149BD1E00659691 /* Main.storyboard */; };
+		B075F5CF2149BD1F00659691 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B075F5CE2149BD1F00659691 /* Assets.xcassets */; };
+		B075F5D22149BD1F00659691 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B075F5D02149BD1F00659691 /* LaunchScreen.storyboard */; };
+		B075F5DD2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075F5DC2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift */; };
+		B075F5EB2149BD7D00659691 /* WWCollapsibleForm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */; };
+		B075F5EC2149BD7D00659691 /* WWCollapsibleForm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF2214C3E1D00251E82 /* Product.swift */; };
+		B0BE4EF5214C3E9400251E82 /* SingleSizeProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */; };
+		B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */; };
+		B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF8214C3F5A00251E82 /* MultipleSizeProduct.swift */; };
+		B0BE4EFB214C3FB400251E82 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFA214C3FB400251E82 /* Menu.swift */; };
+		B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFC214C420600251E82 /* BankProduct.swift */; };
+		B0BE4EFF214C428C00251E82 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFE214C428C00251E82 /* User.swift */; };
+		B0BE4F01214C42BD00251E82 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F00214C42BD00251E82 /* Database.swift */; };
+		B0BE4F03214C438200251E82 /* SwiftInjectHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */; };
+		B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F05214C446900251E82 /* IUnitOfWork.swift */; };
+		B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B075F5D92149BD1F00659691 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B075F5BC2149BD1E00659691 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B075F5C32149BD1E00659691;
+			remoteInfo = WWCollapsibleFormExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B075F5ED2149BD7D00659691 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B075F5EC2149BD7D00659691 /* WWCollapsibleForm.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B017E721214A187E00353957 /* CreditCardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardHeader.swift; sourceTree = "<group>"; };
+		B017E723214A195E00353957 /* CreditCardHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreditCardHeader.xib; sourceTree = "<group>"; };
+		B017E725214A19D900353957 /* CreditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCard.swift; sourceTree = "<group>"; };
+		B017E727214A1A7700353957 /* CreditCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreditCard.xib; sourceTree = "<group>"; };
+		B017E729214A1BA600353957 /* SelectedCreditCardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCreditCardHeader.swift; sourceTree = "<group>"; };
+		B017E72B214A1C0600353957 /* SelectedCreditCardHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectedCreditCardHeader.xib; sourceTree = "<group>"; };
+		B0672A03214C303C008D123C /* mcdonalds_menu.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mcdonalds_menu.json; sourceTree = "<group>"; };
+		B075F5C42149BD1E00659691 /* WWCollapsibleFormExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWCollapsibleFormExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B075F5C72149BD1E00659691 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B075F5C92149BD1E00659691 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		B075F5CC2149BD1E00659691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B075F5CE2149BD1F00659691 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B075F5D12149BD1F00659691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B075F5D32149BD1F00659691 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B075F5D82149BD1F00659691 /* WWCollapsibleFormExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WWCollapsibleFormExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B075F5DC2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleUITests.swift; sourceTree = "<group>"; };
+		B075F5DE2149BD1F00659691 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WWCollapsibleForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0BE4EF2214C3E1D00251E82 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSizeProduct.swift; sourceTree = "<group>"; };
+		B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSize.swift; sourceTree = "<group>"; };
+		B0BE4EF8214C3F5A00251E82 /* MultipleSizeProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSizeProduct.swift; sourceTree = "<group>"; };
+		B0BE4EFA214C3FB400251E82 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		B0BE4EFC214C420600251E82 /* BankProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankProduct.swift; sourceTree = "<group>"; };
+		B0BE4EFE214C428C00251E82 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B0BE4F00214C42BD00251E82 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftInjectHolder.swift; sourceTree = "<group>"; };
+		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
+		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B075F5C12149BD1E00659691 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B075F5EB2149BD7D00659691 /* WWCollapsibleForm.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B075F5D52149BD1F00659691 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B017E71F214A16D800353957 /* ExampleCells */ = {
+			isa = PBXGroup;
+			children = (
+				B017E725214A19D900353957 /* CreditCard.swift */,
+				B017E727214A1A7700353957 /* CreditCard.xib */,
+			);
+			path = ExampleCells;
+			sourceTree = "<group>";
+		};
+		B017E720214A17EF00353957 /* ExampleHeadersFooters */ = {
+			isa = PBXGroup;
+			children = (
+				B017E721214A187E00353957 /* CreditCardHeader.swift */,
+				B017E723214A195E00353957 /* CreditCardHeader.xib */,
+				B017E729214A1BA600353957 /* SelectedCreditCardHeader.swift */,
+				B017E72B214A1C0600353957 /* SelectedCreditCardHeader.xib */,
+			);
+			path = ExampleHeadersFooters;
+			sourceTree = "<group>";
+		};
+		B0672A02214C2EC1008D123C /* ExampleData */ = {
+			isa = PBXGroup;
+			children = (
+				B0672A03214C303C008D123C /* mcdonalds_menu.json */,
+			);
+			path = ExampleData;
+			sourceTree = "<group>";
+		};
+		B075F5BB2149BD1E00659691 = {
+			isa = PBXGroup;
+			children = (
+				B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */,
+				B075F5C62149BD1E00659691 /* WWCollapsibleFormExample */,
+				B075F5DB2149BD1F00659691 /* WWCollapsibleFormExampleUITests */,
+				B075F5C52149BD1E00659691 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B075F5C52149BD1E00659691 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B075F5C42149BD1E00659691 /* WWCollapsibleFormExample.app */,
+				B075F5D82149BD1F00659691 /* WWCollapsibleFormExampleUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B075F5C62149BD1E00659691 /* WWCollapsibleFormExample */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE4EF0214C3DF400251E82 /* Models */,
+				B0BE4EEF214C3DEA00251E82 /* Views */,
+				B075F5C72149BD1E00659691 /* AppDelegate.swift */,
+				B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */,
+				B075F5CB2149BD1E00659691 /* Main.storyboard */,
+				B075F5CE2149BD1F00659691 /* Assets.xcassets */,
+				B075F5D02149BD1F00659691 /* LaunchScreen.storyboard */,
+				B075F5D32149BD1F00659691 /* Info.plist */,
+			);
+			path = WWCollapsibleFormExample;
+			sourceTree = "<group>";
+		};
+		B075F5DB2149BD1F00659691 /* WWCollapsibleFormExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B075F5DC2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift */,
+				B075F5DE2149BD1F00659691 /* Info.plist */,
+			);
+			path = WWCollapsibleFormExampleUITests;
+			sourceTree = "<group>";
+		};
+		B0BE4EEF214C3DEA00251E82 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B075F5C92149BD1E00659691 /* TableViewController.swift */,
+				B017E71F214A16D800353957 /* ExampleCells */,
+				B017E720214A17EF00353957 /* ExampleHeadersFooters */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B0BE4EF0214C3DF400251E82 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE4F07214C44A500251E82 /* Context */,
+				B0BE4F04214C445900251E82 /* Interfaces */,
+				B0BE4EF1214C3E0200251E82 /* Models */,
+				B0672A02214C2EC1008D123C /* ExampleData */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B0BE4EF1214C3E0200251E82 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE4EF2214C3E1D00251E82 /* Product.swift */,
+				B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */,
+				B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */,
+				B0BE4EF8214C3F5A00251E82 /* MultipleSizeProduct.swift */,
+				B0BE4EFA214C3FB400251E82 /* Menu.swift */,
+				B0BE4EFC214C420600251E82 /* BankProduct.swift */,
+				B0BE4EFE214C428C00251E82 /* User.swift */,
+				B0BE4F00214C42BD00251E82 /* Database.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B0BE4F04214C445900251E82 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE4F05214C446900251E82 /* IUnitOfWork.swift */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
+		B0BE4F07214C44A500251E82 /* Context */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */,
+			);
+			path = Context;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B075F5C32149BD1E00659691 /* WWCollapsibleFormExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B075F5E12149BD1F00659691 /* Build configuration list for PBXNativeTarget "WWCollapsibleFormExample" */;
+			buildPhases = (
+				B075F5C02149BD1E00659691 /* Sources */,
+				B075F5C12149BD1E00659691 /* Frameworks */,
+				B075F5C22149BD1E00659691 /* Resources */,
+				B075F5ED2149BD7D00659691 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWCollapsibleFormExample;
+			productName = WWCollapsibleFormExample;
+			productReference = B075F5C42149BD1E00659691 /* WWCollapsibleFormExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B075F5D72149BD1F00659691 /* WWCollapsibleFormExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B075F5E42149BD1F00659691 /* Build configuration list for PBXNativeTarget "WWCollapsibleFormExampleUITests" */;
+			buildPhases = (
+				B075F5D42149BD1F00659691 /* Sources */,
+				B075F5D52149BD1F00659691 /* Frameworks */,
+				B075F5D62149BD1F00659691 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B075F5DA2149BD1F00659691 /* PBXTargetDependency */,
+			);
+			name = WWCollapsibleFormExampleUITests;
+			productName = WWCollapsibleFormExampleUITests;
+			productReference = B075F5D82149BD1F00659691 /* WWCollapsibleFormExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B075F5BC2149BD1E00659691 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0940;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = werewolf;
+				TargetAttributes = {
+					B075F5C32149BD1E00659691 = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
+					B075F5D72149BD1F00659691 = {
+						CreatedOnToolsVersion = 9.4.1;
+						TestTargetID = B075F5C32149BD1E00659691;
+					};
+				};
+			};
+			buildConfigurationList = B075F5BF2149BD1E00659691 /* Build configuration list for PBXProject "WWCollapsibleFormExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B075F5BB2149BD1E00659691;
+			productRefGroup = B075F5C52149BD1E00659691 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B075F5C32149BD1E00659691 /* WWCollapsibleFormExample */,
+				B075F5D72149BD1F00659691 /* WWCollapsibleFormExampleUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B075F5C22149BD1E00659691 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0672A04214C303C008D123C /* mcdonalds_menu.json in Resources */,
+				B017E72C214A1C0600353957 /* SelectedCreditCardHeader.xib in Resources */,
+				B075F5D22149BD1F00659691 /* LaunchScreen.storyboard in Resources */,
+				B017E728214A1A7700353957 /* CreditCard.xib in Resources */,
+				B075F5CF2149BD1F00659691 /* Assets.xcassets in Resources */,
+				B075F5CD2149BD1E00659691 /* Main.storyboard in Resources */,
+				B017E724214A195E00353957 /* CreditCardHeader.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B075F5D62149BD1F00659691 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B075F5C02149BD1E00659691 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0BE4F03214C438200251E82 /* SwiftInjectHolder.swift in Sources */,
+				B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */,
+				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
+				B017E726214A19D900353957 /* CreditCard.swift in Sources */,
+				B075F5CA2149BD1E00659691 /* TableViewController.swift in Sources */,
+				B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */,
+				B0BE4EFB214C3FB400251E82 /* Menu.swift in Sources */,
+				B075F5C82149BD1E00659691 /* AppDelegate.swift in Sources */,
+				B017E722214A187E00353957 /* CreditCardHeader.swift in Sources */,
+				B0BE4EFF214C428C00251E82 /* User.swift in Sources */,
+				B017E72A214A1BA600353957 /* SelectedCreditCardHeader.swift in Sources */,
+				B0BE4EF5214C3E9400251E82 /* SingleSizeProduct.swift in Sources */,
+				B0BE4F01214C42BD00251E82 /* Database.swift in Sources */,
+				B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */,
+				B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */,
+				B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B075F5D42149BD1F00659691 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B075F5DD2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B075F5DA2149BD1F00659691 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B075F5C32149BD1E00659691 /* WWCollapsibleFormExample */;
+			targetProxy = B075F5D92149BD1F00659691 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B075F5CB2149BD1E00659691 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B075F5CC2149BD1E00659691 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B075F5D02149BD1F00659691 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B075F5D12149BD1F00659691 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B075F5DF2149BD1F00659691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B075F5E02149BD1F00659691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B075F5E22149BD1F00659691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B075F5E32149BD1F00659691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B075F5E52149BD1F00659691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WWCollapsibleFormExample;
+			};
+			name = Debug;
+		};
+		B075F5E62149BD1F00659691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WWCollapsibleFormExample;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B075F5BF2149BD1E00659691 /* Build configuration list for PBXProject "WWCollapsibleFormExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B075F5DF2149BD1F00659691 /* Debug */,
+				B075F5E02149BD1F00659691 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B075F5E12149BD1F00659691 /* Build configuration list for PBXNativeTarget "WWCollapsibleFormExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B075F5E22149BD1F00659691 /* Debug */,
+				B075F5E32149BD1F00659691 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B075F5E42149BD1F00659691 /* Build configuration list for PBXNativeTarget "WWCollapsibleFormExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B075F5E52149BD1F00659691 /* Debug */,
+				B075F5E62149BD1F00659691 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B075F5BC2149BD1E00659691 /* Project object */;
+}
