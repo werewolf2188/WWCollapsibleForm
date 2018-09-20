@@ -39,7 +39,7 @@ extension UIColor {
 }
 
 @UIApplicationMain
-class AppDelegate: SwiftInjectHolder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 

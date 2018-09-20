@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A1C712E1CB21BFF5A18EC57D /* Pods_WWCollapsibleFormExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E45BDB2CF6B0C2ED03F9BDC /* Pods_WWCollapsibleFormExample.framework */; };
+		B000DF0121542746003B7886 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B000DF0021542746003B7886 /* MenuView.swift */; };
 		B017E722214A187E00353957 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E721214A187E00353957 /* Header.swift */; };
 		B017E724214A195E00353957 /* Header.xib in Resources */ = {isa = PBXBuildFile; fileRef = B017E723214A195E00353957 /* Header.xib */; };
 		B017E726214A19D900353957 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E725214A19D900353957 /* CellView.swift */; };
@@ -23,6 +24,8 @@
 		B075F5DD2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075F5DC2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift */; };
 		B075F5EB2149BD7D00659691 /* WWCollapsibleForm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */; };
 		B075F5EC2149BD7D00659691 /* WWCollapsibleForm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B091752121542A820094D445 /* MenuPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091752021542A820094D445 /* MenuPresenter.swift */; };
+		B091752321542B210094D445 /* MenuInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091752221542B210094D445 /* MenuInteractor.swift */; };
 		B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF2214C3E1D00251E82 /* Product.swift */; };
 		B0BE4EF5214C3E9400251E82 /* SingleSizeProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */; };
 		B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */; };
@@ -31,7 +34,7 @@
 		B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFC214C420600251E82 /* BankProduct.swift */; };
 		B0BE4EFF214C428C00251E82 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFE214C428C00251E82 /* User.swift */; };
 		B0BE4F01214C42BD00251E82 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F00214C42BD00251E82 /* Database.swift */; };
-		B0BE4F03214C438200251E82 /* SwiftInjectHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */; };
+		B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */; };
 		B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F05214C446900251E82 /* IUnitOfWork.swift */; };
 		B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */; };
 /* End PBXBuildFile section */
@@ -64,6 +67,7 @@
 		0486BA03C2C26404243F29CC /* Pods-WWCollapsibleFormExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.release.xcconfig"; sourceTree = "<group>"; };
 		3E45BDB2CF6B0C2ED03F9BDC /* Pods_WWCollapsibleFormExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWCollapsibleFormExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8391948445E8560BFC82C95F /* Pods-WWCollapsibleFormExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.debug.xcconfig"; sourceTree = "<group>"; };
+		B000DF0021542746003B7886 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		B017E721214A187E00353957 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		B017E723214A195E00353957 /* Header.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Header.xib; sourceTree = "<group>"; };
 		B017E725214A19D900353957 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 		B075F5DC2149BD1F00659691 /* WWCollapsibleFormExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleUITests.swift; sourceTree = "<group>"; };
 		B075F5DE2149BD1F00659691 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B075F5EA2149BD7D00659691 /* WWCollapsibleForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WWCollapsibleForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B091752021542A820094D445 /* MenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPresenter.swift; sourceTree = "<group>"; };
+		B091752221542B210094D445 /* MenuInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuInteractor.swift; sourceTree = "<group>"; };
 		B0BE4EF2214C3E1D00251E82 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSizeProduct.swift; sourceTree = "<group>"; };
 		B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSize.swift; sourceTree = "<group>"; };
@@ -90,7 +96,7 @@
 		B0BE4EFC214C420600251E82 /* BankProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankProduct.swift; sourceTree = "<group>"; };
 		B0BE4EFE214C428C00251E82 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B0BE4F00214C42BD00251E82 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftInjectHolder.swift; sourceTree = "<group>"; };
+		B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwinjectStoryboard.swift; sourceTree = "<group>"; };
 		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
 		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,16 +138,65 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B017E71F214A16D800353957 /* ExampleCells */ = {
+		B000DEFC215424D1003B7886 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				B000DF0421542877003B7886 /* Interactor */,
+				B000DF032154286E003B7886 /* MVP_Presenter */,
+				B000DF0221542864003B7886 /* VIPER_Presenter */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		B000DEFE21542719003B7886 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				B075F5C92149BD1E00659691 /* TableViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		B000DEFF21542729003B7886 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B000DF0021542746003B7886 /* MenuView.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		B000DF0221542864003B7886 /* VIPER_Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B091752021542A820094D445 /* MenuPresenter.swift */,
+			);
+			path = VIPER_Presenter;
+			sourceTree = "<group>";
+		};
+		B000DF032154286E003B7886 /* MVP_Presenter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MVP_Presenter;
+			sourceTree = "<group>";
+		};
+		B000DF0421542877003B7886 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				B091752221542B210094D445 /* MenuInteractor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
+		B017E71F214A16D800353957 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				B017E725214A19D900353957 /* CellView.swift */,
 				B017E727214A1A7700353957 /* CellView.xib */,
 			);
-			path = ExampleCells;
+			path = Cells;
 			sourceTree = "<group>";
 		};
-		B017E720214A17EF00353957 /* ExampleHeadersFooters */ = {
+		B017E720214A17EF00353957 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
 				B017E721214A187E00353957 /* Header.swift */,
@@ -149,7 +204,7 @@
 				B017E729214A1BA600353957 /* SelectedHeader.swift */,
 				B017E72B214A1C0600353957 /* SelectedHeader.xib */,
 			);
-			path = ExampleHeadersFooters;
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		B0672A02214C2EC1008D123C /* ExampleData */ = {
@@ -184,10 +239,11 @@
 		B075F5C62149BD1E00659691 /* WWCollapsibleFormExample */ = {
 			isa = PBXGroup;
 			children = (
+				B000DEFC215424D1003B7886 /* Business */,
 				B0BE4EF0214C3DF400251E82 /* Models */,
 				B0BE4EEF214C3DEA00251E82 /* Views */,
 				B075F5C72149BD1E00659691 /* AppDelegate.swift */,
-				B0BE4F02214C438100251E82 /* SwiftInjectHolder.swift */,
+				B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */,
 				B075F5CB2149BD1E00659691 /* Main.storyboard */,
 				B075F5CE2149BD1F00659691 /* Assets.xcassets */,
 				B075F5D02149BD1F00659691 /* LaunchScreen.storyboard */,
@@ -208,9 +264,10 @@
 		B0BE4EEF214C3DEA00251E82 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B075F5C92149BD1E00659691 /* TableViewController.swift */,
-				B017E71F214A16D800353957 /* ExampleCells */,
-				B017E720214A17EF00353957 /* ExampleHeadersFooters */,
+				B000DEFF21542729003B7886 /* Protocols */,
+				B000DEFE21542719003B7886 /* ViewControllers */,
+				B017E71F214A16D800353957 /* Cells */,
+				B017E720214A17EF00353957 /* Headers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -220,13 +277,13 @@
 			children = (
 				B0BE4F07214C44A500251E82 /* Context */,
 				B0BE4F04214C445900251E82 /* Interfaces */,
-				B0BE4EF1214C3E0200251E82 /* Models */,
+				B0BE4EF1214C3E0200251E82 /* Entity */,
 				B0672A02214C2EC1008D123C /* ExampleData */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		B0BE4EF1214C3E0200251E82 /* Models */ = {
+		B0BE4EF1214C3E0200251E82 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
 				B0BE4EF2214C3E1D00251E82 /* Product.swift */,
@@ -238,7 +295,7 @@
 				B0BE4EFE214C428C00251E82 /* User.swift */,
 				B0BE4F00214C42BD00251E82 /* Database.swift */,
 			);
-			path = Models;
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		B0BE4F04214C445900251E82 /* Interfaces */ = {
@@ -387,10 +444,12 @@
 			inputPaths = (
 				"${SRCROOT}/../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
+				"${BUILT_PRODUCTS_DIR}/SwinjectStoryboard/SwinjectStoryboard.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectStoryboard.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -404,13 +463,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0BE4F03214C438200251E82 /* SwiftInjectHolder.swift in Sources */,
+				B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */,
 				B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */,
 				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
 				B017E726214A19D900353957 /* CellView.swift in Sources */,
 				B075F5CA2149BD1E00659691 /* TableViewController.swift in Sources */,
+				B091752321542B210094D445 /* MenuInteractor.swift in Sources */,
 				B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */,
 				B0BE4EFB214C3FB400251E82 /* Menu.swift in Sources */,
+				B000DF0121542746003B7886 /* MenuView.swift in Sources */,
 				B075F5C82149BD1E00659691 /* AppDelegate.swift in Sources */,
 				B017E722214A187E00353957 /* Header.swift in Sources */,
 				B0BE4EFF214C428C00251E82 /* User.swift in Sources */,
@@ -420,6 +481,7 @@
 				B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */,
 				B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */,
 				B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */,
+				B091752121542A820094D445 /* MenuPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

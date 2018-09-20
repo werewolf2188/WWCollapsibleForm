@@ -6,5 +6,6 @@ target 'WWCollapsibleFormExample' do
     use_frameworks!
 
     pod 'Swinject'
+    pod 'SwinjectStoryboard'
     project './WWCollapsibleFormExample/WWCollapsibleFormExample'
 end
