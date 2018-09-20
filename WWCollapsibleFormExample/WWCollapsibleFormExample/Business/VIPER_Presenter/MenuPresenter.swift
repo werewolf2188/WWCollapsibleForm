@@ -10,31 +10,40 @@ import Foundation
 import WWCollapsibleForm
 protocol MenuViewEventHandler : NSObjectProtocol {
     var view: MenuView? { get set }
+    var menuProvider : MenuProvider? { get set }
     func loadSections()
 }
 
-class MenuPresenter : NSObject, MenuViewEventHandler {
+protocol MenuOutput : NSObjectProtocol {
+    func getMenuSections(sections : [MenuSection])
+}
+
+class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
     weak var view: MenuView?
-    var menuProvider : MenuProvider!
+    var menuProvider : MenuProvider?
     
     func loadSections() {
-        var sections : [WWSection] = []
-        sections.append(self.getCreditCartSections())
-        sections.append(self.getCreditCartSections())
-        sections.append(self.getCreditCartSections())
-        sections.append(self.getCreditCartSections())
-        sections.append(self.getCreditCartSections())
-        self.view?.getSections(sections: sections)
+        self.menuProvider?.provideMenuItems()
     }
     
-    private func getCreditCartSections() -> WWSection {
+    func getMenuSections(sections : [MenuSection])  {
+        let wsections : [WWSection] = sections.map { (mSection) -> WWSection in
+            self.getItemData(items: mSection.items)
+        }
+        
+        
+        self.view?.getSections(sections: wsections)
+    }
+    
+    private func getItemData(items: [MenuItem]) -> WWSection {
         
         let section : WWSection = WWSection(header: WWViewRepresentation(headerView: Header()),
                                             template: WWViewRepresentation(view: CellView()),
                                             selectedHeader: WWViewRepresentation(headerView: SelectedHeader()))
         
-        section.appendData(data: WWTemplateDataObject())
-        section.appendData(data: WWTemplateDataObject())
+        items.forEach { (item) in
+            section.appendData(data: WWTemplateDataObject())
+        }
         return section
     }
 }

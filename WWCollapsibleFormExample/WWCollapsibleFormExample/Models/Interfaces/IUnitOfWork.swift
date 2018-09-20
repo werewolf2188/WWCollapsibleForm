@@ -9,5 +9,5 @@
 import Foundation
 
 protocol IUnitOfWork : NSObjectProtocol {
-    
+    var database : Database! { get set }
 }
