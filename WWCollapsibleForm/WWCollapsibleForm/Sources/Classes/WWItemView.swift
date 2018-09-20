@@ -7,7 +7,7 @@
 //
 
 import Foundation
-open class WWItemView : UIView {
+open class WWItemView : UIView, WWStatusApplier {
     internal var reference: WWCollapsibleForm!
     internal var indexPath: IndexPath!
     

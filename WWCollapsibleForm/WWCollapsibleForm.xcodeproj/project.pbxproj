@@ -20,7 +20,7 @@
 		C2344A31214DB0E50035B98D /* WWNonTemplateDataObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A30214DB0E50035B98D /* WWNonTemplateDataObject.swift */; };
 		C2344A33214DB1690035B98D /* WWStatusDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A32214DB1690035B98D /* WWStatusDecorator.swift */; };
 		C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A34214DB1C00035B98D /* WWItemView.swift */; };
-		C2344A37214DB1D60035B98D /* WWHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A36214DB1D60035B98D /* WWHeaderFooterView.swift */; };
+		C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A36214DB1D60035B98D /* WWHeaderView.swift */; };
 		C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +40,7 @@
 		C2344A30214DB0E50035B98D /* WWNonTemplateDataObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWNonTemplateDataObject.swift; sourceTree = "<group>"; };
 		C2344A32214DB1690035B98D /* WWStatusDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWStatusDecorator.swift; sourceTree = "<group>"; };
 		C2344A34214DB1C00035B98D /* WWItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWItemView.swift; sourceTree = "<group>"; };
-		C2344A36214DB1D60035B98D /* WWHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWHeaderFooterView.swift; sourceTree = "<group>"; };
+		C2344A36214DB1D60035B98D /* WWHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWHeaderView.swift; sourceTree = "<group>"; };
 		C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSelectedHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,7 +98,7 @@
 				C2344A24214DAF0E0035B98D /* WWCollapsibleForm_UITableViewDelegate.swift */,
 				C2344A26214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift */,
 				C2344A2C214DB0990035B98D /* WWDataObject.swift */,
-				C2344A36214DB1D60035B98D /* WWHeaderFooterView.swift */,
+				C2344A36214DB1D60035B98D /* WWHeaderView.swift */,
 				C2344A34214DB1C00035B98D /* WWItemView.swift */,
 				C2344A30214DB0E50035B98D /* WWNonTemplateDataObject.swift */,
 				C2344A28214DAFCB0035B98D /* WWSection.swift */,
@@ -210,7 +210,7 @@
 				B0BE4F0D214C586900251E82 /* UIView_Private_HelperMethods.swift in Sources */,
 				C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */,
 				C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */,
-				C2344A37214DB1D60035B98D /* WWHeaderFooterView.swift in Sources */,
+				C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

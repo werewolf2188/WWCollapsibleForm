@@ -30,9 +30,9 @@ class ViewController: UIViewController {
 
     func getCreditCartSections() -> WWSection {
         
-        let section : WWSection = WWSection(header: WWViewRepresentation(headerFooterView: CreditCardHeader()),
-                                            template: WWViewRepresentation(view: CreditCard()),
-                                            selectedHeader: WWViewRepresentation(headerFooterView: SelectedCreditCardHeader()))
+        let section : WWSection = WWSection(header: WWViewRepresentation(headerView: Header()),
+                                            template: WWViewRepresentation(view: CellView()),
+                                            selectedHeader: WWViewRepresentation(headerView: SelectedHeader()))
         
         section.appendData(data: WWTemplateDataObject())
         section.appendData(data: WWTemplateDataObject())

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-open class WWSelectedHeaderView: WWHeaderFooterView {
+open class WWSelectedHeaderView: WWHeaderView {
     public func expand() {
         self.reference.expand(section: self.section)
     }

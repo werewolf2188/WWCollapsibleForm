@@ -31,7 +31,7 @@
             </objects>
             <point key="canvasLocation" x="-119" y="131"/>
         </scene>
-        <!--View Controller-->
+        <!--Choose your order-->
         <scene sceneID="1bR-RY-5qb">
             <objects>
                 <viewController id="DKS-3P-cOZ" customClass="ViewController" customModule="WWCollapsibleFormExample" customModuleProvider="target" sceneMemberID="viewController">
@@ -53,7 +53,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="osL-qr-XoN"/>
                     </view>
-                    <navigationItem key="navigationItem" id="vO2-N8-fmU"/>
+                    <navigationItem key="navigationItem" title="Choose your order" id="vO2-N8-fmU"/>
                     <connections>
                         <outlet property="form" destination="2aB-JQ-nNB" id="1Bw-lm-hFG"/>
                     </connections>

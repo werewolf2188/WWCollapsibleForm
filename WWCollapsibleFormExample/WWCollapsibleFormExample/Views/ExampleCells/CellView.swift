@@ -1,5 +1,5 @@
 //
-//  CreditCardHeader.swift
+//  CreditCard.swift
 //  WWCollapsibleFormExample
 //
 //  Created by Enrique Ricalde on 9/12/18.
@@ -8,9 +8,9 @@
 
 import UIKit
 import WWCollapsibleForm
+class CellView: WWItemView {
 
-class CreditCardHeader: WWHeaderFooterView {
-
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

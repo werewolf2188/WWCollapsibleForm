@@ -7,7 +7,7 @@
 //
 
 import Foundation
-open class WWHeaderFooterView: UIView {
+open class WWHeaderView: UIView, WWStatusApplier {
     internal var reference: WWCollapsibleForm!
     internal var section : Int!
     

@@ -25,10 +25,10 @@ public class WWViewRepresentation : NSObject {
         }
     }
     
-    public init(headerFooterView: WWHeaderFooterView) {
+    public init(headerView: WWHeaderView) {
         super.init()
-        self.bundle = Bundle(for: type(of: headerFooterView))
-        self.viewName = String(describing: type(of: headerFooterView))
+        self.bundle = Bundle(for: type(of: headerView))
+        self.viewName = String(describing: type(of: headerView))
         self.height = self.createView().frame.size.height
     }
     

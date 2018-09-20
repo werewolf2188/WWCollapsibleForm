@@ -1,5 +1,5 @@
 //
-//  CreditCard.swift
+//  SelectedCreditCardHeader.swift
 //  WWCollapsibleFormExample
 //
 //  Created by Enrique Ricalde on 9/12/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 import WWCollapsibleForm
-class CreditCard: WWItemView {
+class SelectedHeader: WWSelectedHeaderView {
 
     /*
     // Only override draw() if you perform custom drawing.
@@ -18,4 +18,7 @@ class CreditCard: WWItemView {
     }
     */
 
+    @IBAction func OnModify(_ sender: Any) {
+        self.expand()
+    }
 }

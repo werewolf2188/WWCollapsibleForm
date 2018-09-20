@@ -22,11 +22,9 @@ public class WWSection : NSObject {
         case selected
     }
     public var status : WWStatus = .disabled
-    public var footer: WWViewRepresentation?
     
     private var _headerView : UIView!
     private var _selectedHeaderView : UIView!
-    private var _footerView : UIView? = nil
     private var views : [WWViewInfo] = [] //Transform this into either class or struct
 
     internal var header : WWViewRepresentation?
@@ -42,38 +40,20 @@ public class WWSection : NSObject {
         if (status != .selected) {
             if _headerView == nil {
                 _headerView = self.header?.createView()
-                 (_headerView as? WWHeaderFooterView)?.reference = form
-                 (_headerView as? WWHeaderFooterView)?.section = section
+                 (_headerView as? WWHeaderView)?.reference = form
+                 (_headerView as? WWHeaderView)?.section = section
             }
             return _headerView
         } else {
             if _selectedHeaderView == nil {
                 _selectedHeaderView = self.selectedHeader?.createView()
-                (_selectedHeaderView as? WWHeaderFooterView)?.reference = form
-                 (_selectedHeaderView as? WWHeaderFooterView)?.section = section
+                (_selectedHeaderView as? WWHeaderView)?.reference = form
+                 (_selectedHeaderView as? WWHeaderView)?.section = section
             }
             return _selectedHeaderView
         }
     }
-    
-    internal func getFooter(section: Int, form : WWCollapsibleForm) -> UIView? {
-        if (self.status != .selected) {
-            if let footer = self.footer?.createView() {
-                _footerView = footer
-                (_footerView as? WWHeaderFooterView)?.reference = form
-                (_footerView as? WWHeaderFooterView)?.section = section
-            } else {
-                let footer : UIView = UIView()
-                footer.backgroundColor = self.getHeader(section: section, form: form).backgroundColor
-                
-                _footerView = footer
-            }
-        } else {
-            _footerView = nil
-        }
-        return _footerView
-    }
-    
+   
     internal func getRows() -> Int {
         if self.status == .selected {
             return 0
@@ -91,10 +71,12 @@ public class WWSection : NSObject {
     
     internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) {
         
-        if (self.data[row] is WWTemplateDataObject) {
-            let childrenView : UIView = self.template.createView()
+        if (self.data[row] is WWTemplateDataObject) {            
+            let childrenView : UIView = self.views[row].view
+            childrenView.frame = cell.bounds
             childrenView.tag = form.itemTag
             (childrenView as? WWItemView)?.reference = form
+            (childrenView as? WWItemView)?.applyStatus(status: self.status)
             cell.contentView.addSubViewWithConstraints(childrenView)
             if (row != self.data.count - 1){
                 UIView.addSeparator(subView: childrenView)
@@ -133,5 +115,4 @@ public class WWSection : NSObject {
         self.template = template
         self.selectedHeader = selectedHeader
     }
-    
 }
