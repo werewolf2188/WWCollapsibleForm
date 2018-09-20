@@ -19,19 +19,3 @@ public class WWStatusDecorator : NSObject {
         self.decoratorFunction?(view)
     }
 }
-
-
-protocol WWStatusApplier : NSObjectProtocol {
-    var enableDecorator: WWStatusDecorator? { get set }
-    var disableDecorator: WWStatusDecorator? { get set }
-}
-
-extension WWStatusApplier where Self : UIView {
-    func applyStatus(status: WWSection.WWStatus) {
-        if status == .disabled {
-            self.disableDecorator?.decorate(view: self)
-        } else if (status == .enabled) {
-            self.enableDecorator?.decorate(view: self)
-        }
-    }
-}
