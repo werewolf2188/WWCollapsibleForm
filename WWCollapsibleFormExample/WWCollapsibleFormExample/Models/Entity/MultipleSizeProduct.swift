@@ -10,7 +10,7 @@
 import UIKit
 
 class MultipleSizeProduct: Product {
-    var children: [ProductSize] = []
+    let children: [ProductSize]!
     
     private enum CodingKeys: String, CodingKey {
         case children
@@ -19,7 +19,7 @@ class MultipleSizeProduct: Product {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)        
         var nestedContainer = try container.nestedUnkeyedContainer(forKey: .children)
-        children.removeAll()
+        children = []
         while (!nestedContainer.isAtEnd) {
             let size = try nestedContainer.decode(ProductSize.self)
             children.append(size)

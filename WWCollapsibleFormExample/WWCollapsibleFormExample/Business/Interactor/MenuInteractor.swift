@@ -25,15 +25,22 @@ class MenuInteractor: NSObject, MenuProvider {
                     self.getAsItems(singleSizeProducts: context.database.menu.combos, title: "Combos"),
                     self.getAsItems(multipleSizeProducts: context.database.menu.sides, title: "Sides"),
                     self.getAsItems(singleSizeProducts: context.database.menu.desserts, title: "Desserts"),
-                
+                    self.getAsItems(bankProduct: context.database.user.accounts, title: "User", subtitle: context.database.user.name),
                 ])
         }
     }
     
     private func getAsItems(singleSizeProducts: [SingleSizeProduct],title: String , subtitle:String? = nil) -> MenuSection {
         let items : [MenuItem] = singleSizeProducts.map { (product) -> MenuItem in
-            //print(product.price)
-            return MenuItem(id: product.id, name: product.name, image: product.image, price: 0, children: [])
+            MenuItem(id: product.id, name: product.name, image: product.image, price: product.price, children: [])
+        }
+        let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
+        return menuSection
+    }
+    
+    private func getAsItems(bankProduct: [BankProduct],title: String , subtitle:String? = nil) -> MenuSection {
+        let items : [MenuItem] = bankProduct.map { (product) -> MenuItem in
+            MenuItem(id: "\(product.id)|\(product.type.rawValue)" , name: product.name, image: product.image, price: product.balance, children: [])
         }
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
         return menuSection
@@ -41,17 +48,15 @@ class MenuInteractor: NSObject, MenuProvider {
     
     private func getAsItems(multipleSizeProducts: [MultipleSizeProduct],title: String, subtitle:String? = nil) -> MenuSection {
         let items : [MenuItem] = multipleSizeProducts.map { (product) -> MenuItem in
-            
-//            let subItems : [MenuItem] = product.children.map({ (pSize) -> MenuItem in
-//                MenuItem(id: "", name: "", image: nil, price: nil, children:nil)
-//            })
-            return MenuItem(id: product.id, name: product.name, image: product.image, price: nil, children: [] )
+            MenuItem(id: product.id, name: product.name, image: product.image, price: nil, children:
+                product.children.map({ (pSize) -> MenuItem in
+                    MenuItem(id: pSize.id, name: pSize.name, image: nil, price: pSize.price, children:nil)
+                })
+            )
         }
         
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
         return menuSection
-        
-        
     }
     
     

@@ -15,8 +15,8 @@ enum ProductType : String, CodingKey {
 }
 
 class BankProduct: Product {
-    var balance : Float = 0
-    var type : ProductType = .none
+    let balance : Float!
+    let type : ProductType!
     
     private enum CodingKeys: String, CodingKey {
         case balance
