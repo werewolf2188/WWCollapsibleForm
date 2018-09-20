@@ -17,6 +17,6 @@ struct MenuItem {
     var id : String!
     var name : String!
     var image : String?
-    var price : Double? 
+    var price : Double? = 0
     var children : [MenuItem]?
 }

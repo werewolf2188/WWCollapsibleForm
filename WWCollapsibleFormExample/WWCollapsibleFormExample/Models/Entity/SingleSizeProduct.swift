@@ -9,7 +9,7 @@
 import UIKit
 
 class SingleSizeProduct: Product {
-    var price : Double = 0
+    var price : Double? = 0
     
     private enum CodingKeys: String, CodingKey {
         case price
@@ -17,7 +17,7 @@ class SingleSizeProduct: Product {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.price = try container.decode(Double.self, forKey: .price)
+        self.price = try container.decodeIfPresent(Double.self, forKey: .price)
         try super.init(from: decoder)
     }
 }

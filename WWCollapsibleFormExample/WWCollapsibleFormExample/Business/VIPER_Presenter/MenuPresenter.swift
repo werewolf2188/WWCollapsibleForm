@@ -30,8 +30,6 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         let wsections : [WWSection] = sections.map { (mSection) -> WWSection in
             self.getItemData(items: mSection.items)
         }
-        
-        
         self.view?.getSections(sections: wsections)
     }
     

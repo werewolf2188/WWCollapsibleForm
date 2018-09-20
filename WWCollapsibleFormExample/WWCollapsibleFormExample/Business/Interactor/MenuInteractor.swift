@@ -32,7 +32,8 @@ class MenuInteractor: NSObject, MenuProvider {
     
     private func getAsItems(singleSizeProducts: [SingleSizeProduct],title: String , subtitle:String? = nil) -> MenuSection {
         let items : [MenuItem] = singleSizeProducts.map { (product) -> MenuItem in
-            MenuItem(id: product.id, name: product.name, image: product.image, price: nil, children: [])
+            //print(product.price)
+            return MenuItem(id: product.id, name: product.name, image: product.image, price: 0, children: [])
         }
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
         return menuSection
@@ -41,12 +42,10 @@ class MenuInteractor: NSObject, MenuProvider {
     private func getAsItems(multipleSizeProducts: [MultipleSizeProduct],title: String, subtitle:String? = nil) -> MenuSection {
         let items : [MenuItem] = multipleSizeProducts.map { (product) -> MenuItem in
             
-            MenuItem(id: product.id, name: product.name, image: product.image, price: nil, children:
-//                product.children.map({ (pSize) -> MenuItem in
-//                    MenuItem(id: pSize.id, name: pSize.name, image: nil, price: 0, children:nil)
-//                })
-                []
-            )
+//            let subItems : [MenuItem] = product.children.map({ (pSize) -> MenuItem in
+//                MenuItem(id: "", name: "", image: nil, price: nil, children:nil)
+//            })
+            return MenuItem(id: product.id, name: product.name, image: product.image, price: nil, children: [] )
         }
         
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
