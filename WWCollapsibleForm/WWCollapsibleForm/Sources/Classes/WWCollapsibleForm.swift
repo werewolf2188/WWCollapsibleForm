@@ -17,6 +17,7 @@ public class WWCollapsibleForm : UITableView {
     let itemTag : Int = 1000
     
     public var formDelegate : WWCollapsibleFormDelegate?
+    public var collapseDelegate: WWCollapsibleFormCollapseDelegate?
     
     private func initialize() {        
         self.register(UITableViewCell.self, forCellReuseIdentifier: cellString)

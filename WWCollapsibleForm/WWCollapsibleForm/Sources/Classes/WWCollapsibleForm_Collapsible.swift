@@ -23,6 +23,7 @@ extension WWCollapsibleForm {
     }
     
     func collapse(section : Int) {
+        self.collapseDelegate?.willCollapse(section: section, form: self)
         CATransaction.begin()
         self.beginUpdates()
         CATransaction.setCompletionBlock {
@@ -30,6 +31,7 @@ extension WWCollapsibleForm {
             if (nextSection < self.sections.count
                 && self.sections[nextSection].status == .disabled) {
                 self.scrollAndEnable(nextSection: nextSection)
+                self.collapseDelegate?.didCollapse(section: section, form: self)
             }
         }
         self.sections[section].status = .selected
@@ -43,7 +45,9 @@ extension WWCollapsibleForm {
     }
     
     func expand(section : Int) {
+        self.collapseDelegate?.willExpand(section: section, form: self)
         self.sections[section].status = .enabled
         self.reloadSections([section], with: .fade)
+        self.collapseDelegate?.didExpand(section: section, form: self)
     }
 }
