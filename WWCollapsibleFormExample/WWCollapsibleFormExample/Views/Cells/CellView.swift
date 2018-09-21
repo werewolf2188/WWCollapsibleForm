@@ -8,9 +8,26 @@
 
 import UIKit
 import WWCollapsibleForm
-class CellView: WWItemView {
+class CellView: WWItemView, MenuItemView {
 
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var moneyLabel: UILabel!
     
+    func set(productName: String) {
+        self.productName.text = productName
+    }
+    
+    func setImage(image: String?) {
+        if image == nil || image?.isEmpty == true{
+            self.imageView.isHidden = true
+        }
+        // else more to come
+    }
+    
+    func set(money: String) {
+        self.moneyLabel.text = money
+    }
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

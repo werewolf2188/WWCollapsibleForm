@@ -30,6 +30,9 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="titleLabel" destination="FUM-DA-ZeH" id="dnG-Js-2Nd"/>
+            </connections>
             <point key="canvasLocation" x="37" y="-194.5"/>
         </view>
     </objects>

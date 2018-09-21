@@ -58,6 +58,4 @@ class MenuInteractor: NSObject, MenuProvider {
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
         return menuSection
     }
-    
-    
 }

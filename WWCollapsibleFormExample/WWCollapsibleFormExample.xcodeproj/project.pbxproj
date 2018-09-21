@@ -27,6 +27,9 @@
 		B091752121542A820094D445 /* MenuPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091752021542A820094D445 /* MenuPresenter.swift */; };
 		B091752321542B210094D445 /* MenuInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091752221542B210094D445 /* MenuInteractor.swift */; };
 		B091752621543A4D0094D445 /* MenuSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B091752521543A4D0094D445 /* MenuSection.swift */; };
+		B0B77BB521547834006F174A /* MenuItemHeaderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B77BB421547834006F174A /* MenuItemHeaderViews.swift */; };
+		B0B77BB821547C03006F174A /* MenuHeaderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B77BB721547C03006F174A /* MenuHeaderPresenter.swift */; };
+		B0B77BBA21547DD7006F174A /* MenuItemPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B77BB921547DD7006F174A /* MenuItemPresenter.swift */; };
 		B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF2214C3E1D00251E82 /* Product.swift */; };
 		B0BE4EF5214C3E9400251E82 /* SingleSizeProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */; };
 		B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */; };
@@ -90,6 +93,9 @@
 		B091752021542A820094D445 /* MenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPresenter.swift; sourceTree = "<group>"; };
 		B091752221542B210094D445 /* MenuInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuInteractor.swift; sourceTree = "<group>"; };
 		B091752521543A4D0094D445 /* MenuSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSection.swift; sourceTree = "<group>"; };
+		B0B77BB421547834006F174A /* MenuItemHeaderViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemHeaderViews.swift; sourceTree = "<group>"; };
+		B0B77BB721547C03006F174A /* MenuHeaderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderPresenter.swift; sourceTree = "<group>"; };
+		B0B77BB921547DD7006F174A /* MenuItemPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemPresenter.swift; sourceTree = "<group>"; };
 		B0BE4EF2214C3E1D00251E82 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0BE4EF4214C3E9400251E82 /* SingleSizeProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSizeProduct.swift; sourceTree = "<group>"; };
 		B0BE4EF6214C3F1F00251E82 /* ProductSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSize.swift; sourceTree = "<group>"; };
@@ -162,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				B000DF0021542746003B7886 /* MenuView.swift */,
+				B0B77BB421547834006F174A /* MenuItemHeaderViews.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -177,6 +184,8 @@
 		B000DF032154286E003B7886 /* MVP_Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				B0B77BB721547C03006F174A /* MenuHeaderPresenter.swift */,
+				B0B77BB921547DD7006F174A /* MenuItemPresenter.swift */,
 			);
 			path = MVP_Presenter;
 			sourceTree = "<group>";
@@ -474,6 +483,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0B77BB821547C03006F174A /* MenuHeaderPresenter.swift in Sources */,
 				B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */,
 				B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */,
 				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
@@ -487,8 +497,10 @@
 				B091752621543A4D0094D445 /* MenuSection.swift in Sources */,
 				B017E722214A187E00353957 /* Header.swift in Sources */,
 				B0BE4EFF214C428C00251E82 /* User.swift in Sources */,
+				B0B77BBA21547DD7006F174A /* MenuItemPresenter.swift in Sources */,
 				B017E72A214A1BA600353957 /* SelectedHeader.swift in Sources */,
 				B0BE4EF5214C3E9400251E82 /* SingleSizeProduct.swift in Sources */,
+				B0B77BB521547834006F174A /* MenuItemHeaderViews.swift in Sources */,
 				B0BE4F01214C42BD00251E82 /* Database.swift in Sources */,
 				B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */,
 				B0BE4EF3214C3E1D00251E82 /* Product.swift in Sources */,

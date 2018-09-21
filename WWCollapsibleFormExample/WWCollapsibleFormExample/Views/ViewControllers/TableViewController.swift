@@ -15,6 +15,7 @@ class ViewController: UIViewController, MenuView {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eventHandler?.loadSections()
+        self.form.formDelegate = self
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -28,8 +29,23 @@ class ViewController: UIViewController, MenuView {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
 
+extension ViewController : WWCollapsibleFormDelegate {
+    func modifyHeader(header: UIView, section: Int) {
+        if let header = header as? MenuHeaderView {
+            self.eventHandler?.loadHeader(header: header, section: section)
+        }
+    }
     
-
+    func modifyItem(item: UIView, indexPath: IndexPath) {
+        if let item = item as? MenuItemView {
+            self.eventHandler?.loadItem(item: item, section: indexPath.section, row: indexPath.row)
+        }
+    }
+    
+    func itemSelected(indexPath: IndexPath) {
+        self.eventHandler?.itemSelected(section: indexPath.section, row: indexPath.row)
+    }
 }
 

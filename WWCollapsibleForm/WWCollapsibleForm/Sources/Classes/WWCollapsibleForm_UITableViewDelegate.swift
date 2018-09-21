@@ -15,7 +15,10 @@ extension WWCollapsibleForm : UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         /// optimize
-        self.sections[indexPath.section].addView(form: self, cell: cell, row: indexPath.row)
+        
+        if let view = self.sections[indexPath.section].addView(form: self, cell: cell, row: indexPath.row) {
+            self.formDelegate?.modifyItem(item: view, indexPath: indexPath)
+        }
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -30,6 +33,7 @@ extension WWCollapsibleForm : UITableViewDelegate {
                 UIView.addSeparator(subView: lastView, color: UIColor.white)
             }
         }
+        self.formDelegate?.modifyHeader(header: header, section: section)
         return header
     }
     
@@ -62,6 +66,7 @@ extension WWCollapsibleForm : UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (self.sections[indexPath.section].shouldAutoCollapse(row: indexPath.row)) {
+            self.formDelegate?.itemSelected(indexPath: indexPath)
             self.collapse(indexPath: indexPath)
         }
     }

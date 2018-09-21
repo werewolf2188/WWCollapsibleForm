@@ -17,6 +17,8 @@ public class WWCollapsibleForm : UITableView {
     let minimumFooterHeight : CGFloat = 20
     let itemTag : Int = 1000
     
+    public var formDelegate : WWCollapsibleFormDelegate?
+    
     private func initialize() {        
         self.register(UITableViewCell.self, forCellReuseIdentifier: cellString)
         self.separatorStyle = .none

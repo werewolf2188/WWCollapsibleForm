@@ -51,6 +51,11 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="imageView" destination="PTT-KT-SSr" id="ckO-Kj-5HA"/>
+                <outlet property="moneyLabel" destination="wQn-bq-xpW" id="DMb-30-qne"/>
+                <outlet property="productName" destination="bGL-UD-k4F" id="gbK-eZ-a1b"/>
+            </connections>
             <point key="canvasLocation" x="34" y="44.5"/>
         </view>
     </objects>

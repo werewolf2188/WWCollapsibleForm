@@ -69,7 +69,7 @@ public class WWSection : NSObject {
         return self.views.filter({ $0.row == row }).first?.autoCollapse ?? false
     }
     
-    internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) {
+    internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) -> UIView? {
         
         if (self.data[row] is WWTemplateDataObject) {            
             let childrenView : UIView = self.views[row].view
@@ -81,7 +81,9 @@ public class WWSection : NSObject {
             if (row != self.data.count - 1){
                 UIView.addSeparator(subView: childrenView)
             }
+            return childrenView
         }
+        return nil
     }
     
     public convenience init(header: WWViewRepresentation?, template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {

@@ -9,8 +9,19 @@
 import UIKit
 import WWCollapsibleForm
 
-class Header: WWHeaderView {
+class Header: WWHeaderView, MenuHeaderView {
+    func set(title: String) {
+        self.titleLabel.text = title
+    }
+    
+    func setSubtitle(title: String?) {
+        if let titletext = self.titleLabel.text, let subTitle = title {
+            self.titleLabel.text = "\(titletext): \(subTitle)"
+        }
+    }
+    
 
+    @IBOutlet weak var titleLabel: UILabel!
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

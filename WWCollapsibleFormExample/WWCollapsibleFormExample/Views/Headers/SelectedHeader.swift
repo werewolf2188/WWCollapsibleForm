@@ -8,8 +8,37 @@
 
 import UIKit
 import WWCollapsibleForm
-class SelectedHeader: WWSelectedHeaderView {
-
+class SelectedHeader: WWSelectedHeaderView, MenuSelectedHeader {
+    func set(productName: String) {
+        self.productName.text = productName
+    }
+    
+    func setImage(image: String?) {
+        if image == nil || image?.isEmpty == true {
+            self.imageView.isHidden = true
+        }
+        // else more to come
+    }
+    
+    func set(money: String) {
+        self.moneyLabel.text = money
+    }
+    
+    func set(title: String) {
+        self.titleLabel.text = title
+    }
+    
+    func setSubtitle(title: String?) {
+        if let titletext = self.titleLabel.text, let subTitle = title {
+            self.titleLabel.text = "\(titletext): \(subTitle)"
+        }
+    }
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var productName: UILabel!
+    @IBOutlet weak var moneyLabel: UILabel!
+    @IBOutlet weak var modifyButton: UIButton!
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
