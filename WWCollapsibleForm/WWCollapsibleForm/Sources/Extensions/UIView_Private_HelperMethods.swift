@@ -77,6 +77,12 @@ extension UIView {
         let layerMinusHeight : CGFloat = 20
         
         self.removeSeparator()
+        
+        if let sublayers = self.layer.sublayers,
+            (sublayers.filter({$0.name == self.diagonalName}).count > 0) {
+            return
+        }
+        
         shapeLayer = CAShapeLayer()
         shapeLayer.name = self.diagonalName
         let path : CGMutablePath = CGMutablePath()

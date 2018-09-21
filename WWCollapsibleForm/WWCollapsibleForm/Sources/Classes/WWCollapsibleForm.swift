@@ -40,6 +40,9 @@ public class WWCollapsibleForm : UITableView {
     
     //Add new section
     public func append(section: WWSection) {
+        if self.sections.count == 0 {
+            section.status = .enabled
+        }
         section.section = self.sections.count
         self.sections.append(section)
     }

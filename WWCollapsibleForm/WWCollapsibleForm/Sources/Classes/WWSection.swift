@@ -67,7 +67,9 @@ public class WWSection : NSObject {
     }
     
     internal func shouldAutoCollapse(row: Int) -> Bool {
-        return self.views.filter({ $0.row == row }).first?.autoCollapse ?? false
+        let autoCollapse = self.views.filter({ $0.row == row }).first?.autoCollapse ?? false
+        let isEnabled = self.views.filter({ $0.row == row }).first?.view.isUserInteractionEnabled ?? false
+        return autoCollapse && isEnabled
     }
     
     internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) -> UIView? {

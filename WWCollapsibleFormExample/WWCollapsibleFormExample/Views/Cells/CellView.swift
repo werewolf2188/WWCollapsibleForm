@@ -28,6 +28,24 @@ class CellView: WWItemView, MenuItemView {
     func set(money: String) {
         self.moneyLabel.text = money
     }
+    
+    override func awakeFromNib() {
+        self.disableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
+            self.backgroundColor = UIColor.lightGray
+            self.productName.textColor = UIColor.darkGray
+            self.moneyLabel.textColor = UIColor.darkGray
+            self.imageView.backgroundColor = UIColor.darkGray
+            self.isUserInteractionEnabled = false
+        })
+        self.enableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
+            self.backgroundColor = UIColor.white
+            self.productName.textColor = UIColor.black
+            self.moneyLabel.textColor = UIColor.black
+            self.imageView.backgroundColor = UIColor.clear
+            self.isUserInteractionEnabled = true
+        })
+    }
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

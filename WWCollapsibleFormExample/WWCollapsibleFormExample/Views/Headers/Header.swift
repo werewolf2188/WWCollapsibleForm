@@ -22,6 +22,21 @@ class Header: WWHeaderView, MenuHeaderView {
     
 
     @IBOutlet weak var titleLabel: UILabel!
+    
+    
+    override func awakeFromNib() {
+        self.disableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
+            self.backgroundColor = UIColor.lightGray
+            self.titleLabel.textColor = UIColor.darkGray
+            self.isUserInteractionEnabled = false
+        })
+        
+        self.enableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
+            self.backgroundColor = UIColor.white
+            self.titleLabel.textColor = UIColor.black
+            self.isUserInteractionEnabled = true
+        })
+    }
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

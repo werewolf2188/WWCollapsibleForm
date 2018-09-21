@@ -23,6 +23,7 @@ extension WWCollapsibleForm : UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header : UIView = self.sections[section].getHeader(section: section, form: self)
+        (header as? WWHeaderView)?.applyStatus(status: self.sections[section].status)
         if (self.sections[section].status == .selected) {
             if section == self.getTopSelectedIndex() {
                 header.drawDiagonal(draw: true, section: section, maxSection: self.sections.count, color: UIColor.white)

@@ -8,13 +8,34 @@
 
 import Foundation
 extension WWCollapsibleForm {
+    
+    private func scrollAndEnable(nextSection: Int) {
+        //The scroll is doing a weird bounce effect.
+//        self.scrollToRow(at: IndexPath(row: 0, section: nextSection), at: .top, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CATransaction.animationDuration(), execute: {
+            self.sections[nextSection].status = .enabled
+            self.reloadSections([nextSection], with: .none)
+        })
+    }
+    
     func collapse(indexPath: IndexPath) {
         self.collapse(section: indexPath.section)
     }
     
     func collapse(section : Int) {
+        CATransaction.begin()
+        self.beginUpdates()
+        CATransaction.setCompletionBlock {
+            let nextSection = section + 1
+            if (nextSection < self.sections.count
+                && self.sections[nextSection].status == .disabled) {
+                self.scrollAndEnable(nextSection: nextSection)
+            }
+        }
         self.sections[section].status = .selected
         self.reloadSections([section], with: .fade)
+        self.endUpdates()
+        CATransaction.commit()
     }
     
     func expand(indexPath: IndexPath) {
