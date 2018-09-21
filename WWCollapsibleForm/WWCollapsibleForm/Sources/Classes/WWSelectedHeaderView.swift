@@ -9,6 +9,7 @@
 import Foundation
 open class WWSelectedHeaderView: WWHeaderView {
     public func expand() {
+        self.removeDiagonal()
         self.reference.expand(section: self.section)
     }
 }
