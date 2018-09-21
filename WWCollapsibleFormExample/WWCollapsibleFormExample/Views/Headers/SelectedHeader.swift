@@ -8,7 +8,7 @@
 
 import UIKit
 import WWCollapsibleForm
-class SelectedHeader: WWSelectedHeaderView, MenuSelectedHeader {
+class SelectedHeader: WWSelectedHeaderView, MenuSelectedHeaderView {
     func set(productName: String) {
         self.productName.text = productName
     }

@@ -26,7 +26,7 @@ class MenuHeaderPresenter : NSObject, MenuHeaderViewPresenter {
         self.header.set(title: self.menuSection.title)
         self.header.setSubtitle(title: self.menuSection.subtitle)
         
-        if let selectedView = self.header as? MenuSelectedHeader,
+        if let selectedView = self.header as? MenuSelectedHeaderView,
             let selectedItem = selectedItem {
             selectedView.set(productName: selectedItem.name)
             selectedView.setImage(image: selectedItem.image)

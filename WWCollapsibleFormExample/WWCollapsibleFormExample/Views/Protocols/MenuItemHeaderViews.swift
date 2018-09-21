@@ -19,6 +19,6 @@ protocol MenuItemView : NSObjectProtocol {
     func set(money: String)
 }
 
-protocol MenuSelectedHeader : MenuHeaderView, MenuItemView {
+protocol MenuSelectedHeaderView : MenuHeaderView, MenuItemView {
     
 }
