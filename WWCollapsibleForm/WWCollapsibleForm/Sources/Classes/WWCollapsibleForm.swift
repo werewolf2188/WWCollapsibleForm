@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-////
 public class WWCollapsibleForm : UITableView {
     
     var sections : [WWSection] = []

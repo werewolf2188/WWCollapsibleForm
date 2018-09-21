@@ -16,8 +16,6 @@ extension WWCollapsibleForm : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        /// optimize
-        
         if let view = self.sections[indexPath.section].addView(form: self, cell: cell, row: indexPath.row) {
             self.formDelegate?.modifyItem(item: view, indexPath: indexPath)
         }
