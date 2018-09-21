@@ -16,6 +16,19 @@ extension UIView {
         }
     }
     
+    private static var specialTag : Int {
+        get {
+            return 999
+        }
+    }
+    
+    private var specialTag : Int {
+        get {
+            return UIView.specialTag
+        }
+    }
+    
+    
     func addSubViewWithConstraints(_ subView:UIView) {
         self.addSubview(subView)
         subView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
@@ -26,7 +39,7 @@ extension UIView {
     
     //Will change
     class func addSeparator(subView: UIView, color: UIColor = UIColor.black, leading: CGFloat = 30, trailing: CGFloat = CGFloat.nan) {
-        let tag : Int = 999
+        let tag : Int = UIView.specialTag
         subView.viewWithTag(tag)?.removeFromSuperview()
         let separator : UIView = UIView(frame: CGRect.zero)
         separator.tag = tag
@@ -44,49 +57,37 @@ extension UIView {
     }
     
     //Will change
-    func hideSeparator(draw:Bool, section: Int, maxSection: Int)
+    func removeSeparator()
     {
         let selfV : UIView = self
-        let separator : UIView? = selfV.viewWithTag(999)
-        separator?.isHidden = draw && (section + 1) < maxSection
-        
+        let separator : UIView? = selfV.viewWithTag(self.specialTag)
+        separator?.removeFromSuperview()
     }
     //Will change
     func removeDiagonal() {
-        
-        var shapeLayer : CAShapeLayer?
-        
         if let sublayers = self.layer.sublayers,
             (sublayers.count > 0) {
-            shapeLayer = sublayers.filter({$0.name == self.diagonalName}).first as? CAShapeLayer
-            shapeLayer?.removeFromSuperlayer()
+            sublayers.filter({$0.name == self.diagonalName}).first?.removeFromSuperlayer()
         }
     }
 
     //Will change
-    func drawDiagonal(draw:Bool, section: Int, maxSection: Int, color: UIColor)
-    {
-        
-        let selfV : UIView = self
-        self.hideSeparator(draw: draw, section: section, maxSection: maxSection)
-        
-        var shapeLayer : CAShapeLayer?
+    func drawDiagonal(draw:Bool, section: Int, maxSection: Int, color: UIColor) {
+        var shapeLayer : CAShapeLayer
         let layerMinusHeight : CGFloat = 20
         
+        self.removeSeparator()
         shapeLayer = CAShapeLayer()
-        shapeLayer?.name = self.diagonalName
+        shapeLayer.name = self.diagonalName
         let path : CGMutablePath = CGMutablePath()
-        path.move(to: CGPoint(x: 0, y: selfV.bounds.height))
-        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: selfV.bounds.height))
-        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: selfV.bounds.height - layerMinusHeight))
+        path.move(to: CGPoint(x: 0, y: self.bounds.height))
+        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: self.bounds.height))
+        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: self.bounds.height - layerMinusHeight))
         path.closeSubpath()
-        shapeLayer?.path = path
-        shapeLayer?.fillColor = color.cgColor
-        if let newLayer = shapeLayer,
-            (draw && (section + 1) < maxSection)
-        {
-            selfV.layer.addSublayer(newLayer)
+        shapeLayer.path = path
+        shapeLayer.fillColor = color.cgColor
+        if (draw && (section + 1) < maxSection) {
+            self.layer.addSublayer(shapeLayer)
         }
-        
     }
 }

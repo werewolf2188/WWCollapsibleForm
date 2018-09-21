@@ -31,6 +31,7 @@ public class WWSection : NSObject {
     internal var selectedHeader : WWViewRepresentation!
     internal var template: WWViewRepresentation!
     internal var data : [WWDataObject] = []
+    internal var section : Int = -1
     
     internal override init() {
         super.init()
@@ -84,6 +85,22 @@ public class WWSection : NSObject {
             return childrenView
         }
         return nil
+    }
+    
+    internal func addSeparatorToSelectedHeader() {
+        
+        if let _selectedHeaderView = self._selectedHeaderView {
+            _selectedHeaderView.removeDiagonal()
+            UIView.addSeparator(subView: _selectedHeaderView, color: UIColor.white)
+        }
+    }
+    
+    internal func removeSeparatorToSelectedHeader(onRemoved:(_ selectedHeader: UIView, _ section: Int) -> Void) {
+        
+        if let _selectedHeaderView = self._selectedHeaderView {
+            _selectedHeaderView.removeSeparator()
+            onRemoved(_selectedHeaderView, section)
+        }
     }
     
     public convenience init(header: WWViewRepresentation?, template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
