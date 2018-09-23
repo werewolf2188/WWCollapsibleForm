@@ -22,6 +22,7 @@ public class WWSection : NSObject {
         case selected
     }
     public var status : WWStatus = .disabled
+    public var resetOnForward : Bool = false
     
     private var _headerView : UIView!
     private var _selectedHeaderView : UIView!

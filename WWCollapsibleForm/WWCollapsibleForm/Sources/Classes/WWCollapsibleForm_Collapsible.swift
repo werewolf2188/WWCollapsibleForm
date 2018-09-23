@@ -46,8 +46,27 @@ extension WWCollapsibleForm {
     
     func expand(section : Int) {
         self.collapseDelegate?.willExpand(section: section, form: self)
+        
+        CATransaction.begin()
+        self.beginUpdates()
+        CATransaction.setCompletionBlock {
+            if self.sections[section].resetOnForward {
+                var indexes : [Int] = []
+                for index in (section + 1)..<self.sections.count {
+                    if (self.sections[index].status != .disabled) {
+                        self.sections[index].status = .disabled
+                        indexes.append(index)
+                    }
+                }
+                let indexSet : IndexSet = IndexSet(indexes)
+                self.reloadSections(indexSet, with: .none)
+            }
+        }
         self.sections[section].status = .enabled
         self.reloadSections([section], with: .fade)
+        self.endUpdates()
+        CATransaction.commit()
+        
         self.collapseDelegate?.didExpand(section: section, form: self)
     }
 }

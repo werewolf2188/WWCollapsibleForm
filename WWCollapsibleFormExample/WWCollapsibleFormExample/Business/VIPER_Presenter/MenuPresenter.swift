@@ -24,6 +24,7 @@ protocol MenuOutput : NSObjectProtocol {
 class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
     weak var view: MenuView?
     var menuProvider : MenuProvider?
+    static let BURGER_SECTION : Int = 0
     
     // private section presenters
     private var sectionPresenters : [(section: Int, presenter: MenuHeaderViewPresenter)] = []
@@ -72,6 +73,10 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         let section : WWSection = WWSection(header: WWViewRepresentation(headerView: Header()),
                                             template: WWViewRepresentation(view: CellView()),
                                             selectedHeader: WWViewRepresentation(headerView: SelectedHeader()))
+        
+        if (sectionNum == MenuPresenter.BURGER_SECTION) {
+            section.resetOnForward = true
+        }
         var rowCount : Int = 0
         items.forEach { (item) in
             let data = WWTemplateDataObject()

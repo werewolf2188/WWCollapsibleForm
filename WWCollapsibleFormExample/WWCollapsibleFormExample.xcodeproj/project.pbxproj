@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1C712E1CB21BFF5A18EC57D /* Pods_WWCollapsibleFormExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E45BDB2CF6B0C2ED03F9BDC /* Pods_WWCollapsibleFormExample.framework */; };
+		303AEE54EA5EA01B7DAAD998 /* Pods_WWCollapsibleFormExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C67A3BB7330CE3F8A2034D70 /* Pods_WWCollapsibleFormExample.framework */; };
 		B000DF0121542746003B7886 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B000DF0021542746003B7886 /* MenuView.swift */; };
 		B017E722214A187E00353957 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = B017E721214A187E00353957 /* Header.swift */; };
 		B017E724214A195E00353957 /* Header.xib in Resources */ = {isa = PBXBuildFile; fileRef = B017E723214A195E00353957 /* Header.xib */; };
@@ -68,9 +68,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0486BA03C2C26404243F29CC /* Pods-WWCollapsibleFormExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.release.xcconfig"; sourceTree = "<group>"; };
-		3E45BDB2CF6B0C2ED03F9BDC /* Pods_WWCollapsibleFormExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWCollapsibleFormExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8391948445E8560BFC82C95F /* Pods-WWCollapsibleFormExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.debug.xcconfig"; sourceTree = "<group>"; };
+		1200F413B851AD07DA162D07 /* Pods-WWCollapsibleFormExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.release.xcconfig"; sourceTree = "<group>"; };
+		25842516107EEF5D06211C4E /* Pods-WWCollapsibleFormExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WWCollapsibleFormExample.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample.debug.xcconfig"; sourceTree = "<group>"; };
 		B000DF0021542746003B7886 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		B017E721214A187E00353957 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		B017E723214A195E00353957 /* Header.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Header.xib; sourceTree = "<group>"; };
@@ -107,6 +106,7 @@
 		B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwinjectStoryboard.swift; sourceTree = "<group>"; };
 		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
 		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
+		C67A3BB7330CE3F8A2034D70 /* Pods_WWCollapsibleFormExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWCollapsibleFormExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B075F5EB2149BD7D00659691 /* WWCollapsibleForm.framework in Frameworks */,
-				A1C712E1CB21BFF5A18EC57D /* Pods_WWCollapsibleFormExample.framework in Frameworks */,
+				303AEE54EA5EA01B7DAAD998 /* Pods_WWCollapsibleFormExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,19 +129,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1DF0198B96953DF27A674748 /* Pods */ = {
+		30B746E19DC2E969A64549C4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8391948445E8560BFC82C95F /* Pods-WWCollapsibleFormExample.debug.xcconfig */,
-				0486BA03C2C26404243F29CC /* Pods-WWCollapsibleFormExample.release.xcconfig */,
+				25842516107EEF5D06211C4E /* Pods-WWCollapsibleFormExample.debug.xcconfig */,
+				1200F413B851AD07DA162D07 /* Pods-WWCollapsibleFormExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		33EDAF294202BE7C1706D5B4 /* Frameworks */ = {
+		7E9E634604082DA8B53FA028 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3E45BDB2CF6B0C2ED03F9BDC /* Pods_WWCollapsibleFormExample.framework */,
+				C67A3BB7330CE3F8A2034D70 /* Pods_WWCollapsibleFormExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -233,8 +233,8 @@
 				B075F5C62149BD1E00659691 /* WWCollapsibleFormExample */,
 				B075F5DB2149BD1F00659691 /* WWCollapsibleFormExampleUITests */,
 				B075F5C52149BD1E00659691 /* Products */,
-				1DF0198B96953DF27A674748 /* Pods */,
-				33EDAF294202BE7C1706D5B4 /* Frameworks */,
+				30B746E19DC2E969A64549C4 /* Pods */,
+				7E9E634604082DA8B53FA028 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -341,12 +341,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B075F5E12149BD1F00659691 /* Build configuration list for PBXNativeTarget "WWCollapsibleFormExample" */;
 			buildPhases = (
-				4AA0DF9C7ACB7B22DB73935A /* [CP] Check Pods Manifest.lock */,
+				84219939358BF429E7FF2305 /* [CP] Check Pods Manifest.lock */,
 				B075F5C02149BD1E00659691 /* Sources */,
 				B075F5C12149BD1E00659691 /* Frameworks */,
 				B075F5C22149BD1E00659691 /* Resources */,
 				B075F5ED2149BD7D00659691 /* Embed Frameworks */,
-				827774BAC130801E7D1B0A82 /* [CP] Embed Pods Frameworks */,
+				1DE6DA2FEF9F64AF7DDD2C40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -438,25 +438,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4AA0DF9C7ACB7B22DB73935A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-WWCollapsibleFormExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		827774BAC130801E7D1B0A82 /* [CP] Embed Pods Frameworks */ = {
+		1DE6DA2FEF9F64AF7DDD2C40 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -474,6 +456,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		84219939358BF429E7FF2305 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WWCollapsibleFormExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -663,16 +663,13 @@
 		};
 		B075F5E22149BD1F00659691 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8391948445E8560BFC82C95F /* Pods-WWCollapsibleFormExample.debug.xcconfig */;
+			baseConfigurationReference = 25842516107EEF5D06211C4E /* Pods-WWCollapsibleFormExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F647UR2ZKE;
 				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -682,16 +679,13 @@
 		};
 		B075F5E32149BD1F00659691 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0486BA03C2C26404243F29CC /* Pods-WWCollapsibleFormExample.release.xcconfig */;
+			baseConfigurationReference = 1200F413B851AD07DA162D07 /* Pods-WWCollapsibleFormExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F647UR2ZKE;
 				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -705,11 +699,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -724,11 +714,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

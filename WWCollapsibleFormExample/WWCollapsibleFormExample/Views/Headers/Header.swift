@@ -28,13 +28,11 @@ class Header: WWHeaderView, MenuHeaderView {
         self.disableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
             self.backgroundColor = UIColor.lightGray
             self.titleLabel.textColor = UIColor.darkGray
-            self.isUserInteractionEnabled = false
         })
         
         self.enableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
             self.backgroundColor = UIColor.white
             self.titleLabel.textColor = UIColor.black
-            self.isUserInteractionEnabled = true
         })
     }
     /*
