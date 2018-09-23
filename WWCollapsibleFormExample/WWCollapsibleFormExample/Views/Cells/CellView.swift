@@ -22,7 +22,9 @@ class CellView: WWItemView, MenuItemView {
         if image == nil || image?.isEmpty == true{
             self.imageView.isHidden = true
         }
-        // else more to come
+        else if let image = image {
+            self.imageView.image = UIImage(named: image)
+        }
     }
     
     func set(money: String) {
@@ -34,14 +36,14 @@ class CellView: WWItemView, MenuItemView {
             self.backgroundColor = UIColor.lightGray
             self.productName.textColor = UIColor.darkGray
             self.moneyLabel.textColor = UIColor.darkGray
-            self.imageView.backgroundColor = UIColor.darkGray
+            self.imageView.alpha = 0.3
             self.isUserInteractionEnabled = false
         })
         self.enableDecorator = WWStatusDecorator(decoratorFunction: { (_) in
             self.backgroundColor = UIColor.white
             self.productName.textColor = UIColor.black
             self.moneyLabel.textColor = UIColor.black
-            self.imageView.backgroundColor = UIColor.clear
+            self.imageView.alpha = 1
             self.isUserInteractionEnabled = true
         })
     }

@@ -17,7 +17,9 @@ class SelectedHeader: WWSelectedHeaderView, MenuSelectedHeaderView {
         if image == nil || image?.isEmpty == true {
             self.imageView.isHidden = true
         }
-        // else more to come
+        else if let image = image {
+            self.imageView.image = UIImage(named: image)
+        }
     }
     
     func set(money: String) {

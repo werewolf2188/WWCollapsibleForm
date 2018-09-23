@@ -5,25 +5,25 @@
         "combos" : [{
                     "id": "BIG_MAC",
                     "name": "Big Mac",
-                    "image" : "",
+                    "image" : "big_mac",
                     "price" : 10.99
                     },
                     {
                     "id": "QUARTER_POUNDER",
                     "name": "Quarter Pounder",
-                    "image" : "",
+                    "image" : "quarter_pounder",
                     "price" : 8.99
                     },
                     {
                     "id": "CHICKEN_SANDWICH",
                     "name": "Chicken Grilled Sandwich",
-                    "image" : "",
+                    "image" : "chicken_sandwich",
                     "price" : 7.99
                     }],
         "sides" : [{
                    "id" : "FRIES",
                    "name" : "Fries",
-                   "image": "",
+                   "image": "french_fries",
                    "children": [{
                                 "id" : "SMALL",
                                 "name" : "Small",
@@ -42,7 +42,7 @@
                    }, {
                    "id" : "SALAD",
                    "name" : "Salad",
-                   "image": "",
+                   "image": "salad_icon",
                    "children": [{
                                 "id" : "CEASAR",
                                 "name" : "Ceasar Salad",
@@ -57,13 +57,13 @@
         "desserts" : [{
                       "id": "VANILLA",
                       "name": "Vanilla Ice Cream",
-                      "image" : "",
+                      "image" : "vanilla_ice_cream",
                       "price" : 1.00
                       },
                       {
                       "id": "CHOCOLATE",
                       "name": "Chocolate Ice Cream",
-                      "image" : "",
+                      "image" : "chocolate_ice_cream",
                       "price" : 8.99
                       }],
         
@@ -88,7 +88,7 @@
                       "id": "CREDITCARD1",
                       "name" : "Credit Card 1",
                       "type" : "CREDITCARD",
-                      "image" : "",
+                      "image" : "credit_card",
                       "balance" : 11000.00
                       }]
     }

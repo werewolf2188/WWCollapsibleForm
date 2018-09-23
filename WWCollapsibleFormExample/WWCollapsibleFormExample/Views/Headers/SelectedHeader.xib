@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,13 +16,13 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="136"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYI-ix-x1W">
-                    <rect key="frame" x="30" y="30" width="41" height="26"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="User: Jesus Enrique Ricalde Moises" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYI-ix-x1W">
+                    <rect key="frame" x="30" y="30" width="243" height="26"/>
                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="22"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJd-mY-tH9">
+                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJd-mY-tH9">
                     <rect key="frame" x="323" y="27" width="47" height="32"/>
                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                     <state key="normal" title="Modify">
@@ -35,7 +35,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xvd-U8-i8W">
                     <rect key="frame" x="30" y="66" width="115" height="50"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="epk-9d-Bqm">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="epk-9d-Bqm">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="7ck-Sr-bet"/>
@@ -61,6 +61,7 @@
             <constraints>
                 <constraint firstItem="xvd-U8-i8W" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="66" id="07K-XC-XmU"/>
                 <constraint firstItem="OJd-mY-tH9" firstAttribute="centerY" secondItem="SYI-ix-x1W" secondAttribute="centerY" id="593-Fz-o9V"/>
+                <constraint firstItem="OJd-mY-tH9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SYI-ix-x1W" secondAttribute="trailing" constant="50" id="5mg-F5-vIp"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OJd-mY-tH9" secondAttribute="trailing" constant="30" id="I9A-cf-sjB"/>
                 <constraint firstItem="SYI-ix-x1W" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="30" id="O7g-yI-x60"/>
                 <constraint firstItem="xvd-U8-i8W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="PcK-em-Yii"/>
