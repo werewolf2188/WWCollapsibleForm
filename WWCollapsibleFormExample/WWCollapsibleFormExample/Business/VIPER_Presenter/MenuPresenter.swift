@@ -25,6 +25,7 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
     weak var view: MenuView?
     var menuProvider : MenuProvider?
     static let BURGER_SECTION : Int = 0
+    static let BANKPRODUCTO_SECTION : Int = 3
     
     // private section presenters
     private var sectionPresenters : [(section: Int, presenter: MenuHeaderViewPresenter)] = []
@@ -76,6 +77,9 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         
         if (sectionNum == MenuPresenter.BURGER_SECTION) {
             section.resetOnForward = true
+        }
+        if (sectionNum == MenuPresenter.BANKPRODUCTO_SECTION) {
+            section.unmutableOnceSelected = true
         }
         var rowCount : Int = 0
         items.forEach { (item) in

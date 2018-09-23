@@ -53,7 +53,8 @@ extension WWCollapsibleForm {
             if self.sections[section].resetOnForward {
                 var indexes : [Int] = []
                 for index in (section + 1)..<self.sections.count {
-                    if (self.sections[index].status != .disabled) {
+                    if (self.sections[index].status == .enabled ||
+                        (self.sections[index].status == .selected && !self.sections[index].unmutableOnceSelected )) {
                         self.sections[index].status = .disabled
                         indexes.append(index)
                     }

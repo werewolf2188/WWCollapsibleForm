@@ -23,6 +23,7 @@ public class WWSection : NSObject {
     }
     public var status : WWStatus = .disabled
     public var resetOnForward : Bool = false
+    public var unmutableOnceSelected : Bool = false
     
     private var _headerView : UIView!
     private var _selectedHeaderView : UIView!
