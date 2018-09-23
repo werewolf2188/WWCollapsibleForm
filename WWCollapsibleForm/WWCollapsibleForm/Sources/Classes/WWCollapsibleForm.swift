@@ -9,23 +9,25 @@
 import Foundation
 import UIKit
 
-public class WWCollapsibleForm : UITableView {
+public class WWCollapsibleForm : UIView {
     
     var sections : [WWSection] = []
     let cellString : String = "cell"
     let minimumFooterHeight : CGFloat = 20
     let itemTag : Int = 1000
     
+    var tableView : UITableView!
+    
     public var formDelegate : WWCollapsibleFormDelegate?
     public var collapseDelegate: WWCollapsibleFormCollapseDelegate?
     
-    private func initialize() {        
-        self.register(UITableViewCell.self, forCellReuseIdentifier: cellString)
-        self.separatorStyle = .none
+    private func initialize() {
+        self.tableView = UITableView(frame: self.bounds, style: .grouped)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellString)
     }
     
-    public init(frame: CGRect) {
-        super.init(frame: frame, style: .grouped)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         self.initialize()
     }
     
@@ -35,8 +37,11 @@ public class WWCollapsibleForm : UITableView {
     }
     
     public override func didMoveToSuperview() {
-        self.dataSource = self
-        self.delegate = self
+        self.tableView.frame = self.bounds
+        self.addSubViewWithConstraints(self.tableView)
+        self.tableView.separatorStyle = .none
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
     }
     
     //Add new section

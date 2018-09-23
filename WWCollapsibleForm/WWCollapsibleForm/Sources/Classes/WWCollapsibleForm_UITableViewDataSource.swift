@@ -13,7 +13,7 @@ extension WWCollapsibleForm : UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell : UITableViewCell = self.dequeueReusableCell(withIdentifier: self.cellString, for: indexPath)
+        let cell : UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: self.cellString, for: indexPath)
         cell.selectionStyle = .none
         cell.viewWithTag(self.itemTag)?.removeFromSuperview()
         return cell

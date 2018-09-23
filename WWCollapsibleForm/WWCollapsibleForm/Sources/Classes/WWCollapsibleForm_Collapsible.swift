@@ -14,7 +14,7 @@ extension WWCollapsibleForm {
 //        self.scrollToRow(at: IndexPath(row: 0, section: nextSection), at: .top, animated: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + CATransaction.animationDuration(), execute: {
             self.sections[nextSection].status = .enabled
-            self.reloadSections([nextSection], with: .none)
+            self.tableView.reloadSections([nextSection], with: .none)
         })
     }
     
@@ -25,7 +25,7 @@ extension WWCollapsibleForm {
     func collapse(section : Int) {
         self.collapseDelegate?.willCollapse(section: section, form: self)
         CATransaction.begin()
-        self.beginUpdates()
+        self.tableView.beginUpdates()
         CATransaction.setCompletionBlock {
             let nextSection = section + 1
             if (nextSection < self.sections.count
@@ -35,8 +35,8 @@ extension WWCollapsibleForm {
             }
         }
         self.sections[section].status = .selected
-        self.reloadSections([section], with: .fade)
-        self.endUpdates()
+        self.tableView.reloadSections([section], with: .fade)
+        self.tableView.endUpdates()
         CATransaction.commit()
     }
     
@@ -48,7 +48,7 @@ extension WWCollapsibleForm {
         self.collapseDelegate?.willExpand(section: section, form: self)
         
         CATransaction.begin()
-        self.beginUpdates()
+        self.tableView.beginUpdates()
         CATransaction.setCompletionBlock {
             if self.sections[section].resetOnForward {
                 var indexes : [Int] = []
@@ -60,12 +60,12 @@ extension WWCollapsibleForm {
                     }
                 }
                 let indexSet : IndexSet = IndexSet(indexes)
-                self.reloadSections(indexSet, with: .none)
+                self.tableView.reloadSections(indexSet, with: .none)
             }
         }
         self.sections[section].status = .enabled
-        self.reloadSections([section], with: .fade)
-        self.endUpdates()
+        self.tableView.reloadSections([section], with: .fade)
+        self.tableView.endUpdates()
         CATransaction.commit()
         
         self.collapseDelegate?.didExpand(section: section, form: self)

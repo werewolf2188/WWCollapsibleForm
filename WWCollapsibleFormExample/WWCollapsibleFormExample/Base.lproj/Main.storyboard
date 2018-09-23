@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H6k-c9-vTb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H6k-c9-vTb">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,27 +35,15 @@
         <scene sceneID="1bR-RY-5qb">
             <objects>
                 <viewController id="DKS-3P-cOZ" customClass="ViewController" customModule="WWCollapsibleFormExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="sNX-AI-65Q">
+                    <view key="view" contentMode="scaleToFill" id="sNX-AI-65Q" customClass="WWCollapsibleForm" customModule="WWCollapsibleForm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="2aB-JQ-nNB" customClass="WWCollapsibleForm" customModule="WWCollapsibleForm">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="2aB-JQ-nNB" firstAttribute="leading" secondItem="osL-qr-XoN" secondAttribute="leading" id="i4K-92-A7s"/>
-                            <constraint firstItem="2aB-JQ-nNB" firstAttribute="top" secondItem="osL-qr-XoN" secondAttribute="top" id="ilg-EF-R1u"/>
-                            <constraint firstItem="osL-qr-XoN" firstAttribute="trailing" secondItem="2aB-JQ-nNB" secondAttribute="trailing" id="lBg-r1-L05"/>
-                            <constraint firstItem="osL-qr-XoN" firstAttribute="bottom" secondItem="2aB-JQ-nNB" secondAttribute="bottom" id="wKd-N0-TK6"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="osL-qr-XoN"/>
                     </view>
                     <navigationItem key="navigationItem" title="Choose your order" id="vO2-N8-fmU"/>
                     <connections>
-                        <outlet property="form" destination="2aB-JQ-nNB" id="1Bw-lm-hFG"/>
+                        <outlet property="form" destination="sNX-AI-65Q" id="664-Eb-Fsa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SiG-Nv-9uG" userLabel="First Responder" sceneMemberID="firstResponder"/>
