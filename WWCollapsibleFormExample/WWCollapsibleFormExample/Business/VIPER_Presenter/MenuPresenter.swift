@@ -78,10 +78,15 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         if (sectionNum == MenuPresenter.BURGER_SECTION) {
             section.resetOnForward = true
         }
+        var rowCount : Int = 0
         if (sectionNum == MenuPresenter.BANKPRODUCTO_SECTION) {
             section.unmutableOnceSelected = true
+            let data = WWNonTemplateDataObject(view: AlternateCell())
+            data.autoCollapse = false
+            section.appendData(data: data)
+            rowCount = 1
         }
-        var rowCount : Int = 0
+        
         items.forEach { (item) in
             let data = WWTemplateDataObject()
             let presenter : MenuItemPresenter = MenuItemPresenter()

@@ -76,7 +76,7 @@ public class WWSection : NSObject {
     
     internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) -> UIView? {
         
-        if (self.data[row] is WWTemplateDataObject) {            
+        if (self.data[row] is WWTemplateDataObject || self.data[row] is WWNonTemplateDataObject)  {  //For now it's the same
             let childrenView : UIView = self.views[row].view
             childrenView.frame = cell.bounds
             childrenView.tag = form.itemTag

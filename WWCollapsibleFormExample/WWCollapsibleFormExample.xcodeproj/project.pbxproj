@@ -41,6 +41,8 @@
 		B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */; };
 		B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F05214C446900251E82 /* IUnitOfWork.swift */; };
 		B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */; };
+		C286AB472158634E00ACF338 /* AlternateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB462158634E00ACF338 /* AlternateCell.swift */; };
+		C286AB492158635B00ACF338 /* AlternateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C286AB482158635B00ACF338 /* AlternateCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,8 @@
 		B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwinjectStoryboard.swift; sourceTree = "<group>"; };
 		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
 		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
+		C286AB462158634E00ACF338 /* AlternateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateCell.swift; sourceTree = "<group>"; };
+		C286AB482158635B00ACF338 /* AlternateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlternateCell.xib; sourceTree = "<group>"; };
 		C67A3BB7330CE3F8A2034D70 /* Pods_WWCollapsibleFormExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWCollapsibleFormExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -203,6 +207,8 @@
 			children = (
 				B017E725214A19D900353957 /* CellView.swift */,
 				B017E727214A1A7700353957 /* CellView.xib */,
+				C286AB462158634E00ACF338 /* AlternateCell.swift */,
+				C286AB482158635B00ACF338 /* AlternateCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -420,6 +426,7 @@
 			files = (
 				B0672A04214C303C008D123C /* mcdonalds_menu.json in Resources */,
 				B017E72C214A1C0600353957 /* SelectedHeader.xib in Resources */,
+				C286AB492158635B00ACF338 /* AlternateCell.xib in Resources */,
 				B075F5D22149BD1F00659691 /* LaunchScreen.storyboard in Resources */,
 				B017E728214A1A7700353957 /* CellView.xib in Resources */,
 				B075F5CF2149BD1F00659691 /* Assets.xcassets in Resources */,
@@ -489,6 +496,7 @@
 				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
 				B017E726214A19D900353957 /* CellView.swift in Sources */,
 				B075F5CA2149BD1E00659691 /* TableViewController.swift in Sources */,
+				C286AB472158634E00ACF338 /* AlternateCell.swift in Sources */,
 				B091752321542B210094D445 /* MenuInteractor.swift in Sources */,
 				B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */,
 				B0BE4EFB214C3FB400251E82 /* Menu.swift in Sources */,
@@ -669,7 +677,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F647UR2ZKE;
 				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -685,7 +696,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F647UR2ZKE;
 				INFOPLIST_FILE = WWCollapsibleFormExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -699,7 +713,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -714,7 +732,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WWCollapsibleFormExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = werewolf.WWCollapsibleFormExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

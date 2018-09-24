@@ -24,6 +24,7 @@ class CellView: WWItemView, MenuItemView {
         }
         else if let image = image {
             self.imageView.image = UIImage(named: image)
+            self.imageView.isHidden = false
         }
     }
     
