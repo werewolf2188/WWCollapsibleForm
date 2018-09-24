@@ -22,16 +22,17 @@ class MyViewController : UIViewController {
         
         view1.backgroundColor = UIColor.red
         view1.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        heightLayout1 = view1.heightAnchor.constraint(equalToConstant: 200)//.isActive = true
+        heightLayout1 = view1.heightAnchor.constraint(equalToConstant: 300)
         heightLayout1.isActive = true
         view2.backgroundColor = UIColor.blue
         view2.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        heightLayout2 = view2.heightAnchor.constraint(equalToConstant: 200)
+        heightLayout2 = view2.heightAnchor.constraint(equalToConstant: 300)
         heightLayout2.isActive = true
         
         view3.backgroundColor = UIColor.yellow
         view3.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-        heightLayout3 = view3.heightAnchor.constraint(equalToConstant: 400)
+        view3.alpha = 0
+        heightLayout3 = view3.heightAnchor.constraint(equalToConstant: 200)
         heightLayout3.isActive = true
         
         stackView.axis = .vertical
@@ -42,9 +43,9 @@ class MyViewController : UIViewController {
         stackView.backgroundColor = UIColor.yellow
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view3.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view3)
-        view3.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        view3.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        self.view1.addSubview(view3)
+        view3.topAnchor.constraint(equalTo: self.view1.topAnchor).isActive = true
+        view3.leadingAnchor.constraint(equalTo: self.view1.leadingAnchor).isActive = true
         self.view.addSubview(stackView)
         stackView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
@@ -60,23 +61,24 @@ class MyViewController : UIViewController {
         button.setTitleColor(UIColor.blue, for: .normal)
         button.widthAnchor.constraint(equalToConstant: 100)
         button.heightAnchor.constraint(equalToConstant: 30)
-        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
         button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         button.addTarget(self, action: #selector(self.hideShow(target:)), for: .touchUpInside)
         
     }
 
     @objc func hideShow(target: AnyObject?) {
-        let isHiding : Bool = heightLayout2.constant == 200
-        heightLayout2.constant = heightLayout2.constant == 200 ? 0 : 200
-        UIView.animate(withDuration: 0.5, animations: {
+//        let isHiding : Bool = heightLayout1.constant == 200
+        heightLayout1.constant = heightLayout1.constant == 200 ? 300 : 200
+        UIView.animate(withDuration: 0.25, animations: {
             self.view.layoutIfNeeded()
+            self.view3.alpha = self.view3.alpha == 0 ? 1 : 0
         }) { (success) in
-            if isHiding {
-                UIView.transition(from: self.stackView, to: self.view3, duration: 0.5, options: [UIView.AnimationOptions.curveEaseIn], completion: nil)
-            } else {
-                UIView.transition(from: self.view3, to: self.stackView, duration: 0.5, options: [UIView.AnimationOptions.curveEaseIn], completion: nil)
-            }
+//            if isHiding {
+//                UIView.transition(from: self.stackView, to: self.view3, duration: 0.5, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
+//            } else {
+//                UIView.transition(from: self.view3, to: self.stackView, duration: 0.5, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
+//            }
             
         }
     }
