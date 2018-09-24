@@ -70,17 +70,19 @@ class MyViewController : UIViewController {
     @objc func hideShow(target: AnyObject?) {
 //        let isHiding : Bool = heightLayout1.constant == 200
         heightLayout1.constant = heightLayout1.constant == 200 ? 300 : 200
-        UIView.animate(withDuration: 0.25, animations: {
+        let anim : UIViewPropertyAnimator = UIViewPropertyAnimator(duration: CATransaction.animationDuration() * 10, curve: UIView.AnimationCurve.easeInOut) {
             self.view.layoutIfNeeded()
-            self.view3.alpha = self.view3.alpha == 0 ? 1 : 0
-        }) { (success) in
-//            if isHiding {
-//                UIView.transition(from: self.stackView, to: self.view3, duration: 0.5, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
-//            } else {
-//                UIView.transition(from: self.view3, to: self.stackView, duration: 0.5, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
-//            }
-            
         }
+        
+        anim.addAnimations {
+            self.view3.alpha = self.view3.alpha == 0 ? 1 : 0
+        }
+        anim.startAnimation()
+//        UIView.animate(withDuration: CATransaction.animationDuration(), delay: 0, options: [.curveEaseInOut], animations: {
+//
+//        }) { (success) in
+//
+//        }
     }
     
     override func loadView() {
