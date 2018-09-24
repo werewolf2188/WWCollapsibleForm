@@ -22,7 +22,7 @@ extension WWCollapsibleForm {
         self.collapse(section: indexPath.section)
     }
     
-    func collapse(section : Int) {
+    public func collapse(section : Int) {
         self.collapseDelegate?.willCollapse(section: section, form: self)
         CATransaction.begin()
         self.tableView.beginUpdates()
@@ -44,7 +44,7 @@ extension WWCollapsibleForm {
         self.expand(section: indexPath.section)
     }
     
-    func expand(section : Int) {
+    public func expand(section : Int) {
         self.collapseDelegate?.willExpand(section: section, form: self)
         
         CATransaction.begin()

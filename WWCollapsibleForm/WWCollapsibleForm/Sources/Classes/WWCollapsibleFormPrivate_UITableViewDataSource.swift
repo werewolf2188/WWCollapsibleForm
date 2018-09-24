@@ -7,19 +7,19 @@
 //
 
 import Foundation
-extension WWCollapsibleForm : UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension WWCollapsibleFormPrivate : UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.sections[section].getRows()
     }
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: self.cellString, for: indexPath)
         cell.selectionStyle = .none
         cell.viewWithTag(self.itemTag)?.removeFromSuperview()
         return cell
     }
     
-    public func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
     }
 }

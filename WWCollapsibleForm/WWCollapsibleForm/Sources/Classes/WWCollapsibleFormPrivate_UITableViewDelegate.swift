@@ -7,7 +7,7 @@
 //
 
 import Foundation
-extension WWCollapsibleForm : UITableViewDelegate {
+extension WWCollapsibleFormPrivate : UITableViewDelegate {
     
     internal func getTopSelectedIndex() -> Int {
         return self.sections.filter({$0.status == .selected}).sorted { (sectionA, sectionB) -> Bool in
@@ -15,14 +15,14 @@ extension WWCollapsibleForm : UITableViewDelegate {
             }.first?.section ?? -1
     }
     
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let view = self.sections[indexPath.section].addView(form: self, cell: cell, row: indexPath.row) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let view = self.sections[indexPath.section].addView(form: self.publicForm, cell: cell, row: indexPath.row) {
             self.formDelegate?.modifyItem(item: view, indexPath: indexPath)
         }
     }
     
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header : UIView = self.sections[section].getHeader(section: section, form: self)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header : UIView = self.sections[section].getHeader(section: section, form: self.publicForm)
         (header as? WWHeaderView)?.applyStatus(status: self.sections[section].status)
         if (self.sections[section].status == .selected) {
             if section == self.getTopSelectedIndex() {
@@ -46,37 +46,37 @@ extension WWCollapsibleForm : UITableViewDelegate {
         return header
     }
     
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if (self.sections[section].status != .selected) {
             let footer : UIView = UIView()
-            footer.backgroundColor = self.sections[section].getHeader(section: section, form: self).backgroundColor
+            footer.backgroundColor = self.sections[section].getHeader(section: section, form: self.publicForm).backgroundColor
             return footer
         }
         return nil
     }
     
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if (self.sections[section].status == .selected) {
             return self.sections[section].selectedHeader?.height ?? UITableViewAutomaticDimension // Improve
         }
         return self.sections[section].header?.height ?? UITableViewAutomaticDimension // Improve
     }
     
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if (self.sections[section].status != .selected) {
             return minimumFooterHeight 
         }
         return 0.000001 //Well it worked
     }
     
-    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.sections[indexPath.section].getHeight(row: indexPath.row)
     }
     
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (self.sections[indexPath.section].shouldAutoCollapse(row: indexPath.row)) {
             self.formDelegate?.itemSelected(indexPath: indexPath)
-            self.collapse(indexPath: indexPath)
+            self.publicForm.collapse(indexPath: indexPath)
         }
     }
 }
