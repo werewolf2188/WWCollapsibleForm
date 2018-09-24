@@ -13,8 +13,8 @@
 		B0B77BB3215474E8006F174A /* WWCollapsibleFormDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B77BB2215474E8006F174A /* WWCollapsibleFormDelegate.swift */; };
 		B0BE4F0D214C586900251E82 /* UIView_Private_HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F0C214C586900251E82 /* UIView_Private_HelperMethods.swift */; };
 		B0E617EE21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E617ED21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift */; };
-		C2344A23214DAEC50035B98D /* WWCollapsibleFormPrivate_UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A22214DAEC50035B98D /* WWCollapsibleFormPrivate_UITableViewDataSource.swift */; };
-		C2344A25214DAF0E0035B98D /* WWCollapsibleFormPrivate_UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A24214DAF0E0035B98D /* WWCollapsibleFormPrivate_UITableViewDelegate.swift */; };
+		C2344A23214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A22214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift */; };
+		C2344A25214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A24214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift */; };
 		C2344A27214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A26214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift */; };
 		C2344A29214DAFCB0035B98D /* WWSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A28214DAFCB0035B98D /* WWSection.swift */; };
 		C2344A2B214DB05E0035B98D /* WWViewRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A2A214DB05E0035B98D /* WWViewRepresentation.swift */; };
@@ -25,7 +25,7 @@
 		C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A34214DB1C00035B98D /* WWItemView.swift */; };
 		C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A36214DB1D60035B98D /* WWHeaderView.swift */; };
 		C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */; };
-		C286AB4B21586CF800ACF338 /* WWCollapsibleFormPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB4A21586CF800ACF338 /* WWCollapsibleFormPrivate.swift */; };
+		C286AB4B21586CF800ACF338 /* WWCollapsibleFormAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,8 +37,8 @@
 		B0B77BB2215474E8006F174A /* WWCollapsibleFormDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormDelegate.swift; sourceTree = "<group>"; };
 		B0BE4F0C214C586900251E82 /* UIView_Private_HelperMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Private_HelperMethods.swift; sourceTree = "<group>"; };
 		B0E617ED21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormCollapseDelegate.swift; sourceTree = "<group>"; };
-		C2344A22214DAEC50035B98D /* WWCollapsibleFormPrivate_UITableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormPrivate_UITableViewDataSource.swift; sourceTree = "<group>"; };
-		C2344A24214DAF0E0035B98D /* WWCollapsibleFormPrivate_UITableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormPrivate_UITableViewDelegate.swift; sourceTree = "<group>"; };
+		C2344A22214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormAdapter_UITableViewDataSource.swift; sourceTree = "<group>"; };
+		C2344A24214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormAdapter_UITableViewDelegate.swift; sourceTree = "<group>"; };
 		C2344A26214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleForm_Collapsible.swift; sourceTree = "<group>"; };
 		C2344A28214DAFCB0035B98D /* WWSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSection.swift; sourceTree = "<group>"; };
 		C2344A2A214DB05E0035B98D /* WWViewRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWViewRepresentation.swift; sourceTree = "<group>"; };
@@ -49,7 +49,7 @@
 		C2344A34214DB1C00035B98D /* WWItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWItemView.swift; sourceTree = "<group>"; };
 		C2344A36214DB1D60035B98D /* WWHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWHeaderView.swift; sourceTree = "<group>"; };
 		C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSelectedHeaderView.swift; sourceTree = "<group>"; };
-		C286AB4A21586CF800ACF338 /* WWCollapsibleFormPrivate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormPrivate.swift; sourceTree = "<group>"; };
+		C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,9 +105,9 @@
 				C2344A26214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift */,
 				B0E617ED21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift */,
 				B0B77BB2215474E8006F174A /* WWCollapsibleFormDelegate.swift */,
-				C286AB4A21586CF800ACF338 /* WWCollapsibleFormPrivate.swift */,
-				C2344A22214DAEC50035B98D /* WWCollapsibleFormPrivate_UITableViewDataSource.swift */,
-				C2344A24214DAF0E0035B98D /* WWCollapsibleFormPrivate_UITableViewDelegate.swift */,
+				C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */,
+				C2344A22214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift */,
+				C2344A24214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift */,
 				C2344A2C214DB0990035B98D /* WWDataObject.swift */,
 				C2344A36214DB1D60035B98D /* WWHeaderView.swift */,
 				C2344A34214DB1C00035B98D /* WWItemView.swift */,
@@ -212,12 +212,12 @@
 				B075F5E92149BD6700659691 /* WWCollapsibleForm.swift in Sources */,
 				B0B77BB3215474E8006F174A /* WWCollapsibleFormDelegate.swift in Sources */,
 				C2344A2B214DB05E0035B98D /* WWViewRepresentation.swift in Sources */,
-				C2344A25214DAF0E0035B98D /* WWCollapsibleFormPrivate_UITableViewDelegate.swift in Sources */,
+				C2344A25214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift in Sources */,
 				C2344A2F214DB0C60035B98D /* WWTemplateDataObject.swift in Sources */,
-				C2344A23214DAEC50035B98D /* WWCollapsibleFormPrivate_UITableViewDataSource.swift in Sources */,
+				C2344A23214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift in Sources */,
 				C2344A2D214DB0990035B98D /* WWDataObject.swift in Sources */,
 				C2344A29214DAFCB0035B98D /* WWSection.swift in Sources */,
-				C286AB4B21586CF800ACF338 /* WWCollapsibleFormPrivate.swift in Sources */,
+				C286AB4B21586CF800ACF338 /* WWCollapsibleFormAdapter.swift in Sources */,
 				C2344A27214DAF9C0035B98D /* WWCollapsibleForm_Collapsible.swift in Sources */,
 				C2344A31214DB0E50035B98D /* WWNonTemplateDataObject.swift in Sources */,
 				C2344A33214DB1690035B98D /* WWStatusDecorator.swift in Sources */,

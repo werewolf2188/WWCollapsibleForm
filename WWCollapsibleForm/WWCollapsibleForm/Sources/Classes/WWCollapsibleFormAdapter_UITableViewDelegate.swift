@@ -7,7 +7,7 @@
 //
 
 import Foundation
-extension WWCollapsibleFormPrivate : UITableViewDelegate {
+extension WWCollapsibleFormAdapter : UITableViewDelegate {
     
     internal func getTopSelectedIndex() -> Int {
         return self.sections.filter({$0.status == .selected}).sorted { (sectionA, sectionB) -> Bool in

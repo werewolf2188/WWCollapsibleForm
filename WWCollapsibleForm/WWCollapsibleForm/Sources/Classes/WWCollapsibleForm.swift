@@ -16,7 +16,7 @@ public class WWCollapsibleForm : UIView {
     let cellString : String = "cell"
     let minimumFooterHeight : CGFloat = 20
     let itemTag : Int = 1000
-    var privateForm : WWCollapsibleFormPrivate!
+    var privateForm : WWCollapsibleFormAdapter!
 
     public var formDelegate : WWCollapsibleFormDelegate?
     public var collapseDelegate: WWCollapsibleFormCollapseDelegate?
@@ -24,7 +24,7 @@ public class WWCollapsibleForm : UIView {
     private func initialize() {
         self.tableView = UITableView(frame: self.bounds, style: .grouped)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellString)
-        self.privateForm = WWCollapsibleFormPrivate(form: self)
+        self.privateForm = WWCollapsibleFormAdapter(form: self)
         
     }
     

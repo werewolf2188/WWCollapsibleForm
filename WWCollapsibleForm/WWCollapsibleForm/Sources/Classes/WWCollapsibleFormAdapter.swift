@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class WWCollapsibleFormPrivate : NSObject {
+class WWCollapsibleFormAdapter : NSObject {
     
     var publicForm : WWCollapsibleForm!
     

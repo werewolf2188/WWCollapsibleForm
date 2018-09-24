@@ -7,7 +7,7 @@
 //
 
 import Foundation
-extension WWCollapsibleFormPrivate : UITableViewDataSource {
+extension WWCollapsibleFormAdapter : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.sections[section].getRows()
     }
