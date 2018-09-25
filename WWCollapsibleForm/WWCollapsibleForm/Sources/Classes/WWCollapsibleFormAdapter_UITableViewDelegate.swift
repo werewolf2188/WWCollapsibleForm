@@ -77,6 +77,9 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
         if (self.sections[indexPath.section].shouldAutoCollapse(row: indexPath.row)) {
             self.formDelegate?.itemSelected(indexPath: indexPath)
             self.publicForm.collapse(indexPath: indexPath)
+        } else if (self.sections[indexPath.section].isParentAndEnabled(row: indexPath.row)),
+            let items = self.sections[indexPath.section].changeSubGroup(row: indexPath.row) {
+            self.tableView.reloadRows(at: items, with: .bottom)
         }
     }
 }

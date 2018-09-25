@@ -7,8 +7,12 @@
 //
 
 import Foundation
+
+protocol WWAutoCollapsable : NSObjectProtocol {
+    var autoCollapse : Bool { get set }
+}
+
 public class WWDataObject : NSObject {
-    public var autoCollapse : Bool = true
     
     override init() {
         super.init()

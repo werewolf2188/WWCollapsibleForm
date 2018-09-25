@@ -22,6 +22,6 @@ class MenuItemPresenter : NSObject, MenuItemViewPresenter {
     func showItem() {
         itemView.set(productName: item.name)
         itemView.setImage(image: item.image)
-        itemView.set(money: String(format: "$%.02f", item.price ?? 0))
+        itemView.set(money: item.price == nil ? "" : String(format: "$%.02f", item.price ?? 0))
     }
 }

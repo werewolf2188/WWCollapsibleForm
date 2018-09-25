@@ -29,6 +29,10 @@ class CellView: WWItemView, MenuItemView {
     }
     
     func set(money: String) {
+        if money.isEmpty {
+            self.moneyLabel.text = ""
+            return
+        }
         self.moneyLabel.text = money
     }
     

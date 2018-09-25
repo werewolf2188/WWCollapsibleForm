@@ -7,7 +7,8 @@
 //
 
 import Foundation
-public class WWNonTemplateDataObject : WWDataObject {
+public class WWNonTemplateDataObject : WWDataObject, WWAutoCollapsable {
+    public var autoCollapse : Bool = true
     internal var template: WWViewRepresentation!
     override internal init() {
         super.init()

@@ -29,12 +29,14 @@ extension UIView {
     }
     
     
-    func addSubViewWithConstraints(_ subView:UIView) {
+    func addSubViewWithConstraints(_ subView:UIView, edgeInsets : UIEdgeInsets = UIEdgeInsets.zero) {
         self.addSubview(subView)
-        subView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        subView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        subView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        subView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        
+        subView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: edgeInsets.left).isActive = true
+        subView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: edgeInsets.right).isActive = true
+        subView.topAnchor.constraint(equalTo: self.topAnchor, constant: edgeInsets.top).isActive = true
+        subView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: edgeInsets.bottom).isActive = true
+        subView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     //Will change

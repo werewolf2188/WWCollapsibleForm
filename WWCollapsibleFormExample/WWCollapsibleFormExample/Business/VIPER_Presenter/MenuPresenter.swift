@@ -25,7 +25,8 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
     weak var view: MenuView?
     var menuProvider : MenuProvider?
     static let BURGER_SECTION : Int = 0
-    static let BANKPRODUCTO_SECTION : Int = 3
+    static let SIDES_SECTION : Int = 1
+    static let BANKPRODUCT_SECTION : Int = 3
     
     // private section presenters
     private var sectionPresenters : [(section: Int, presenter: MenuHeaderViewPresenter)] = []
@@ -79,7 +80,7 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
             section.resetOnForward = true
         }
         var rowCount : Int = 0
-        if (sectionNum == MenuPresenter.BANKPRODUCTO_SECTION) {
+        if (sectionNum == MenuPresenter.BANKPRODUCT_SECTION) {
             section.unmutableOnceSelected = true
             let data = WWNonTemplateDataObject(view: AlternateCell())
             data.autoCollapse = false
@@ -88,11 +89,20 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         }
         
         items.forEach { (item) in
-            let data = WWTemplateDataObject()
+            let data = item.children != nil &&
+                (item.children?.count ?? 0) > 0 ? WWSubGroupDataObject(template: WWViewRepresentation(view: CellView()), headerTemplate : WWViewRepresentation(view: CellView())) : WWTemplateDataObject()
             let presenter : MenuItemPresenter = MenuItemPresenter()
             presenter.item = item
             self.rowPresenters.append((section: sectionNum, row: rowCount, presenter: presenter))
-            rowCount = rowCount + 1
+            rowCount = rowCount + 1            
+            for children in item.children ?? [] {
+                let childrenData = WWTemplateDataObject()
+                let presenter : MenuItemPresenter = MenuItemPresenter()
+                presenter.item = children
+                self.rowPresenters.append((section: sectionNum, row: rowCount, presenter: presenter))
+                rowCount = rowCount + 1
+                (data as? WWSubGroupDataObject)?.appendData(object: childrenData)
+            }
             section.appendData(data: data)
         }
         return section

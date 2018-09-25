@@ -8,13 +8,6 @@
 
 import Foundation
 public class WWSection : NSObject {
-  
-    private struct WWViewInfo {
-        var row : Int
-        var view: UIView
-        var height : CGFloat
-        var autoCollapse : Bool
-    }
     
     public enum WWStatus : Int {
         case disabled
@@ -27,7 +20,8 @@ public class WWSection : NSObject {
     
     private var _headerView : UIView!
     private var _selectedHeaderView : UIView!
-    private var views : [WWViewInfo] = [] //Transform this into either class or struct
+    private var views : [WWViewInfo] = []
+    private let leftSpacing : CGFloat = 20
 
     internal var header : WWViewRepresentation?
     internal var selectedHeader : WWViewRepresentation!
@@ -37,6 +31,10 @@ public class WWSection : NSObject {
     
     internal override init() {
         super.init()
+    }
+    
+    internal func getItemCount() -> Int {
+        return self.views.count
     }
     
     internal func getHeader(section: Int, form : WWCollapsibleForm) -> UIView {
@@ -61,34 +59,65 @@ public class WWSection : NSObject {
         if self.status == .selected {
             return 0
         }
-        return self.views.count
+        return getItemCount()
     }
     
     internal func getHeight(row: Int) -> CGFloat {
-        return self.views.filter({ $0.row == row }).first?.height ?? 0
+        // Hiding the views is not the best thing ever. Need to figure it out something better.
+        if let parent = self.views[row].parent,
+            parent.isCollapsed {
+            self.views[row].view.isHidden = true
+            return 0
+        }
+        self.views[row].view.isHidden = false
+        return self.views[row].height
     }
     
     internal func shouldAutoCollapse(row: Int) -> Bool {
-        let autoCollapse = self.views.filter({ $0.row == row }).first?.autoCollapse ?? false
-        let isEnabled = self.views.filter({ $0.row == row }).first?.view.isUserInteractionEnabled ?? false
+        let autoCollapse = self.views[row].autoCollapse ?? false
+        let isEnabled = self.views[row].view.isUserInteractionEnabled
         return autoCollapse && isEnabled
     }
     
-    internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) -> UIView? {
-        
-        if (self.data[row] is WWTemplateDataObject || self.data[row] is WWNonTemplateDataObject)  {  //For now it's the same
-            let childrenView : UIView = self.views[row].view
-            childrenView.frame = cell.bounds
-            childrenView.tag = form.itemTag
-            (childrenView as? WWItemView)?.reference = form
-            (childrenView as? WWItemView)?.applyStatus(status: self.status)
-            cell.contentView.addSubViewWithConstraints(childrenView)
-            if (row != self.data.count - 1){
-                UIView.addSeparator(subView: childrenView)
-            }
-            return childrenView
+    internal func isParentAndEnabled(row : Int) -> Bool {
+        if let parent = self.views[row] as? WWParentViewInfo {
+            return parent.view.isUserInteractionEnabled
+        }
+        return false
+    }
+    
+    internal func changeSubGroup(row : Int) -> [IndexPath]? {
+        if let parent = self.views[row] as? WWParentViewInfo {
+            parent.isCollapsed = !parent.isCollapsed
+            
+            return parent.children?.map({ (info) -> IndexPath? in
+                return (info.view as? WWItemView)?.indexPath
+            }).filter({ $0 != nil}).map({ $0! })
         }
         return nil
+    }
+    
+    internal func addView(form: WWCollapsibleForm, cell: UITableViewCell, row: Int) -> UIView? {
+        let childrenView : UIView = self.views[row].view
+        childrenView.frame = cell.bounds
+        childrenView.tag = form.itemTag
+        (childrenView as? WWItemView)?.reference = form
+        (childrenView as? WWItemView)?.applyStatus(status: self.status)
+        cell.contentView.addSubViewWithConstraints(childrenView, edgeInsets: UIEdgeInsets(top: 0, left: CGFloat(self.views[row].level ?? 0) * self.leftSpacing, bottom: 0, right: 0))
+        cell.contentView.backgroundColor = childrenView.backgroundColor
+        
+        //has a parent or it's the last child
+        //This has to change a little bit
+        if (row != self.views.count - 1) {
+            UIView.addSeparator(subView: childrenView)
+        }
+        
+        if let parent = (self.views[row] as? WWParentViewInfo),
+            !parent.isCollapsed {
+            parent.view.removeSeparator()
+        }
+        
+        return childrenView
     }
     
     internal func addSeparatorToSelectedHeader() {
@@ -119,19 +148,17 @@ public class WWSection : NSObject {
     }
     
     public func appendData(data: WWDataObject) {
-        var view : UIView = UIView()
-        var height : CGFloat = 0
-        if (data is WWTemplateDataObject) {
-            view = template.createView()
-            height = template.height
-            
-        } else if (data is WWNonTemplateDataObject) {
-            view = (data as? WWNonTemplateDataObject)?.template.createView() ?? UIView()
-            height = (data as? WWNonTemplateDataObject)?.template.height ?? 0
-        }
-        self.views.append(WWViewInfo(row: self.data.count, view: view, height: height, autoCollapse: data.autoCollapse))
-        self.data.append(data)
         
+        self.data.append(data)
+        self.appendView(data: data)
+    }
+    
+    func appendView(data: WWDataObject) {        
+        if let builder : IWWViewInfoBuilder = IWWViewInfoBuilderFactory.getBuilder(dataObject: data) {
+            let director : WWViewInfoBuilDirector = WWViewInfoBuilDirector(builder: builder)
+            director.construct(section: self)
+            self.views.append(contentsOf: builder.getResult())
+        }
     }
     
     private func initialize(template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {

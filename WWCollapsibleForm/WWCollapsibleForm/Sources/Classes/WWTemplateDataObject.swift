@@ -7,7 +7,8 @@
 //
 
 import Foundation
-public class WWTemplateDataObject : WWDataObject {
+public class WWTemplateDataObject : WWDataObject, WWAutoCollapsable {
+    public var autoCollapse : Bool = true
     public override init() {
         super.init()
     }
