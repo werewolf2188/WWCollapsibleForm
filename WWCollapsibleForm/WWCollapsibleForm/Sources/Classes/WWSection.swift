@@ -20,6 +20,7 @@ public class WWSection : NSObject {
     
     private var _headerView : UIView!
     private var _selectedHeaderView : UIView!
+    
     private var views : [WWViewInfo] = []
     private let leftSpacing : CGFloat = 20
 
@@ -89,10 +90,10 @@ public class WWSection : NSObject {
     internal func changeSubGroup(row : Int) -> [IndexPath]? {
         if let parent = self.views[row] as? WWParentViewInfo {
             parent.isCollapsed = !parent.isCollapsed
-            
-            return parent.children?.map({ (info) -> IndexPath? in
+            let items = parent.children?.map({ (info) -> IndexPath? in
                 return (info.view as? WWItemView)?.indexPath
             }).filter({ $0 != nil}).map({ $0! })
+            return items
         }
         return nil
     }
@@ -102,21 +103,11 @@ public class WWSection : NSObject {
         childrenView.frame = cell.bounds
         childrenView.tag = form.itemTag
         (childrenView as? WWItemView)?.reference = form
+        (childrenView as? WWItemView)?.indexPath = IndexPath(row: row, section: self.section)
         (childrenView as? WWItemView)?.applyStatus(status: self.status)
         cell.contentView.addSubViewWithConstraints(childrenView, edgeInsets: UIEdgeInsets(top: 0, left: CGFloat(self.views[row].level ?? 0) * self.leftSpacing, bottom: 0, right: 0))
         cell.contentView.backgroundColor = childrenView.backgroundColor
-        
-        //has a parent or it's the last child
-        //This has to change a little bit
-        if (row != self.views.count - 1) {
-            UIView.addSeparator(subView: childrenView)
-        }
-        
-        if let parent = (self.views[row] as? WWParentViewInfo),
-            !parent.isCollapsed {
-            parent.view.removeSeparator()
-        }
-        
+        self.setSeparator(childrenView: childrenView, row: row)
         return childrenView
     }
     
@@ -164,5 +155,33 @@ public class WWSection : NSObject {
     private func initialize(template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
         self.template = template
         self.selectedHeader = selectedHeader
+    }
+    
+    private func setSeparator(childrenView: UIView, row: Int) {
+        //It does not have any parents
+        childrenView.removeSeparator()
+        if (self.views.filter({ $0 is WWParentViewInfo }).count == 0) {
+            if (row != self.views.count - 1) {
+                UIView.addSeparator(subView: childrenView)
+            }
+        } else {
+            let numberOfParents : Int = self.views.filter({ $0 is WWParentViewInfo }).count
+            self.views.enumerated().forEach { (arg0) in
+                
+                let (index, element) = arg0
+                if (index == row) {
+                    if let parent = element as? WWParentViewInfo,
+                        let indexOfParent = self.views.firstIndex(of: self.views[row]),
+                        parent.isCollapsed && indexOfParent < (numberOfParents - 1) {
+                        UIView.addSeparator(subView: childrenView)
+                    } else if let lastIndexPath = (element.parent?.children?.last?.view as? WWItemView)?.indexPath,
+                        let indexPath = (element.view as? WWItemView)?.indexPath,
+                        indexPath != lastIndexPath {
+                        UIView.addSeparator(subView: childrenView)
+                    }
+                }
+            }
+            
+        }
     }
 }

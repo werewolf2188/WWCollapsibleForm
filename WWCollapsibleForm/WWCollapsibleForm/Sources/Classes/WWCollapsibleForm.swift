@@ -44,6 +44,7 @@ public class WWCollapsibleForm : UIView {
         self.tableView.separatorStyle = .none
         self.tableView.dataSource = self.privateForm
         self.tableView.delegate = self.privateForm
+        self.tableView.backgroundColor = self.backgroundColor
     }
     
     //Add new section

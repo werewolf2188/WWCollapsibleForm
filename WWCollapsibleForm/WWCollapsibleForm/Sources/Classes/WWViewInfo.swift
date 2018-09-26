@@ -106,16 +106,18 @@ fileprivate class WWSubGroupDataObjectViewInfoBuilder : NSObject, IWWViewInfoBui
         let parent : WWParentViewInfo = WWParentViewInfo(view: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.createView() ?? UIView(), height: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level)
         
         var items : [WWViewInfo] = [parent]
+        parent.children = []
         var builder: IWWViewInfoBuilder?
         for children in (self.dataObject as? WWSubGroupDataObject)?.data ?? [] {
             builder = IWWViewInfoBuilderFactory.getBuilder(dataObject: children)
             builder?.level = self.level + 1
             builder?.section = self.section
-            parent.children = builder?.getResult()
-            parent.children?.forEach({ (child) in
+            let subItems : [WWViewInfo] = builder?.getResult() ?? []
+            subItems.forEach({ (child) in
                 child.parent = parent
             })
-            items.append(contentsOf: parent.children ?? [])
+            parent.children?.append(contentsOf:  subItems)
+            items.append(contentsOf: subItems)
         }
         return items
     }
