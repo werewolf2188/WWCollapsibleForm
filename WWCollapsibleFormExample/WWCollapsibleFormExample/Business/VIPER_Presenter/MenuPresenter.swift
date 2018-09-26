@@ -13,8 +13,8 @@ protocol MenuViewEventHandler : NSObjectProtocol {
     var menuProvider : MenuProvider? { get set }
     func loadSections()
     func loadHeader(header : MenuHeaderView, section : Int)
-    func loadItem(item : MenuItemView, section: Int, row : Int)
-    func itemSelected(section: Int, row : Int)
+    func loadItem(item : MenuItemView, section: Int, data : WWDataObject)
+    func itemSelected(section: Int, data : WWDataObject)
 }
 
 protocol MenuOutput : NSObjectProtocol {
@@ -31,7 +31,7 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
     // private section presenters
     private var sectionPresenters : [(section: Int, presenter: MenuHeaderViewPresenter)] = []
     //private row presenters
-    private var rowPresenters : [(section: Int, row: Int, presenter: MenuItemViewPresenter)] = []
+    private var rowPresenters : [(section: Int, data: WWDataObject, presenter: MenuItemViewPresenter)] = []
     
     func loadSections() {
         self.menuProvider?.provideMenuItems()
@@ -57,17 +57,24 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
         }
     }
     
-    func loadItem(item : MenuItemView, section: Int, row : Int) {
-        if let holder = self.rowPresenters.filter({$0.section == section && $0.row == row}).first {
+    func loadItem(item : MenuItemView, section: Int, data : WWDataObject) {
+        if let holder = self.rowPresenters.filter({$0.section == section && $0.data == data}).first {
             holder.presenter.itemView = item
             holder.presenter.showItem()
         }
     }
     
-    func itemSelected(section: Int, row : Int) {
-        if let rHolder = self.rowPresenters.filter({$0.section == section && $0.row == row}).first,
+    func itemSelected(section: Int, data : WWDataObject) {
+        if let rHolder = self.rowPresenters.filter({$0.section == section && $0.data == data}).first,
             let sHolder = self.sectionPresenters.filter({$0.section == section}).first {
-            sHolder.presenter.selectedItem = rHolder.presenter.item
+            if let parent = rHolder.data.parent,
+                let rParentHolder = self.rowPresenters.filter({$0.data == parent}).first {
+                sHolder.presenter.selectedItem = MenuItem(id: rParentHolder.presenter.item.id , name:
+                        "\(rHolder.presenter.item.name ?? "") - \(rParentHolder.presenter.item.name ?? "")", image: rParentHolder.presenter.item.image, price: rHolder.presenter.item.price, children: nil)
+            } else {
+                sHolder.presenter.selectedItem = rHolder.presenter.item
+            }
+            
         }
     }
     
@@ -93,13 +100,13 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
                 (item.children?.count ?? 0) > 0 ? WWSubGroupDataObject(template: WWViewRepresentation(view: CellView()), headerTemplate : WWViewRepresentation(view: CellView())) : WWTemplateDataObject()
             let presenter : MenuItemPresenter = MenuItemPresenter()
             presenter.item = item
-            self.rowPresenters.append((section: sectionNum, row: rowCount, presenter: presenter))
+            self.rowPresenters.append((section: sectionNum, data: data, presenter: presenter))
             rowCount = rowCount + 1            
             for children in item.children ?? [] {
                 let childrenData = WWTemplateDataObject()
                 let presenter : MenuItemPresenter = MenuItemPresenter()
                 presenter.item = children
-                self.rowPresenters.append((section: sectionNum, row: rowCount, presenter: presenter))
+                self.rowPresenters.append((section: sectionNum, data: childrenData, presenter: presenter))
                 rowCount = rowCount + 1
                 (data as? WWSubGroupDataObject)?.appendData(object: childrenData)
             }

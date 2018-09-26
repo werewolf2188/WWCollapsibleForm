@@ -24,6 +24,7 @@ public class WWSubGroupDataObject: WWDataObject {
     }
     
     public func appendData(object: WWDataObject) {
+        object.internalParent = self
         self.data.append(object)
     }
 }

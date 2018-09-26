@@ -17,7 +17,7 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let view = self.sections[indexPath.section].addView(form: self.publicForm, cell: cell, row: indexPath.row) {
-            self.formDelegate?.modifyItem(item: view, indexPath: indexPath)
+            self.formDelegate?.modifyItem(item: view, data: self.sections[indexPath.section].getDataObject(row: indexPath.row), section: indexPath.section)
         }
     }
     
@@ -75,7 +75,7 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (self.sections[indexPath.section].shouldAutoCollapse(row: indexPath.row)) {
-            self.formDelegate?.itemSelected(indexPath: indexPath)
+            self.formDelegate?.itemSelected(data: self.sections[indexPath.section].getDataObject(row: indexPath.row), section: indexPath.section)
             self.publicForm.collapse(indexPath: indexPath)
         } else if (self.sections[indexPath.section].isParentAndEnabled(row: indexPath.row)),
             let items = self.sections[indexPath.section].changeSubGroup(row: indexPath.row) {

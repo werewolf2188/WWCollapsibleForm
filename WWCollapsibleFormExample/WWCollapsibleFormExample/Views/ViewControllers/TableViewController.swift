@@ -38,14 +38,14 @@ extension ViewController : WWCollapsibleFormDelegate {
         }
     }
     
-    func modifyItem(item: UIView, indexPath: IndexPath) {
+    func modifyItem(item: UIView, data: WWDataObject, section: Int) {
         if let item = item as? MenuItemView {
-            self.eventHandler?.loadItem(item: item, section: indexPath.section, row: indexPath.row)
+            self.eventHandler?.loadItem(item: item, section: section, data: data)
         }
     }
     
-    func itemSelected(indexPath: IndexPath) {
-        self.eventHandler?.itemSelected(section: indexPath.section, row: indexPath.row)
+    func itemSelected(data: WWDataObject, section: Int) {
+        self.eventHandler?.itemSelected(section: section, data: data)
     }
 }
 

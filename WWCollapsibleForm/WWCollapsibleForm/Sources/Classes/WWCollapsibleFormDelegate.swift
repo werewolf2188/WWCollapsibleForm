@@ -9,6 +9,6 @@
 import Foundation
 public protocol WWCollapsibleFormDelegate {
     func modifyHeader(header: UIView, section: Int)
-    func modifyItem(item: UIView, indexPath: IndexPath) //This should change to an indexer and not an index path
-    func itemSelected(indexPath: IndexPath) //This should change to an indexer and not an index path
+    func modifyItem(item: UIView, data: WWDataObject, section: Int) //This should change to an indexer and not an index path
+    func itemSelected(data: WWDataObject, section: Int) //This should change to an indexer and not an index path
 }

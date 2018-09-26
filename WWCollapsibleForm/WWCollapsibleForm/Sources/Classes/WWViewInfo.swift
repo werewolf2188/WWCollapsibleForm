@@ -12,13 +12,14 @@ class WWViewInfo : NSObject {
     var height : CGFloat!
     var autoCollapse : Bool!
     var level : Int!
-    
-    init(view: UIView, height : CGFloat, autoCollapse : Bool, level : Int){
+    var data : WWDataObject!
+    init(view: UIView, height : CGFloat, autoCollapse : Bool, level : Int, data: WWDataObject){
         super.init()
         self.view = view
         self.height = height
         self.autoCollapse = autoCollapse
         self.level = level
+        self.data = data
     }
     
     var parent : WWParentViewInfo?
@@ -72,7 +73,7 @@ fileprivate class WWTemplateDataObjectViewInfoBuilder : NSObject, IWWViewInfoBui
     }
     
     func getResult() -> [WWViewInfo] {
-        return [WWViewInfo(view: self.section.template.createView(), height: self.section.template.height, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level)]
+        return [WWViewInfo(view: self.section.template.createView(), height: self.section.template.height, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level, data: dataObject)]
     }
 }
 
@@ -87,7 +88,7 @@ fileprivate class WWNonTemplateDataObjectViewInfoBuilder : NSObject, IWWViewInfo
     }
     
     func getResult() -> [WWViewInfo] {
-        return [WWViewInfo(view: (self.dataObject as? WWNonTemplateDataObject)?.template.createView() ?? UIView(), height: (self.dataObject as? WWNonTemplateDataObject)?.template.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level)]
+        return [WWViewInfo(view: (self.dataObject as? WWNonTemplateDataObject)?.template.createView() ?? UIView(), height: (self.dataObject as? WWNonTemplateDataObject)?.template.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level, data: dataObject)]
     }
 }
 
@@ -103,7 +104,7 @@ fileprivate class WWSubGroupDataObjectViewInfoBuilder : NSObject, IWWViewInfoBui
     
     func getResult() -> [WWViewInfo] {
         
-        let parent : WWParentViewInfo = WWParentViewInfo(view: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.createView() ?? UIView(), height: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level)
+        let parent : WWParentViewInfo = WWParentViewInfo(view: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.createView() ?? UIView(), height: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level, data: dataObject)
         
         var items : [WWViewInfo] = [parent]
         parent.children = []

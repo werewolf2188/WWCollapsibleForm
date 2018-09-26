@@ -17,4 +17,28 @@ public class WWDataObject : NSObject {
     override init() {
         super.init()
     }
+    
+    internal var internalParent : WWSubGroupDataObject?
+    public var parent: WWSubGroupDataObject? {
+        get {
+            return internalParent
+        }
+    }
+    
+    public override var hash: Int {
+        get {
+            return ObjectIdentifier(self).hashValue
+        }
+    }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        if let otherObject = object as? WWDataObject {
+            return self.hash == otherObject.hash
+        }
+        return false
+    }
+    
+    public func isEqual(to data: WWDataObject) -> Bool {
+        return self.isEqual(data)
+    }
 }

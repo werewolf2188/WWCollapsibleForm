@@ -111,6 +111,10 @@ public class WWSection : NSObject {
         return childrenView
     }
     
+    internal func getDataObject(row: Int) -> WWDataObject {
+        return self.views[row].data
+    }
+    
     internal func addSeparatorToSelectedHeader() {
         
         if let _selectedHeaderView = self._selectedHeaderView {
