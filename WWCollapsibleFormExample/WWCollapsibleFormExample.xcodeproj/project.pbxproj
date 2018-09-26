@@ -393,9 +393,11 @@
 				TargetAttributes = {
 					B075F5C32149BD1E00659691 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 					B075F5D72149BD1F00659691 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = B075F5C32149BD1E00659691;
 					};
 				};

@@ -40,7 +40,7 @@ class MenuInteractor: NSObject, MenuProvider {
     
     private func getAsItems(bankProduct: [BankProduct],title: String , subtitle:String? = nil) -> MenuSection {
         let items : [MenuItem] = bankProduct.map { (product) -> MenuItem in
-            MenuItem(id: "\(product.id)|\(product.type.rawValue)" , name: product.name, image: product.image, price: product.balance, children: [])
+            MenuItem(id: "\(product.id ?? "")|\(product.type.rawValue)" , name: product.name, image: product.image, price: product.balance, children: [])
         }
         let menuSection : MenuSection = MenuSection(title: title, subtitle: subtitle, items: items)
         return menuSection
