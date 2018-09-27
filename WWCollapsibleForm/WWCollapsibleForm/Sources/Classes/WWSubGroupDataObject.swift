@@ -8,10 +8,17 @@
 
 import UIKit
 
+public enum WWSubGroupDataObjectCollapse : Int {
+    case byButton
+    case byCell
+}
+
 public class WWSubGroupDataObject: WWDataObject {
     internal var data : [WWDataObject] = []
     internal var template: WWViewRepresentation!
     internal var headerTemplate: WWViewRepresentation!
+    
+    public var collapse: WWSubGroupDataObjectCollapse = .byCell
     
     override internal init() {
         super.init()

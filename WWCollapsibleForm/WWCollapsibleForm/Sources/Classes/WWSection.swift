@@ -82,7 +82,8 @@ public class WWSection : NSObject {
     
     internal func isParentAndEnabled(row : Int) -> Bool {
         if let parent = self.views[row] as? WWParentViewInfo {
-            return parent.view.isUserInteractionEnabled
+            return parent.view.isUserInteractionEnabled &&
+                (parent.data as? WWSubGroupDataObject)?.collapse == .byCell
         }
         return false
     }
@@ -90,6 +91,7 @@ public class WWSection : NSObject {
     internal func changeSubGroup(row : Int) -> [IndexPath]? {
         if let parent = self.views[row] as? WWParentViewInfo {
             parent.isCollapsed = !parent.isCollapsed
+            (parent.view as? WWItemView)?.isCollapsed = parent.isCollapsed
             let items = parent.children?.map({ (info) -> IndexPath? in
                 return (info.view as? WWItemView)?.indexPath
             }).filter({ $0 != nil}).map({ $0! })
@@ -108,6 +110,23 @@ public class WWSection : NSObject {
         cell.contentView.addSubViewWithConstraints(childrenView, edgeInsets: UIEdgeInsets(top: 0, left: CGFloat(self.views[row].level ?? 0) * self.leftSpacing, bottom: 0, right: 0))
         cell.contentView.backgroundColor = childrenView.backgroundColor
         self.setSeparator(childrenView: childrenView, row: row)
+        
+        if let subGroup = self.views[row].data as? WWSubGroupDataObject,
+            subGroup.collapse == .byButton {
+            
+            (childrenView as? WWItemView)?.subGroupButton?.actionHandle(controlEvents: .touchUpInside, forAction: {
+                if (childrenView.isUserInteractionEnabled), let indexPath = (childrenView as? WWItemView)?.indexPath {
+                    
+                    if let items = self.changeSubGroup(row: indexPath.row) {
+                        form.tableView.beginUpdates()
+                        form.tableView.reloadRows(at:  [indexPath], with: .none)
+                        form.tableView.reloadRows(at: items, with: .bottom)
+                        form.tableView.endUpdates()
+                    }
+                }
+            })
+            
+        }
         return childrenView
     }
     

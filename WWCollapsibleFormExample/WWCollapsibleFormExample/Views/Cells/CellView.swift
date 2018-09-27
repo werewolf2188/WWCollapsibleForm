@@ -41,6 +41,8 @@ class CellView: WWItemView, MenuItemView {
             self.backgroundColor = UIColor.lightGray
             self.productName.textColor = UIColor.darkGray
             self.moneyLabel.textColor = UIColor.darkGray
+            self.subGroupButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            self.subGroupButton?.tintColor = UIColor.darkGray
             self.imageView.alpha = 0.3
             self.isUserInteractionEnabled = false
         })
@@ -48,6 +50,8 @@ class CellView: WWItemView, MenuItemView {
             self.backgroundColor = UIColor.white
             self.productName.textColor = UIColor.black
             self.moneyLabel.textColor = UIColor.black
+            self.subGroupButton?.setTitleColor(UIColor.black, for: .normal)
+            self.subGroupButton?.tintColor = UIColor.black
             self.imageView.alpha = 1
             self.isUserInteractionEnabled = true
         })

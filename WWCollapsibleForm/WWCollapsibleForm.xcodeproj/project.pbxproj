@@ -28,6 +28,7 @@
 		C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A36214DB1D60035B98D /* WWHeaderView.swift */; };
 		C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */; };
 		C286AB4B21586CF800ACF338 /* WWCollapsibleFormAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */; };
+		C291119D215C63700080CA3F /* UIButton_ActionHandleBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291119C215C63700080CA3F /* UIButton_ActionHandleBlock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		C2344A36214DB1D60035B98D /* WWHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWHeaderView.swift; sourceTree = "<group>"; };
 		C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSelectedHeaderView.swift; sourceTree = "<group>"; };
 		C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormAdapter.swift; sourceTree = "<group>"; };
+		C291119C215C63700080CA3F /* UIButton_ActionHandleBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton_ActionHandleBlock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				B0BE4F0C214C586900251E82 /* UIView_Private_HelperMethods.swift */,
+				C291119C215C63700080CA3F /* UIButton_ActionHandleBlock.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */,
 				C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */,
 				B0E617EE21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift in Sources */,
+				C291119D215C63700080CA3F /* UIButton_ActionHandleBlock.swift in Sources */,
 				B0913CDA2153FCB4008F575F /* WWStatusApplier.swift in Sources */,
 				C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */,
 			);

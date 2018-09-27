@@ -104,8 +104,12 @@ fileprivate class WWSubGroupDataObjectViewInfoBuilder : NSObject, IWWViewInfoBui
     
     func getResult() -> [WWViewInfo] {
         
-        let parent : WWParentViewInfo = WWParentViewInfo(view: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.createView() ?? UIView(), height: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level, data: dataObject)
         
+        let view : UIView = (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.createView() ?? UIView()
+        
+        let parent : WWParentViewInfo = WWParentViewInfo(view: view, height: (self.dataObject as? WWSubGroupDataObject)?.headerTemplate.height ?? 0, autoCollapse: (self.dataObject as? WWAutoCollapsable)?.autoCollapse ?? false, level: self.level, data: dataObject)
+        (view as? WWItemView)?.buildSubGroupButton()
+        (view as? WWItemView)?.isCollapsed = parent.isCollapsed
         var items : [WWViewInfo] = [parent]
         parent.children = []
         var builder: IWWViewInfoBuilder?
