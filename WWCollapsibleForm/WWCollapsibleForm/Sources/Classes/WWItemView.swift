@@ -57,8 +57,6 @@ open class WWItemView : UIView, WWStatusApplier {
         }
     }
     
-    
-    
     public func collapse() {
         self.reference.collapse(indexPath: indexPath)
     }
