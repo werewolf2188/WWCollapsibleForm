@@ -98,4 +98,19 @@ extension UIView {
             self.layer.addSublayer(shapeLayer)
         }
     }
+    
+    func isAppExtension() -> Bool {
+        return Bundle.main.executablePath?.contains(".appex/") ?? false
+    }
+    
+    func isRTL() -> Bool {
+        if #available(iOS 9.0, *) {
+            return UIView.userInterfaceLayoutDirection(
+                for: self.semanticContentAttribute) == .rightToLeft
+        } else if self.isAppExtension() {
+            return Locale.characterDirection(forLanguage: Locale.current.languageCode ?? "en-US") == .rightToLeft
+        } else  {
+            return UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
+        }
+    }
 }
