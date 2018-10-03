@@ -25,6 +25,12 @@ public class WWDataObject : NSObject {
         }
     }
     
+    var options : [WWOptionViewItem] = []
+    
+    public func appendOptions(option : WWOptionViewItem) {
+        self.options.append(option)
+    }
+    
     public override var hash: Int {
         get {
             return ObjectIdentifier(self).hashValue

@@ -7,8 +7,9 @@
 //
 
 import Foundation
-public protocol WWCollapsibleFormDelegate {
+@objc public protocol WWCollapsibleFormDelegate {
     func modifyHeader(header: UIView, section: Int)
-    func modifyItem(item: UIView, data: WWDataObject, section: Int) //This should change to an indexer and not an index path
-    func itemSelected(data: WWDataObject, section: Int) //This should change to an indexer and not an index path
+    func modifyItem(item: UIView, data: WWDataObject, section: Int)
+    func itemSelected(data: WWDataObject, section: Int)
+    @objc optional func optionSelected(option: WWOptionViewItem, data: WWDataObject, section: Int)
 }
