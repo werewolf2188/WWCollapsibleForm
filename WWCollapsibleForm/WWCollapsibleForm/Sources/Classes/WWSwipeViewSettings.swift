@@ -18,22 +18,33 @@ enum WWSwipeViewTransition : Int {
 
 class WWSwipeViewSettings : NSObject {
     var transition : WWSwipeViewTransition = .border
-    var threshold : CGFloat = 0
+    var threshold : CGFloat = 0.5
     var offset : CGFloat = 0
     var topMargin : CGFloat = 0
     var bottomMargin : CGFloat = 0
     var buttonsDistance : CGFloat = 0
-    var expandLastButtonBySafeAreaInsets : Bool = false
+    var expandLastButtonBySafeAreaInsets : Bool = true
     
-    var showAnimation : WWSwipeViewAnimation!
-    var hideAnimation : WWSwipeViewAnimation!
-    var stretchAnimation : WWSwipeViewAnimation!
+    var showAnimation : WWSwipeViewAnimation! = WWSwipeViewAnimation()
+    var hideAnimation : WWSwipeViewAnimation! = WWSwipeViewAnimation()
+    var stretchAnimation : WWSwipeViewAnimation! = WWSwipeViewAnimation()
     
-    var animationDuration : CGFloat = 0
-    var keepButtonsSwiped : Bool = false
+    var animationDuration : CGFloat {
+        get {
+            return showAnimation.duration
+        }
+        set {
+            showAnimation.duration = newValue
+            hideAnimation.duration = newValue
+            stretchAnimation.duration = newValue
+        }
+    }
+    var keepButtonsSwiped : Bool = true
     var onlySwipeButtons : Bool = false
-    var enableSwipeBounces : Bool = false
+    var enableSwipeBounces : Bool = true
     
     var swipeBounceRate : CGFloat = 1.0
     var allowsButtonsWithDifferentWidth : Bool = false
+    
+    
 }

@@ -17,9 +17,9 @@ enum WWSwipeViewExpansion : Int {
 class WWSwipeViewExpansionSettings : NSObject {
     var buttonIndex: Int = -1
     var fillOnTrigger : Bool = false
-    var threshold: CGFloat = 1.5
+    var threshold: CGFloat = 1.3
     var expansionColor : UIColor!
-    var expansionLayout: WWSwipeViewExpansion = .none
-    var triggerAnimation: WWSwipeViewAnimation!
+    var expansionLayout: WWSwipeViewExpansion = .border
+    var triggerAnimation: WWSwipeViewAnimation! = WWSwipeViewAnimation()
     var animationDuration: CGFloat = 0.2
 }

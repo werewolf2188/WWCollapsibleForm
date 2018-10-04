@@ -23,6 +23,13 @@ enum WWSwipeViewDirection : Int {
 }
 
 //HELPER CLASSES
+fileprivate class WWSwipeAnimationData : NSObject {
+    var from : CGFloat = 0
+    var to : CGFloat = 0
+    var duration : CFTimeInterval = 0
+    var start : CFTimeInterval = 0
+    var animation : WWSwipeViewAnimation!
+}
 
 class WWSwipeView : UIView {
     //MARK: Internal properties
