@@ -7,244 +7,262 @@
 //
 
 import Foundation
+
+class WWSwipeViewButtonView : UIView {
+    weak var currentView : WWSwipeView!
+    var backgroundColorCopy : UIColor!
+    
+    private var buttons : [UIView]!
+    private var container : UIView!
+    private var fromLeft : Bool!
+    private var expandedButton : UIView!
+    private var expansionBackground : UIView!
+    private var expandedButtonAnimated : UIView!
+    private var expansionBackgroundAnimated : UIView!
+    private var expandedButtonBoundsCopy : CGRect!
+    private var direction : WWSwipeViewDirection = .leftToRight
+    private var expansionLayout : WWSwipeViewExpansionLayout = .border
+    private var expansionOffset : CGFloat = 0
+    private var buttonsDistance : CGFloat = 0
+    private var safeInset : CGFloat = 0
+    private var autoHideExpansion : Bool = false
+    
+    init(buttons: [UIView], direction: WWSwipeViewDirection, settings: WWSwipeViewSettings, safeInset: CGFloat) {
+        var containerWidth : CGFloat = 0
+        var maxSize : CGSize = CGSize.zero
+        let lastButton : UIView? = buttons.last
+        for button in buttons {
+            containerWidth += button.bounds.size.width + (lastButton == button ? 0 : settings.buttonsDistance)
+            maxSize.width = max(maxSize.width, button.bounds.size.width)
+            maxSize.height = max(maxSize.height, button.bounds.size.height)
+        }
+        
+        if (!settings.allowsButtonsWithDifferentWidth) {
+            containerWidth = maxSize.width * CGFloat(buttons.count) + settings.buttonsDistance * (CGFloat(buttons.count) - 1);
+        }
+        
+        super.init(frame: CGRect(x: 0, y: 0, width:  containerWidth + safeInset, height: maxSize.height))
+        fromLeft = direction == .leftToRight
+        buttonsDistance = settings.buttonsDistance
+        container = UIView(frame: self.bounds)
+        container.clipsToBounds = true
+        container.backgroundColor = UIColor.clear
+        self.direction = direction
+        self.safeInset = safeInset
+        self.addSubview(container)
+        self.buttons = fromLeft ? buttons : buttons.reversed()
+        for button in self.buttons {
+            if button is UIButton {
+                (button as? UIButton)?.removeTarget(nil, action: #selector(self.mgButtonClicked(sender:)), for: .touchUpInside)
+                (button as? UIButton)?.addTarget(self, action: #selector(self.mgButtonClicked(sender:)), for: .touchUpInside)
+            }
+            
+            if (!settings.allowsButtonsWithDifferentWidth) {
+                button.frame = CGRect(x: 0, y: 0, width: maxSize.width, height: maxSize.height)
+                button.autoresizingMask = [.flexibleHeight]
+                container.insertSubview(button, at: fromLeft ? 0: container.subviews.count)
+            }
+            
+        }
+        if (safeInset > 0 && settings.expandLastButtonBySafeAreaInsets && self.buttons.count > 0) {
+            if let notchButton : UIView = direction == .rightToLeft ? self.buttons.last : self.buttons.first {
+                notchButton.frame = CGRect(x: 0, y: 0, width: notchButton.frame.size.width + safeInset, height: notchButton.frame.size.height)
+                self.adjustContentEdge(view: notchButton, edgeDelta: safeInset)
+            }
+        }
+        self.resetButtons()
+    }
+    
+    deinit {
+        for button in self.buttons {
+            if button is UIButton {
+                (button as? UIButton)?.removeTarget(nil, action: #selector(self.mgButtonClicked(sender:)), for: .touchUpInside)
+            }
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if (self.expandedButton != nil) {
+            self.layoutExpansion(offset: self.expansionOffset)
+        } else {
+            self.container.frame = self.bounds
+        }
+    }
+}
+
+//MARK: Layout
+extension WWSwipeViewButtonView {
+    func adjustContentEdge(view: UIView, edgeDelta delta: CGFloat) {
+        
+        if let button = view as? UIButton {
+            var contentInsets : UIEdgeInsets = button.contentEdgeInsets
+            if direction == .rightToLeft {
+                contentInsets.right += delta
+            } else {
+                contentInsets.left += delta
+            }
+            button.contentEdgeInsets = contentInsets
+        }
+    }
+    
+    func resetButtons() {
+        var offsetX : CGFloat = 0
+        let lastButton = self.buttons.last
+        for button in self.buttons {
+            button.frame = CGRect(x: offsetX, y: 0, width: button.bounds.size.width, height: self.bounds.size.height)
+            button.autoresizingMask = [.flexibleHeight]
+            offsetX += button.bounds.size.width + (lastButton == button ? 0 : buttonsDistance)
+        }
+    }
+    
+    func setSafeInset(_ safeInset: CGFloat, extendEdgeButton: Bool, isRTL: Bool) {
+        let diff : CGFloat = safeInset - self.safeInset
+        if (diff != 0) {
+            self.safeInset = safeInset
+            if (extendEdgeButton) {
+                if let edgeButton : UIView = direction == .rightToLeft ? self.buttons.last : self.buttons.first {
+                    edgeButton.frame = CGRect(x: 0, y: 0, width: edgeButton.frame.size.width + diff, height: edgeButton.frame.size.height)
+                    self.adjustContentEdge(view: edgeButton, edgeDelta: diff)
+                }
+            }
+            
+            var frame : CGRect = self.frame
+            let transform : CGAffineTransform = self.transform
+            self.transform = .identity
+            frame.size.width += diff
+            if (self.direction == .leftToRight) {
+                frame.origin.x = -frame.size.width + safeInset * (isRTL ? 1 : -1)
+            } else {
+                frame.origin.x = (self.superview?.bounds.size.width ?? 0) + safeInset * (isRTL ? 1 : -1)
+            }
+            self.frame = frame
+            self.transform = transform
+            self.resetButtons()
+        }
+    }
+    
+    func layoutExpansion(offset: CGFloat) {
+        self.expansionOffset = offset
+        self.container.frame = CGRect(x: self.fromLeft ? 0 : self.bounds.size.width - offset, y: 0, width: offset, height: self.bounds.size.height)
+        if self.expansionBackgroundAnimated != nil && self.expandedButtonAnimated != nil {
+            self.expansionBackgroundAnimated.frame = self.expansionBackgroundRect(button: self.expandedButtonAnimated)
+        }
+    }
+    
+    func expansionBackgroundRect(button: UIView) -> CGRect {
+        let extra : CGFloat = 100
+        if (self.fromLeft) {
+            return CGRect(x: -extra, y: 0, width: button.frame.origin.x + extra, height: self.container.bounds.size.height)
+        } else {
+            return CGRect(x: button.frame.origin.x +  button.bounds.size.width, y: 0, width: self.container.bounds.size.width - (button.frame.origin.x + button.bounds.size.width ), height: container.bounds.size.height)
+        }
+    }
+    
+    func expandToOffset(_ offset: CGFloat, settings: WWSwipeViewExpansionSettings) {
+        if (settings.buttonIndex < 0 || settings.buttonIndex >= self.buttons.count) {
+            return;
+        }
+        
+        if (self.expandedButton == nil) {
+            self.expandedButton = self.buttons[self.fromLeft ? settings.buttonIndex : self.buttons.count - settings.buttonIndex - 1]
+            var previousRect : CGRect = container.frame
+            self.layoutExpansion(offset: offset)
+            self.resetButtons()
+            if (!self.fromLeft) {
+                for button in self.buttons {
+                    var frame : CGRect = button.frame
+                    frame.origin.x += container.bounds.size.width - previousRect.size.width
+                    button.frame = frame
+                }
+            }
+            self.expansionBackground = UIView(frame: self.expansionBackgroundRect(button: expandedButton))
+            self.expansionBackground.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            if settings.expansionColor != nil {
+                self.backgroundColorCopy = self.expandedButton.backgroundColor
+                self.expandedButton.backgroundColor = settings.expansionColor
+            }
+            self.expansionBackground.backgroundColor = self.expandedButton.backgroundColor
+            if UIColor.clear == self.expandedButton.backgroundColor {
+                self.expansionBackground.layer.contents = self.expandedButton.layer.contents;
+            }
+            self.container.addSubview(self.expansionBackground)
+            self.expansionLayout = settings.expansionLayout
+            let duration = self.fromLeft ? self.currentView.leftExpansion.animationDuration : self.currentView.rightExpansion.animationDuration
+            UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: [.beginFromCurrentState], animations: {
+                self.animationExpandToOffset()
+                
+            }, completion: nil)
+           return
+        }
+        self.layoutExpansion(offset: offset)
+    }
+}
+
+//MARK: Clicks
+extension WWSwipeViewButtonView {
+    @objc func mgButtonClicked(sender: Any) {
+        
+    }
+}
+
+//MARK: Animations
+extension WWSwipeViewButtonView {
+    func animationExpandToOffset() {
+        self.expandedButton.isHidden = false
+        if (self.expansionLayout == .center) {
+            self.expandedButtonBoundsCopy = self.expandedButton.bounds
+            self.expandedButton.layer.mask = nil
+            self.expandedButton.layer.transform = CATransform3DIdentity
+            self.expandedButton.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            self.expandedButton.superview?.bringSubview(toFront: self.expandedButton)
+            self.expandedButton.frame = self.container.bounds
+            self.expansionBackground.frame = self.expansionBackgroundRect(button: self.expandedButton)
+        } else if (self.expansionLayout == .none) {
+            self.expandedButton.superview?.bringSubview(toFront: self.expandedButton)
+            self.expansionBackground.frame = self.container.bounds
+        } else if self.fromLeft {
+            
+        }
+        //            self->_expandedButton.hidden = NO;
+        //
+        //            if (self->_expansionLayout == MGSwipeExpansionLayoutCenter) {
+        //            self->_expandedButtonBoundsCopy = self->_expandedButton.bounds;
+        //            self->_expandedButton.layer.mask = nil;
+        //            self->_expandedButton.layer.transform = CATransform3DIdentity;
+        //            self->_expandedButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        //            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
+        //            self->_expandedButton.frame = self->_container.bounds;
+        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
+        //            }
+        //            else if (self->_expansionLayout == MGSwipeExpansionLayoutNone) {
+        //            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
+        //            self->_expansionBackground.frame = self->_container.bounds;
+        //            }
+        //            else if (self->_fromLeft) {
+        //            self->_expandedButton.frame = CGRectMake(self->_container.bounds.size.width - self->_expandedButton.bounds.size.width, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
+        //            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleLeftMargin;
+        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
+        //            }
+        //            else {
+        //            self->_expandedButton.frame = CGRectMake(0, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
+        //            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleRightMargin;
+        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
+        //            }
+    }
+}
 //#pragma mark Button Container View and transitions
 //
-//@interface MGSwipeButtonsView : UIView
-//@property (nonatomic, weak) MGSwipeTableCell * cell;
-//@property (nonatomic, strong) UIColor * backgroundColorCopy;
-//@end
 //
 //@implementation MGSwipeButtonsView
-//{
-//    NSArray * _buttons;
-//    UIView * _container;
-//    BOOL _fromLeft;
-//    UIView * _expandedButton;
-//    UIView * _expandedButtonAnimated;
-//    UIView * _expansionBackground;
-//    UIView * _expansionBackgroundAnimated;
-//    CGRect _expandedButtonBoundsCopy;
-//    MGSwipeDirection _direction;
-//    MGSwipeF _expansionLayout;
-//    CGFloat _expansionOffset;
-//    CGFloat _buttonsDistance;
-//    CGFloat _safeInset;
-//    BOOL _autoHideExpansion;
-//}
+
 //
 //#pragma mark Layout
 //
-//-(instancetype) initWithButtons:(NSArray*) buttonsArray direction:(MGSwipeDirection) direction swipeSettings:(MGSwipeSettings*) settings safeInset: (CGFloat) safeInset
-//{
-//    CGFloat containerWidth = 0;
-//    CGSize maxSize = CGSizeZero;
-//    UIView* lastButton = [buttonsArray lastObject];
-//    for (UIView * button in buttonsArray) {
-//        containerWidth += button.bounds.size.width + (lastButton == button ? 0 : settings.buttonsDistance);
-//        maxSize.width = MAX(maxSize.width, button.bounds.size.width);
-//        maxSize.height = MAX(maxSize.height, button.bounds.size.height);
-//    }
-//    if (!settings.allowsButtonsWithDifferentWidth) {
-//        containerWidth = maxSize.width * buttonsArray.count + settings.buttonsDistance * (buttonsArray.count - 1);
-//    }
-//
-//    if (self = [super initWithFrame:CGRectMake(0, 0, containerWidth + safeInset, maxSize.height)]) {
-//        _fromLeft = direction == MGSwipeDirectionLeftToRight;
-//        _buttonsDistance = settings.buttonsDistance;
-//        _container = [[UIView alloc] initWithFrame:self.bounds];
-//        _container.clipsToBounds = YES;
-//        _container.backgroundColor = [UIColor clearColor];
-//        _direction = direction;
-//        _safeInset = safeInset;
-//        [self addSubview:_container];
-//        _buttons = _fromLeft ? buttonsArray: [[buttonsArray reverseObjectEnumerator] allObjects];
-//        for (UIView * button in _buttons) {
-//            if ([button isKindOfClass:[UIButton class]]) {
-//                UIButton * btn = (UIButton*)button;
-//                [btn removeTarget:nil action:@selector(mgButtonClicked:) forControlEvents:UIControlEventTouchUpInside]; //Remove all targets to avoid problems with reused buttons among many cells
-//                [btn addTarget:self action:@selector(mgButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            }
-//            if (!settings.allowsButtonsWithDifferentWidth) {
-//                button.frame = CGRectMake(0, 0, maxSize.width, maxSize.height);
-//            }
-//            button.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-//            [_container insertSubview:button atIndex: _fromLeft ? 0: _container.subviews.count];
-//        }
-//        // Expand last button to make it look good with a notch.
-//        if (safeInset > 0 && settings.expandLastButtonBySafeAreaInsets && _buttons.count > 0) {
-//            UIView * notchButton = _direction == MGSwipeDirectionRightToLeft ? [_buttons lastObject] : [_buttons firstObject];
-//            notchButton.frame = CGRectMake(0, 0, notchButton.frame.size.width + safeInset, notchButton.frame.size.height);
-//            [self adjustContentEdge:notchButton edgeDelta:safeInset];
-//        }
-//        [self resetButtons];
-//    }
-//    return self;
-//}
-//
-//-(void) dealloc
-//    {
-//        for (UIView * button in _buttons) {
-//            if ([button isKindOfClass:[UIButton class]]) {
-//                [(UIButton *)button removeTarget:self action:@selector(mgButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            }
-//        }
-//}
-//
-//-(void) resetButtons
-//    {
-//        CGFloat offsetX = 0;
-//        UIView* lastButton = [_buttons lastObject];
-//        for (UIView * button in _buttons) {
-//            button.frame = CGRectMake(offsetX, 0, button.bounds.size.width, self.bounds.size.height);
-//            button.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-//            offsetX += button.bounds.size.width + (lastButton == button ? 0 : _buttonsDistance);
-//        }
-//}
-//
-//-(void) setSafeInset:(CGFloat)safeInset extendEdgeButton:(BOOL) extendEdgeButton isRTL: (BOOL) isRTL {
-//    CGFloat diff = safeInset - _safeInset;
-//    if (diff != 0) {
-//        _safeInset = safeInset;
-//        // Adjust last button length (fit the safeInset to make it look good with a notch)
-//        if (extendEdgeButton) {
-//            UIView * edgeButton = _direction == MGSwipeDirectionRightToLeft ? [_buttons lastObject] : [_buttons firstObject];
-//            edgeButton.frame = CGRectMake(0, 0, edgeButton.bounds.size.width + diff, edgeButton.frame.size.height);
-//            // Adjust last button content edge (to correctly align the text/icon)
-//            [self adjustContentEdge:edgeButton edgeDelta:diff];
-//        }
-//
-//        CGRect frame = self.frame;
-//        CGAffineTransform transform = self.transform;
-//        self.transform = CGAffineTransformIdentity;
-//        // Adjust container width
-//        frame.size.width += diff;
-//        // Adjust position to match width and safeInsets chages
-//        if (_direction == MGSwipeDirectionLeftToRight) {
-//            frame.origin.x = -frame.size.width + safeInset * (isRTL ? 1 : -1);
-//        }
-//        else {
-//            frame.origin.x = self.superview.bounds.size.width + safeInset * (isRTL ? 1 : -1);
-//        }
-//
-//        self.frame = frame;
-//        self.transform = transform;
-//        [self resetButtons];
-//    }
-//}
-//
-//-(void) adjustContentEdge: (UIView *) view edgeDelta:(CGFloat) delta {
-//    if ([view isKindOfClass:[UIButton class]]) {
-//        UIButton * btn = (UIButton *) view;
-//        UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-//        if (_direction == MGSwipeDirectionRightToLeft) {
-//            contentInsets.right += delta;
-//        }
-//        else {
-//            contentInsets.left += delta;
-//        }
-//        btn.contentEdgeInsets = contentInsets;
-//    }
-//}
-//
-//-(void) layoutExpansion: (CGFloat) offset
-//{
-//    _expansionOffset = offset;
-//    _container.frame = CGRectMake(_fromLeft ? 0: self.bounds.size.width - offset, 0, offset, self.bounds.size.height);
-//    if (_expansionBackgroundAnimated && _expandedButtonAnimated) {
-//        _expansionBackgroundAnimated.frame = [self expansionBackgroundRect:_expandedButtonAnimated];
-//    }
-//}
-//
-//-(void) layoutSubviews
-//    {
-//        [super layoutSubviews];
-//        if (_expandedButton) {
-//            [self layoutExpansion:_expansionOffset];
-//        }
-//        else {
-//            _container.frame = self.bounds;
-//        }
-//}
-//
-//-(CGRect) expansionBackgroundRect: (UIView *) button
-//{
-//    CGFloat extra = 100.0f; //extra size to avoid expansion background size issue on iOS 7.0
-//    if (_fromLeft) {
-//        return CGRectMake(-extra, 0, button.frame.origin.x + extra, _container.bounds.size.height);
-//    }
-//    else {
-//        return CGRectMake(button.frame.origin.x +  button.bounds.size.width, 0,
-//                          _container.bounds.size.width - (button.frame.origin.x + button.bounds.size.width ) + extra
-//            ,_container.bounds.size.height);
-//    }
-//
-//}
-//
-//-(void) expandToOffset:(CGFloat) offset settings:(MGSwipeExpansionSettings*) settings
-//{
-//    if (settings.buttonIndex < 0 || settings.buttonIndex >= _buttons.count) {
-//        return;
-//    }
-//    if (!_expandedButton) {
-//        _expandedButton = [_buttons objectAtIndex: _fromLeft ? settings.buttonIndex : _buttons.count - settings.buttonIndex - 1];
-//        CGRect previusRect = _container.frame;
-//        [self layoutExpansion:offset];
-//        [self resetButtons];
-//        if (!_fromLeft) { //Fix expansion animation for right buttons
-//            for (UIView * button in _buttons) {
-//                CGRect frame = button.frame;
-//                frame.origin.x += _container.bounds.size.width - previusRect.size.width;
-//                button.frame = frame;
-//            }
-//        }
-//        _expansionBackground = [[UIView alloc] initWithFrame:[self expansionBackgroundRect:_expandedButton]];
-//        _expansionBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        if (settings.expansionColor) {
-//            _backgroundColorCopy = _expandedButton.backgroundColor;
-//            _expandedButton.backgroundColor = settings.expansionColor;
-//        }
-//        _expansionBackground.backgroundColor = _expandedButton.backgroundColor;
-//        if (UIColor.clearColor == _expandedButton.backgroundColor) {
-//            // Provides access to more complex content for display on the background
-//            _expansionBackground.layer.contents = _expandedButton.layer.contents;
-//        }
-//        [_container addSubview:_expansionBackground];
-//        _expansionLayout = settings.expansionLayout;
-//
-//        CGFloat duration = _fromLeft ? _cell.leftExpansion.animationDuration : _cell.rightExpansion.animationDuration;
-//        [UIView animateWithDuration: duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-//            self->_expandedButton.hidden = NO;
-//
-//            if (self->_expansionLayout == MGSwipeExpansionLayoutCenter) {
-//            self->_expandedButtonBoundsCopy = self->_expandedButton.bounds;
-//            self->_expandedButton.layer.mask = nil;
-//            self->_expandedButton.layer.transform = CATransform3DIdentity;
-//            self->_expandedButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-//            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
-//            self->_expandedButton.frame = self->_container.bounds;
-//            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-//            }
-//            else if (self->_expansionLayout == MGSwipeExpansionLayoutNone) {
-//            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
-//            self->_expansionBackground.frame = self->_container.bounds;
-//            }
-//            else if (self->_fromLeft) {
-//            self->_expandedButton.frame = CGRectMake(self->_container.bounds.size.width - self->_expandedButton.bounds.size.width, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
-//            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleLeftMargin;
-//            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-//            }
-//            else {
-//            self->_expandedButton.frame = CGRectMake(0, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
-//            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleRightMargin;
-//            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-//            }
-//
-//            } completion:^(BOOL finished) {
-//            }];
-//        return;
-//    }
-//    [self layoutExpansion:offset];
-//}
 //
 //-(void) endExpansionAnimated:(BOOL) animated
 //{
