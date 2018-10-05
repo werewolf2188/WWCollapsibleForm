@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum WWSwipeViewExpansion : Int {
+enum WWSwipeViewExpansionLayout : Int {
     case border
     case center
     case none
@@ -19,7 +19,7 @@ class WWSwipeViewExpansionSettings : NSObject {
     var fillOnTrigger : Bool = false
     var threshold: CGFloat = 1.3
     var expansionColor : UIColor!
-    var expansionLayout: WWSwipeViewExpansion = .border
+    var expansionLayout: WWSwipeViewExpansionLayout = .border
     var triggerAnimation: WWSwipeViewAnimation! = WWSwipeViewAnimation()
     var animationDuration: CGFloat = 0.2
 }

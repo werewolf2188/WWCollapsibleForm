@@ -32,6 +32,8 @@
 		C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A34214DB1C00035B98D /* WWItemView.swift */; };
 		C2344A37214DB1D60035B98D /* WWHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A36214DB1D60035B98D /* WWHeaderView.swift */; };
 		C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */; };
+		C263E71C2166FB320012459A /* WWSwipeViewInputOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263E71B2166FB320012459A /* WWSwipeViewInputOverlay.swift */; };
+		C263E71E2166FC0E0012459A /* WWSwipeViewButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263E71D2166FC0E0012459A /* WWSwipeViewButtonsView.swift */; };
 		C286AB4B21586CF800ACF338 /* WWCollapsibleFormAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */; };
 		C291119D215C63700080CA3F /* UIButton_ActionHandleBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291119C215C63700080CA3F /* UIButton_ActionHandleBlock.swift */; };
 		C2C2A840216447BF0034021A /* WWSwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C2A83F216447BF0034021A /* WWSwipeView.swift */; };
@@ -66,6 +68,8 @@
 		C2344A34214DB1C00035B98D /* WWItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWItemView.swift; sourceTree = "<group>"; };
 		C2344A36214DB1D60035B98D /* WWHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWHeaderView.swift; sourceTree = "<group>"; };
 		C2344A38214DB2160035B98D /* WWSelectedHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSelectedHeaderView.swift; sourceTree = "<group>"; };
+		C263E71B2166FB320012459A /* WWSwipeViewInputOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSwipeViewInputOverlay.swift; sourceTree = "<group>"; };
+		C263E71D2166FC0E0012459A /* WWSwipeViewButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSwipeViewButtonsView.swift; sourceTree = "<group>"; };
 		C286AB4A21586CF800ACF338 /* WWCollapsibleFormAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormAdapter.swift; sourceTree = "<group>"; };
 		C291119C215C63700080CA3F /* UIButton_ActionHandleBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton_ActionHandleBlock.swift; sourceTree = "<group>"; };
 		C2C2A83F216447BF0034021A /* WWSwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWSwipeView.swift; sourceTree = "<group>"; };
@@ -141,8 +145,10 @@
 				B0EB0BEA215A7C9600D7B491 /* WWSubGroupDataObject.swift */,
 				C2C2A83F216447BF0034021A /* WWSwipeView.swift */,
 				B0AC687421651866007819E5 /* WWSwipeViewAnimation.swift */,
+				C263E71D2166FC0E0012459A /* WWSwipeViewButtonsView.swift */,
 				B07F281E2165390C005D03F5 /* WWSwipeViewDelegate.swift */,
 				B0AC687621651CFF007819E5 /* WWSwipeViewExpansionSettings.swift */,
+				C263E71B2166FB320012459A /* WWSwipeViewInputOverlay.swift */,
 				B0AC6872216517A2007819E5 /* WWSwipeViewSettings.swift */,
 				C2344A2E214DB0C60035B98D /* WWTemplateDataObject.swift */,
 				C2344A2A214DB05E0035B98D /* WWViewRepresentation.swift */,
@@ -243,6 +249,7 @@
 				B0B77BB3215474E8006F174A /* WWCollapsibleFormDelegate.swift in Sources */,
 				C2344A2B214DB05E0035B98D /* WWViewRepresentation.swift in Sources */,
 				C2C2A840216447BF0034021A /* WWSwipeView.swift in Sources */,
+				C263E71C2166FB320012459A /* WWSwipeViewInputOverlay.swift in Sources */,
 				C2344A25214DAF0E0035B98D /* WWCollapsibleFormAdapter_UITableViewDelegate.swift in Sources */,
 				C2344A2F214DB0C60035B98D /* WWTemplateDataObject.swift in Sources */,
 				C2344A23214DAEC50035B98D /* WWCollapsibleFormAdapter_UITableViewDataSource.swift in Sources */,
@@ -258,6 +265,7 @@
 				B07F281F2165390C005D03F5 /* WWSwipeViewDelegate.swift in Sources */,
 				B0EB0BEB215A7C9600D7B491 /* WWSubGroupDataObject.swift in Sources */,
 				C2344A35214DB1C00035B98D /* WWItemView.swift in Sources */,
+				C263E71E2166FC0E0012459A /* WWSwipeViewButtonsView.swift in Sources */,
 				C2344A39214DB2160035B98D /* WWSelectedHeaderView.swift in Sources */,
 				B0AC687721651CFF007819E5 /* WWSwipeViewExpansionSettings.swift in Sources */,
 				B0E617EE21558E2E00F5D882 /* WWCollapsibleFormCollapseDelegate.swift in Sources */,

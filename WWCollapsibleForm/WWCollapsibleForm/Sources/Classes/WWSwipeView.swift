@@ -33,7 +33,7 @@ fileprivate class WWSwipeAnimationData : NSObject {
 
 class WWSwipeView : UIView {
     //MARK: Internal properties
-    //Leave delegate for later
+    weak var delegate : WWSwipeViewDelegate?
     var options : [WWOptionViewItem]!
     var swipeContentView : UIView!
     var leftButtons: [UIView]!
