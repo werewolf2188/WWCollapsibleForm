@@ -11,7 +11,7 @@ import Foundation
 enum WWSwipeViewTransition : Int {
     case border
     case `static`
-    case drage
+    case drag
     case clipCenter
     case rotate3D
 }

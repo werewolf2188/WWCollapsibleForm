@@ -170,7 +170,7 @@ extension WWSwipeViewButtonView {
         
         if (self.expandedButton == nil) {
             self.expandedButton = self.buttons[self.fromLeft ? settings.buttonIndex : self.buttons.count - settings.buttonIndex - 1]
-            var previousRect : CGRect = container.frame
+            let previousRect : CGRect = container.frame
             self.layoutExpansion(offset: offset)
             self.resetButtons()
             if (!self.fromLeft) {
@@ -203,13 +203,6 @@ extension WWSwipeViewButtonView {
     }
 }
 
-//MARK: Clicks
-extension WWSwipeViewButtonView {
-    @objc func mgButtonClicked(sender: Any) {
-        
-    }
-}
-
 //MARK: Animations
 extension WWSwipeViewButtonView {
     func animationExpandToOffset() {
@@ -226,207 +219,169 @@ extension WWSwipeViewButtonView {
             self.expandedButton.superview?.bringSubview(toFront: self.expandedButton)
             self.expansionBackground.frame = self.container.bounds
         } else if self.fromLeft {
-            
+            self.expandedButton.frame = CGRect(x: self.container.bounds.size.width - self.expandedButton.bounds.size.width, y: 0, width: self.expandedButton.bounds.size.width, height: self.expandedButton.bounds.size.height)
+            self.expandedButton.autoresizingMask = [self.expandedButton.autoresizingMask, .flexibleLeftMargin]
+            self.expansionBackground.frame = self.expansionBackgroundRect(button: self.expandedButton)
+        } else {
+            self.expandedButton.frame = CGRect(x: 0, y: 0, width: self.expandedButton.bounds.size.width, height: self.expandedButton.bounds.size.height)
+            self.expandedButton.autoresizingMask = [self.expandedButton.autoresizingMask, .flexibleRightMargin]
+            self.expansionBackground.frame = self.expansionBackgroundRect(button: self.expandedButton)
         }
-        //            self->_expandedButton.hidden = NO;
-        //
-        //            if (self->_expansionLayout == MGSwipeExpansionLayoutCenter) {
-        //            self->_expandedButtonBoundsCopy = self->_expandedButton.bounds;
-        //            self->_expandedButton.layer.mask = nil;
-        //            self->_expandedButton.layer.transform = CATransform3DIdentity;
-        //            self->_expandedButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        //            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
-        //            self->_expandedButton.frame = self->_container.bounds;
-        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-        //            }
-        //            else if (self->_expansionLayout == MGSwipeExpansionLayoutNone) {
-        //            [self->_expandedButton.superview bringSubviewToFront:self->_expandedButton];
-        //            self->_expansionBackground.frame = self->_container.bounds;
-        //            }
-        //            else if (self->_fromLeft) {
-        //            self->_expandedButton.frame = CGRectMake(self->_container.bounds.size.width - self->_expandedButton.bounds.size.width, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
-        //            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleLeftMargin;
-        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-        //            }
-        //            else {
-        //            self->_expandedButton.frame = CGRectMake(0, 0, self->_expandedButton.bounds.size.width, self->_expandedButton.bounds.size.height);
-        //            self->_expandedButton.autoresizingMask|= UIViewAutoresizingFlexibleRightMargin;
-        //            self->_expansionBackground.frame = [self expansionBackgroundRect:self->_expandedButton];
-        //            }
+    }
+    
+    func endExpansionAnimated(animated: Bool) {
+        if (self.expandedButton != nil) {
+            self.expandedButtonAnimated = self.expandedButton
+            if self.expansionBackgroundAnimated != nil && self.expansionBackgroundAnimated != self.expansionBackground {
+                self.expansionBackgroundAnimated.removeFromSuperview()
+            }
+            
+            self.expansionBackgroundAnimated = self.expansionBackground
+            self.expansionBackground = nil
+            self.expandedButton = nil
+            if self.backgroundColorCopy != nil {
+                self.expansionBackgroundAnimated.backgroundColor = self.backgroundColorCopy
+                self.expandedButtonAnimated.backgroundColor = self.backgroundColorCopy
+                self.backgroundColorCopy = nil
+            }
+            let duration = self.fromLeft ? self.currentView.leftExpansion.animationDuration : self.currentView.rightExpansion.animationDuration
+            UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: [.beginFromCurrentState], animations: {
+                self.container.frame = self.bounds
+                if self.expansionLayout == .center {
+                    self.expandedButtonAnimated.frame = self.expandedButtonBoundsCopy
+                }
+                self.resetButtons()
+                self.expansionBackgroundAnimated.frame = self.expansionBackgroundRect(button: self.expandedButtonAnimated)
+            }, completion: { (finished) in
+                self.expansionBackgroundAnimated.removeFromSuperview()
+            })
+        }
+        else if self.expansionBackground != nil {
+            self.expansionBackground.removeFromSuperview()
+            self.expansionBackground  = nil
+        }
+    }
+    
+    func getExpandedButton() -> UIView {
+        return self.expandedButton
     }
 }
-//#pragma mark Button Container View and transitions
-//
-//
-//@implementation MGSwipeButtonsView
 
-//
-//#pragma mark Layout
-//
-//
-//-(void) endExpansionAnimated:(BOOL) animated
-//{
-//    if (_expandedButton) {
-//        _expandedButtonAnimated = _expandedButton;
-//        if (_expansionBackgroundAnimated && _expansionBackgroundAnimated != _expansionBackground) {
-//            [_expansionBackgroundAnimated removeFromSuperview];
-//        }
-//        _expansionBackgroundAnimated = _expansionBackground;
-//        _expansionBackground = nil;
-//        _expandedButton = nil;
-//        if (_backgroundColorCopy) {
-//            _expansionBackgroundAnimated.backgroundColor = _backgroundColorCopy;
-//            _expandedButtonAnimated.backgroundColor = _backgroundColorCopy;
-//            _backgroundColorCopy = nil;
-//        }
-//        CGFloat duration = _fromLeft ? _cell.leftExpansion.animationDuration : _cell.rightExpansion.animationDuration;
-//        [UIView animateWithDuration: animated ? duration : 0.0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-//            self->_container.frame = self.bounds;
-//            if (self->_expansionLayout == MGSwipeExpansionLayoutCenter) {
-//            self->_expandedButtonAnimated.frame = self->_expandedButtonBoundsCopy;
-//            }
-//            [self resetButtons];
-//            self->_expansionBackgroundAnimated.frame = [self expansionBackgroundRect:self->_expandedButtonAnimated];
-//            } completion:^(BOOL finished) {
-//            [self->_expansionBackgroundAnimated removeFromSuperview];
-//            }];
-//    }
-//    else if (_expansionBackground) {
-//        [_expansionBackground removeFromSuperview];
-//        _expansionBackground = nil;
-//    }
-//}
-//
-//-(UIView*) getExpandedButton
-//    {
-//        return _expandedButton;
-//}
-//
-//#pragma mark Trigger Actions
-//
-//-(BOOL) handleClick: (id) sender fromExpansion:(BOOL) fromExpansion
-//{
-//    bool autoHide = false;
-//    #pragma clang diagnostic push
-//    #pragma clang diagnostic ignored "-Wundeclared-selector"
-//    if ([sender respondsToSelector:@selector(callMGSwipeConvenienceCallback:)]) {
-//        //call convenience block callback if exits (usage of MGSwipeButton class is not compulsory)
-//        autoHide = [sender performSelector:@selector(callMGSwipeConvenienceCallback:) withObject:_cell];
-//    }
-//    #pragma clang diagnostic pop
-//
-//    if (_cell.delegate && [_cell.delegate respondsToSelector:@selector(swipeTableCell:tappedButtonAtIndex:direction:fromExpansion:)]) {
-//        NSInteger index = [_buttons indexOfObject:sender];
-//        if (!_fromLeft) {
-//            index = _buttons.count - index - 1; //right buttons are reversed
-//        }
-//        autoHide|= [_cell.delegate swipeTableCell:_cell tappedButtonAtIndex:index direction:_fromLeft ? MGSwipeDirectionLeftToRight : MGSwipeDirectionRightToLeft fromExpansion:fromExpansion];
-//    }
-//
-//    if (fromExpansion && autoHide) {
-//        _expandedButton = nil;
-//        _cell.swipeOffset = 0;
-//    }
-//    else if (autoHide) {
-//        [_cell hideSwipeAnimated:YES];
-//    }
-//
-//    return autoHide;
-//
-//}
-////button listener
-//-(void) mgButtonClicked: (id) sender
-//{
-//    [self handleClick:sender fromExpansion:NO];
-//}
-//
-//
-//#pragma mark Transitions
-//
-//-(void) transitionStatic:(CGFloat) t
-//{
-//    const CGFloat dx = self.bounds.size.width * (1.0 - t);
-//    CGFloat offsetX = 0;
-//
-//    UIView* lastButton = [_buttons lastObject];
-//    for (UIView *button in _buttons) {
-//        CGRect frame = button.frame;
-//        frame.origin.x = offsetX + (_fromLeft ? dx : -dx);
-//        button.frame = frame;
-//        offsetX += frame.size.width + (button == lastButton ? 0 : _buttonsDistance);
-//    }
-//}
-//
-//-(void) transitionDrag:(CGFloat) t
-//{
-//    //No Op, nothing to do ;)
-//}
-//
-//-(void) transitionClip:(CGFloat) t
-//{
-//    CGFloat selfWidth = self.bounds.size.width;
-//    CGFloat offsetX = 0;
-//
-//    UIView* lastButton = [_buttons lastObject];
-//    for (UIView *button in _buttons) {
-//        CGRect frame = button.frame;
-//        CGFloat dx = roundf(frame.size.width * 0.5 * (1.0 - t)) ;
-//        frame.origin.x = _fromLeft ? (selfWidth - frame.size.width - offsetX) * (1.0 - t) + offsetX + dx : offsetX * t - dx;
-//        button.frame = frame;
-//
-//        if (_buttons.count > 1) {
-//            CAShapeLayer *maskLayer = [CAShapeLayer new];
-//            CGRect maskRect = CGRectMake(dx - 0.5, 0, frame.size.width - 2 * dx + 1.5, frame.size.height);
-//            CGPathRef path = CGPathCreateWithRect(maskRect, NULL);
-//            maskLayer.path = path;
-//            CGPathRelease(path);
-//            button.layer.mask = maskLayer;
-//        }
-//
-//        offsetX += frame.size.width + (button == lastButton ? 0 : _buttonsDistance);
-//    }
-//}
-//
-//-(void) transtitionFloatBorder:(CGFloat) t
-//{
-//    CGFloat selfWidth = self.bounds.size.width;
-//    CGFloat offsetX = 0;
-//
-//    UIView* lastButton = [_buttons lastObject];
-//    for (UIView *button in _buttons) {
-//        CGRect frame = button.frame;
-//        frame.origin.x = _fromLeft ? (selfWidth - frame.size.width - offsetX) * (1.0 - t) + offsetX : offsetX * t;
-//        button.frame = frame;
-//        offsetX += frame.size.width + (button == lastButton ? 0 : _buttonsDistance);
-//    }
-//}
-//
-//-(void) transition3D:(CGFloat) t
-//{
-//    const CGFloat invert = _fromLeft ? 1.0 : -1.0;
-//    const CGFloat angle = M_PI_2 * (1.0 - t) * invert;
-//    CATransform3D transform = CATransform3DIdentity;
-//    transform.m34 = -1.0/400.0f; //perspective 1/z
-//    const CGFloat dx = -_container.bounds.size.width * 0.5 * invert;
-//    const CGFloat offset = dx * 2 * (1.0 - t);
-//    transform = CATransform3DTranslate(transform, dx - offset, 0, 0);
-//    transform = CATransform3DRotate(transform, angle, 0.0, 1.0, 0.0);
-//    transform = CATransform3DTranslate(transform, -dx, 0, 0);
-//    _container.layer.transform = transform;
-//}
-//
-//-(void) transition:(MGSwipeTransition) mode percent:(CGFloat) t
-//{
-//    switch (mode) {
-//    case MGSwipeTransitionStatic: [self transitionStatic:t]; break;
-//    case MGSwipeTransitionDrag: [self transitionDrag:t]; break;
-//    case MGSwipeTransitionClipCenter: [self transitionClip:t]; break;
-//    case MGSwipeTransitionBorder: [self transtitionFloatBorder:t]; break;
-//    case MGSwipeTransitionRotate3D: [self transition3D:t]; break;
-//    }
-//    if (_expandedButtonAnimated && _expansionBackgroundAnimated) {
-//        _expansionBackgroundAnimated.frame = [self expansionBackgroundRect:_expandedButtonAnimated];
-//    }
-//}
-//
-//@end
+//MARK: Clicks
+extension WWSwipeViewButtonView {
+    @discardableResult
+    func handleClick(sender: Any, fromExpansion: Bool) -> Bool {
+        var autoHide : Bool = false
+        let senderObject = sender as AnyObject
+        if senderObject.responds(to: Selector(("callMGSwipeConvenienceCallback:"))){
+            autoHide = autoHide || (senderObject.perform(Selector(("callMGSwipeConvenienceCallback:")), with: self.currentView)?.takeRetainedValue() as? Bool ?? false)
+        }
+        if let delegate = self.currentView.delegate, let button = sender as? UIView, var index :Int = self.buttons.firstIndex(of: button) {
+            
+            if !self.fromLeft {
+                index = self.buttons.count - index - 1
+            }
+            
+            autoHide = autoHide || delegate.tappedButtonAtIndex(self.currentView, index: index, direction: self.fromLeft ? .leftToRight : .rightToLeft, fromExpansion: fromExpansion)
+        }
+        if (fromExpansion && autoHide) {
+            self.expandedButton = nil;
+            self.currentView.swipeOffset = 0;
+        } else if (autoHide) {
+            self.currentView.hideSwipe(animated: true)
+        }
+        return autoHide
+    }
+    
+    @objc func mgButtonClicked(sender: Any) {
+        self.handleClick(sender: sender, fromExpansion: false)
+    }
+}
+
+//MARK: Transitions
+extension WWSwipeViewButtonView {
+    func transitionStatic(t: CGFloat) {
+        let dx : CGFloat = self.bounds.size.width * (1.0 - t)
+        var offsetX : CGFloat = 0
+        if let lastButton = self.buttons.last {
+            for button in self.buttons {
+                var frame = button.frame
+                frame.origin.x = offsetX + (self.fromLeft ? dx : -dx)
+                button.frame = frame
+                offsetX += frame.size.width + (button == lastButton ? 0 : self.buttonsDistance)
+            }
+        }
+    }
+    
+    func transitionDrag(t: CGFloat) {
+        //No Op, nothing to do ;)
+    }
+    
+    func transitionClip(t: CGFloat) {
+        let selfWidth : CGFloat = self.bounds.size.width
+        var offsetX : CGFloat = 0
+        
+        if let lastButton = self.buttons.last {
+            for button in self.buttons {
+                var frame = button.frame
+                let dx : CGFloat = round(frame.size.width * 0.5 * (1.0 - t))
+                frame.origin.x = self.fromLeft ? (selfWidth - frame.size.width - offsetX) * (1.0 - t) + offsetX + dx : offsetX * t - dx
+                button.frame = frame
+                
+                if (self.buttons.count > 1){
+                    let maskLayer : CAShapeLayer = CAShapeLayer()
+                    let maskRect : CGRect = CGRect(x: dx - 0.5, y: 0, width: frame.size.width - 2 * dx + 1.5, height: frame.size.height)
+                    let path : CGPath = CGPath(rect: maskRect, transform: nil)
+                    maskLayer.path = path
+                    button.layer.mask = maskLayer
+                }
+                offsetX += frame.size.width + (button == lastButton ? 0 : self.buttonsDistance)
+            }
+        }
+    }
+    
+    func transtitionFloatBorder(t: CGFloat) {
+        let selfWidth : CGFloat = self.bounds.size.width
+        var offsetX : CGFloat = 0
+        if let lastButton = self.buttons.last {
+            for button in self.buttons {
+                var frame = button.frame
+                frame.origin.x = self.fromLeft ? (selfWidth - frame.size.width - offsetX) * (1.0 - t) + offsetX : offsetX * t
+                button.frame = frame
+                offsetX += frame.size.width + (button == lastButton ? 0 : self.buttonsDistance)
+            }
+        }
+    }
+    
+    func transition3D(t: CGFloat) {
+        let invert : CGFloat = self.fromLeft ? 1.0 : -1.0
+        let angle : CGFloat = CGFloat.pi * (1.0 - t) * invert
+        var transform : CATransform3D = CATransform3DIdentity
+        transform.m34 = -1.0/400.0; //perspective 1/z
+        let dx : CGFloat = self.container.bounds.size.width * 0.5 * invert
+        let offset : CGFloat = dx * 2 * (1.0 - t)
+        transform = CATransform3DTranslate(transform, dx - offset, 0, 0)
+        transform = CATransform3DRotate(transform, angle, 0.0, 1.0, 0.0)
+        transform = CATransform3DTranslate(transform, -dx, 0, 0)
+        self.container.layer.transform = transform
+    }
+    
+    func transition(_ mode :WWSwipeViewTransition, percent t: CGFloat) {
+        switch mode {
+        case .static:
+            self.transitionStatic(t: t)
+        case .drag:
+            self.transitionDrag(t: t)
+        case .clipCenter:
+            self.transitionClip(t: t)
+        case .border:
+            self.transtitionFloatBorder(t: t)
+        case .rotate3D:
+            self.transition3D(t: t)
+        }
+        
+        if self.expandedButtonAnimated != nil && self.expansionBackgroundAnimated != nil {
+            self.expansionBackgroundAnimated.frame = self.expansionBackgroundRect(button: self.expandedButtonAnimated)
+        }
+    }
+}
