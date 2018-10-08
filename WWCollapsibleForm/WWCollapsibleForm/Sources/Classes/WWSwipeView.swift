@@ -405,27 +405,20 @@ class WWSwipeView : UIView {
     }
     
     fileprivate func backgroundColorForSwipe() -> UIColor {
-        //        if (_swipeBackgroundColor) {
-        //            return _swipeBackgroundColor; //user defined color
-        //        }
-        //        else if (self.contentView.backgroundColor && ![self.contentView.backgroundColor isEqual:[UIColor clearColor]]) {
-        //            return self.contentView.backgroundColor;
-        //        }
-        //        else if (self.backgroundColor) {
-        //            return self.backgroundColor;
-        //        }
-        //        return [UIColor clearColor];
+        if self.swipeBackgroundColor != nil {
+            return self.swipeBackgroundColor
+        } else if let color = self.backgroundColor, color.isEqual(UIColor.clear) {
+            return color
+        }
         return UIColor.clear
     }
     
-    fileprivate func imageFromView(view: UIView, cropSize: CGSize) -> UIImage {
-        
-        //    UIGraphicsBeginImageContextWithOptions(cropSize, NO, 0);
-        //    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
-        //    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
-        //    UIGraphicsEndImageContext();
-        //    return image;
-        return UIImage()
+    fileprivate func imageFromView(view: UIView, cropSize: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(cropSize, false, 0)
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
+        let image: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
     
     fileprivate func setAccesoryViewsHidden(_ hidden: Bool) {
