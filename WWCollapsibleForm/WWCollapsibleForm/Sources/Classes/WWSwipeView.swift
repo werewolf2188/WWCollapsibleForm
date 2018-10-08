@@ -164,6 +164,12 @@ class WWSwipeView : UIView {
         }
     }
     
+    override func willMove(toSuperview newSuperview: UIView?) {
+        if (newSuperview == nil) { //remove the table overlay when a cell is removed from the table
+            self.hideSwipeOverlayIfNeeded()
+        }
+    }
+    
     //MARK: Internal functions
     func hideSwipe(animated: Bool, completion: ((Bool) ->Void)? = nil) {
         
@@ -422,7 +428,6 @@ class WWSwipeView : UIView {
     }
     
     fileprivate func setAccesoryViewsHidden(_ hidden: Bool) {
-        
         //    if (self.accessoryView) {
         //        self.accessoryView.hidden = hidden;
         //    }
@@ -432,20 +437,20 @@ class WWSwipeView : UIView {
         //        }
         //    }
         //
-        //    for (UIView * view in self.contentView.subviews) {
-        //        if (view == _swipeOverlay || view == _swipeContentView) continue;
-        //        if (hidden && !view.hidden) {
-        //            view.hidden = YES;
-        //            [_previusHiddenViews addObject:view];
-        //        }
-        //        else if (!hidden && [_previusHiddenViews containsObject:view]) {
-        //            view.hidden = NO;
-        //        }
-        //    }
-        //
-        //    if (!hidden) {
-        //        [_previusHiddenViews removeAllObjects];
-        //    }
+        for view in self.subviews {
+            if view == self.swipeOverlay || view == self._swipeContentView {
+                continue
+            }
+            if (hidden && !view.isHidden) {
+                self.previousHiddenViews.insert(view)
+            } else if !hidden && self.previousHiddenViews.contains(view) {
+                view.isHidden = false
+            }
+        }
+       
+        if (!hidden) {
+            self.previousHiddenViews.removeAll()
+        }
     }
         
 }
@@ -466,13 +471,6 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
 //@implementation MGSwipeTableCell
 //
 //#pragma mark Handle Table Events
-//
-//-(void) willMoveToSuperview:(UIView *)newSuperview;
-//{
-//    if (newSuperview == nil) { //remove the table overlay when a cell is removed from the table
-//        [self hideSwipeOverlayIfNeeded];
-//    }
-//}
 //
 //-(void) prepareForReuse
 //    {
