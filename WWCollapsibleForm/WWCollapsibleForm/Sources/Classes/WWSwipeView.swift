@@ -23,7 +23,7 @@ enum WWSwipeViewDirection : Int {
 }
 
 //HELPER CLASSES
-fileprivate class WWSwipeAnimationData : NSObject {
+fileprivate class WWSwipeViewAnimationData : NSObject {
     var from : CGFloat = 0
     var to : CGFloat = 0
     var duration : CFTimeInterval = 0
@@ -35,7 +35,18 @@ class WWSwipeView : UIView {
     //MARK: Internal properties
     weak var delegate : WWSwipeViewDelegate?
     var options : [WWOptionViewItem]!
-    var swipeContentView : UIView!
+    var swipeContentView : UIView! {
+        get {
+            if (self._swipeContentView == nil) {
+                self._swipeContentView = UIView(frame: self.bounds)
+                self._swipeContentView.backgroundColor = UIColor.clear
+                self._swipeContentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                self._swipeContentView.layer.zPosition = 9
+                self.addSubview(self._swipeContentView)
+            }
+            return _swipeContentView
+        }
+    }
     var leftButtons: [UIView]!
     var rightButtons: [UIView]!
     
@@ -56,10 +67,38 @@ class WWSwipeView : UIView {
     
     var swipeBackgroundColor : UIColor!
     var swipeOffset : CGFloat = 0
+    var swipeState: WWSwipeViewState!
+    
+    //MARK: Private properties
     
     var state: WWSwipeViewState! = .none
     //MARK: Private properties
+    fileprivate var tapRecognizer :UITapGestureRecognizer!
+    fileprivate var panRecognizer :UIPanGestureRecognizer!
+    fileprivate var panStartPoint : CGPoint!
+    fileprivate var panStartOffset: CGFloat!
+    fileprivate var targetOffset: CGFloat!
     
+    fileprivate var swipeOverlay: UIView!
+    fileprivate var swipeView: UIImageView!
+    fileprivate var _swipeContentView: UIView!
+    fileprivate var leftView: WWSwipeViewButtonView!
+    fileprivate var rightView: WWSwipeViewButtonView!
+    fileprivate var allowSwipeRightToLeft: Bool!
+    fileprivate var allowSwipeLeftToRight: Bool!
+    fileprivate weak var activeExpansion : WWSwipeViewButtonView!
+    
+    fileprivate var tableInputOverlay: WWSwipeViewInputOverlay!
+    fileprivate var overlayEnabled: Bool!
+    //fileprivate var previusSelectionStyle: UITableViewCellSelectionStyle!
+    fileprivate var previousHiddenViews: Set<UIView>!
+    fileprivate var triggerStateChanges: Bool!
+    
+    fileprivate var animationData: WWSwipeViewAnimationData!
+    fileprivate var animationCompletion: ((_ :Bool)-> Void)!
+    fileprivate var displayLink: CADisplayLink!
+    fileprivate var firstSwipeState: WWSwipeViewState!
+
     //MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,6 +115,53 @@ class WWSwipeView : UIView {
         self.options = options
         self.leftButtons = self.options.filter({ $0.side == .left }).map({ $0.getView() })
         self.rightButtons = self.options.filter({ $0.side == .right }).map({ $0.getView() })
+    }
+    
+    deinit {
+        self.hideSwipeOverlayIfNeeded()
+    }
+    
+    //MARK: Override functions
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.initialize()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if (self.swipeContentView != nil) {
+            swipeContentView.frame = self.bounds
+        }
+        
+        if (self.swipeOverlay != nil) {
+            let prevSize : CGSize = self.swipeView.bounds.size
+            self.swipeOverlay.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height)
+            self.fixRegionAndAccesoryViews()
+            if self.swipeView.image != nil && !prevSize.equalTo(self.swipeOverlay.bounds.size) {
+                let safeInsets : UIEdgeInsets = self.getSafeInsets()
+                if self.leftView != nil {
+                    let width : CGFloat = self.leftView.bounds.size.width
+                    self.leftView.setSafeInset(safeInsets.left, extendEdgeButton: self.leftSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
+                    
+                    if self.swipeOffset > 0 && self.leftView.bounds.size.width != width {
+                        self.swipeOffset += self.leftView.bounds.size.width - width
+                    }
+                }
+                
+                if self.rightView != nil {
+                    let width : CGFloat = self.rightView.bounds.size.width
+                    self.rightView.setSafeInset(safeInsets.right, extendEdgeButton: self.rightSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
+                    
+                    if self.swipeOffset < 0 && self.rightView.bounds.size.width != width {
+                        self.swipeOffset -= self.rightView.bounds.size.width - width
+                    }
+                }
+                
+                //refresh contentView in situations like layout change, orientation chage, table resize, etc.
+                self.refreshContentView()
+            }
+            
+        }
     }
     
     //MARK: Internal functions
@@ -96,391 +182,295 @@ class WWSwipeView : UIView {
     }
     
     func refreshContentView() {
-        
+        let currentOffset : CGFloat = self.swipeOffset
+        let prevValue : Bool = self.triggerStateChanges
+        self.triggerStateChanges = false
+        self.swipeOffset = 0
+        self.swipeOffset = currentOffset
+        self.triggerStateChanges = prevValue
     }
     
-    func refreshButtons() {
+    func refreshButtons(usingDelegate: Bool) {
+        if (usingDelegate) {
+            self.leftButtons = []
+            self.rightButtons = []
+        }
         
+        if (self.leftView != nil) {
+            self.leftView.removeFromSuperview()
+            self.leftView = nil
+        }
+        if (self.rightView != nil) {
+            self.rightView.removeFromSuperview()
+            self.rightView = nil
+        }
+        
+        self.createSwipeViewIfNeeded()
+        self.refreshContentView()
     }
     
     //MARK: Private functions
-    private func initialize() {
-        self.options = []
-        self.leftButtons = []
-        self.rightButtons = []
+    fileprivate func initialize(cleanButtons: Bool = true) {
+        
+        if (cleanButtons) {
+            self.options = []
+            self.leftButtons = []
+            self.rightButtons = []
+            self.leftSwipeSettings = WWSwipeViewSettings()
+            self.rightSwipeSettings = WWSwipeViewSettings()
+            self.leftExpansion = WWSwipeViewExpansionSettings()
+            self.rightExpansion = WWSwipeViewExpansionSettings()
+        }
+        self.animationData = WWSwipeViewAnimationData()
+        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panHandler(gesture:)))
+        self.addGestureRecognizer(self.panRecognizer)
+        self.panRecognizer.delegate = self
+        self.activeExpansion = nil
+        self.previousHiddenViews = Set<UIView>()
+        self.swipeState = .none
+        self.triggerStateChanges = true
+        self.allowsSwipeWhenTappingButtons = true
+        self.preservesSelectionStatus = false
+        self.allowsOppositeSwipe = true
+        self.firstSwipeState = .none
     }
-}
-
-
-//#pragma mark MGSwipeTableCell Implementation
-//
-//
-//@implementation MGSwipeTableCell
-//{
-//    UITapGestureRecognizer * _tapRecognizer;
-//    UIPanGestureRecognizer * _panRecognizer;
-//    CGPoint _panStartPoint;
-//    CGFloat _panStartOffset;
-//    CGFloat _targetOffset;
-//
-//    UIView * _swipeOverlay;
-//    UIImageView * _swipeView;
-//    UIView * _swipeContentView;
-//    MGSwipeButtonsView * _leftView;
-//    MGSwipeButtonsView * _rightView;
-//    bool _allowSwipeRightToLeft;
-//    bool _allowSwipeLeftToRight;
-//    __weak MGSwipeButtonsView * _activeExpansion;
-//
-//    MGSwipeTableInputOverlay * _tableInputOverlay;
-//    bool _overlayEnabled;
-//    UITableViewCellSelectionStyle _previusSelectionStyle;
-//    NSMutableSet * _previusHiddenViews;
-//    BOOL _triggerStateChanges;
-//
-//    MGSwipeAnimationData * _animationData;
-//    void (^_animationCompletion)(BOOL finished);
-//    CADisplayLink * _displayLink;
-//    MGSwipeState _firstSwipeState;
-//}
-//
-//#pragma mark View creation & layout
-//
-//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-//{
-//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-//    if (self) {
-//        [self initViews:YES];
-//    }
-//    return self;
-//    }
-//
-//    - (id)initWithCoder:(NSCoder*)aDecoder
-//{
-//    if(self = [super initWithCoder:aDecoder]) {
-//        [self initViews:YES];
-//    }
-//    return self;
-//}
-//
-//-(void) awakeFromNib
-//    {
-//        [super awakeFromNib];
-//        if (!_panRecognizer) {
-//            [self initViews:YES];
-//        }
-//}
-//
-//-(void) dealloc
-//    {
-//        [self hideSwipeOverlayIfNeeded];
-//}
-//
-//-(void) initViews: (BOOL) cleanButtons
-//{
-//    if (cleanButtons) {
-//        _leftButtons = [NSArray array];
-//        _rightButtons = [NSArray array];
-//        _leftSwipeSettings = [[MGSwipeSettings alloc] init];
-//        _rightSwipeSettings = [[MGSwipeSettings alloc] init];
-//        _leftExpansion = [[MGSwipeExpansionSettings alloc] init];
-//        _rightExpansion = [[MGSwipeExpansionSettings alloc] init];
-//    }
-//    _animationData = [[MGSwipeAnimationData alloc] init];
-//    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panHandler:)];
-//    [self addGestureRecognizer:_panRecognizer];
-//    _panRecognizer.delegate = self;
-//    _activeExpansion = nil;
-//    _previusHiddenViews = [NSMutableSet set];
-//    _swipeState = MGSwipeStateNone;
-//    _triggerStateChanges = YES;
-//    _allowsSwipeWhenTappingButtons = YES;
-//    _preservesSelectionStatus = NO;
-//    _allowsOppositeSwipe = YES;
-//    _firstSwipeState = MGSwipeStateNone;
-//
-//}
-//
-//-(void) cleanViews
-//    {
-//        [self hideSwipeAnimated:NO];
-//        if (_displayLink) {
-//            [_displayLink invalidate];
-//            _displayLink = nil;
-//        }
-//        if (_swipeOverlay) {
-//            [_swipeOverlay removeFromSuperview];
-//            _swipeOverlay = nil;
-//        }
-//        _leftView = _rightView = nil;
-//        if (_panRecognizer) {
-//            _panRecognizer.delegate = nil;
-//            [self removeGestureRecognizer:_panRecognizer];
-//            _panRecognizer = nil;
-//        }
-//    }
-//
-//    - (BOOL)isAppExtension
-//        {
-//            return [[NSBundle mainBundle].executablePath rangeOfString:@".appex/"].location != NSNotFound;
-//}
-//
-//
-//-(BOOL) isRTLLocale
-//    {
-//        #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
-//        if (@available(iOS 9, *)) {
-//        #else
-//        if ([[UIView class] respondsToSelector:@selector(userInterfaceLayoutDirectionForSemanticContentAttribute:)]) {
-//        #endif
-//        return [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
-//}
-//else if ([self isAppExtension]) {
-//    return [NSLocale characterDirectionForLanguage:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]]==NSLocaleLanguageDirectionRightToLeft;
-//} else {
-//    UIApplication *application = [UIApplication performSelector:@selector(sharedApplication)];
-//    return application.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
-//}
-//}
-//
-//-(void) fixRegionAndAccesoryViews
-//    {
-//        //Fix right to left layout direction for arabic and hebrew languagues
-//        if (self.bounds.size.width != self.contentView.bounds.size.width && [self isRTLLocale]) {
-//            _swipeOverlay.frame = CGRectMake(-self.bounds.size.width + self.contentView.bounds.size.width, 0, _swipeOverlay.bounds.size.width, _swipeOverlay.bounds.size.height);
-//        }
-//}
-//
-//-(UIEdgeInsets) getSafeInsets {
-//    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
-//    if (@available(iOS 11, *)) {
-//        return self.safeAreaInsets;
-//    }
-//    else {
-//        return UIEdgeInsetsZero;
-//    }
-//    #else
-//    return UIEdgeInsetsZero;
-//    #endif
-//}
-//
-//-(UIView *) swipeContentView
-//    {
-//        if (!_swipeContentView) {
-//            _swipeContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
-//            _swipeContentView.backgroundColor = [UIColor clearColor];
-//            _swipeContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//            _swipeContentView.layer.zPosition = 9;
-//            [self.contentView addSubview:_swipeContentView];
-//        }
-//        return _swipeContentView;
-//}
-//
-//-(void) layoutSubviews
-//    {
-//        [super layoutSubviews];
-//        if (_swipeContentView) {
-//            _swipeContentView.frame = self.contentView.bounds;
-//        }
-//        if (_swipeOverlay) {
-//            CGSize prevSize = _swipeView.bounds.size;
-//            _swipeOverlay.frame = CGRectMake(0, 0, self.bounds.size.width, self.contentView.bounds.size.height);
-//            [self fixRegionAndAccesoryViews];
-//            if (_swipeView.image &&  !CGSizeEqualToSize(prevSize, _swipeOverlay.bounds.size)) {
-//                //refresh safeInsets in situations like layout change, orientation change, table resize, etc.
-//                UIEdgeInsets safeInsets = [self getSafeInsets];
-//                // Refresh safe insets
-//                if (_leftView) {
-//                    CGFloat width = _leftView.bounds.size.width;
-//                    [_leftView setSafeInset:safeInsets.left extendEdgeButton:_leftSwipeSettings.expandLastButtonBySafeAreaInsets isRTL: [self isRTLLocale]];
-//                    if (_swipeOffset > 0 && _leftView.bounds.size.width != width) {
-//                        // Adapt offset to the view change size due to safeInsets
-//                        _swipeOffset += _leftView.bounds.size.width - width;
-//                    }
-//                }
-//                if (_rightView) {
-//                    CGFloat width = _rightView.bounds.size.width;
-//                    [_rightView setSafeInset:safeInsets.right extendEdgeButton:_rightSwipeSettings.expandLastButtonBySafeAreaInsets isRTL: [self isRTLLocale]];
-//                    if (_swipeOffset < 0 && _rightView.bounds.size.width != width) {
-//                        // Adapt offset to the view change size due to safeInsets
-//                        _swipeOffset -= _rightView.bounds.size.width - width;
-//                    }
-//                }
-//                //refresh contentView in situations like layout change, orientation chage, table resize, etc.
-//                [self refreshContentView];
-//            }
-//        }
-//}
-//
-//-(void) fetchButtonsIfNeeded
-//    {
-//        if (_leftButtons.count == 0 && _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
-//            _leftButtons = [_delegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionLeftToRight swipeSettings:_leftSwipeSettings expansionSettings:_leftExpansion];
-//        }
-//        if (_rightButtons.count == 0 && _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
-//            _rightButtons = [_delegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionRightToLeft swipeSettings:_rightSwipeSettings expansionSettings:_rightExpansion];
-//        }
-//}
-//
-//-(void) createSwipeViewIfNeeded
-//    {
-//        UIEdgeInsets safeInsets = [self getSafeInsets];
-//        if (!_swipeOverlay) {
-//            _swipeOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.contentView.bounds.size.height)];
-//            [self fixRegionAndAccesoryViews];
-//            _swipeOverlay.hidden = YES;
-//            _swipeOverlay.backgroundColor = [self backgroundColorForSwipe];
-//            _swipeOverlay.layer.zPosition = 10; //force render on top of the contentView;
-//            _swipeView = [[UIImageView alloc] initWithFrame:_swipeOverlay.bounds];
-//            _swipeView.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//            _swipeView.contentMode = UIViewContentModeCenter;
-//            _swipeView.clipsToBounds = YES;
-//            [_swipeOverlay addSubview:_swipeView];
-//            [self.contentView addSubview:_swipeOverlay];
-//        }
-//
-//        [self fetchButtonsIfNeeded];
-//        if (!_leftView && _leftButtons.count > 0) {
-//            _leftSwipeSettings.allowsButtonsWithDifferentWidth = _leftSwipeSettings.allowsButtonsWithDifferentWidth || _allowsButtonsWithDifferentWidth;
-//            _leftView = [[MGSwipeButtonsView alloc] initWithButtons:_leftButtons direction:MGSwipeDirectionLeftToRight swipeSettings:_leftSwipeSettings safeInset:safeInsets.left];
-//            _leftView.cell = self;
-//            _leftView.frame = CGRectMake(-_leftView.bounds.size.width + safeInsets.left * ([self isRTLLocale] ? 1 : -1),
-//                                         _leftSwipeSettings.topMargin,
-//                                         _leftView.bounds.size.width,
-//                                         _swipeOverlay.bounds.size.height - _leftSwipeSettings.topMargin - _leftSwipeSettings.bottomMargin);
-//            _leftView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
-//            [_swipeOverlay addSubview:_leftView];
-//        }
-//        if (!_rightView && _rightButtons.count > 0) {
-//            _rightSwipeSettings.allowsButtonsWithDifferentWidth = _rightSwipeSettings.allowsButtonsWithDifferentWidth || _allowsButtonsWithDifferentWidth;
-//            _rightView = [[MGSwipeButtonsView alloc] initWithButtons:_rightButtons direction:MGSwipeDirectionRightToLeft swipeSettings:_rightSwipeSettings safeInset:safeInsets.right];
-//            _rightView.cell = self;
-//            _rightView.frame = CGRectMake(_swipeOverlay.bounds.size.width + safeInsets.right * ([self isRTLLocale] ? 1 : -1),
-//                                          _rightSwipeSettings.topMargin,
-//                                          _rightView.bounds.size.width,
-//                                          _swipeOverlay.bounds.size.height - _rightSwipeSettings.topMargin - _rightSwipeSettings.bottomMargin);
-//            _rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
-//            [_swipeOverlay addSubview:_rightView];
-//        }
-//
-//        // Refresh safeInsets if required
-//        if (_leftView) {
-//            [_leftView setSafeInset:safeInsets.left extendEdgeButton:_leftSwipeSettings.expandLastButtonBySafeAreaInsets isRTL: [self isRTLLocale]];
-//        }
-//
-//        if (_rightView) {
-//            [_rightView setSafeInset:safeInsets.right extendEdgeButton:_rightSwipeSettings.expandLastButtonBySafeAreaInsets isRTL: [self isRTLLocale]];
-//        }
-//    }
-//
-//
-//    - (void) showSwipeOverlayIfNeeded
-//        {
-//            if (_overlayEnabled) {
-//                return;
-//            }
-//            _overlayEnabled = YES;
-//
-//            if (!_preservesSelectionStatus)
-//            self.selected = NO;
-//            if (_swipeContentView)
-//            [_swipeContentView removeFromSuperview];
-//            if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCellWillBeginSwiping:)]) {
-//                [_delegate swipeTableCellWillBeginSwiping:self];
-//            }
-//
-//            // snapshot cell without separator
-//            CGSize  cropSize        = CGSizeMake(self.bounds.size.width, self.contentView.bounds.size.height);
-//            _swipeView.image = [self imageFromView:self cropSize:cropSize];
-//
-//            _swipeOverlay.hidden = NO;
-//            if (_swipeContentView)
-//            [_swipeView addSubview:_swipeContentView];
-//
-//            if (!_allowsMultipleSwipe) {
-//                //input overlay on the whole table
-//                UITableView * table = [self parentTable];
-//                if (_tableInputOverlay) {
-//                    [_tableInputOverlay removeFromSuperview];
-//                }
-//                _tableInputOverlay = [[MGSwipeTableInputOverlay alloc] initWithFrame:table.bounds];
-//                _tableInputOverlay.currentCell = self;
-//                [table addSubview:_tableInputOverlay];
-//            }
-//
-//            _previusSelectionStyle = self.selectionStyle;
-//            self.selectionStyle = UITableViewCellSelectionStyleNone;
-//            [self setAccesoryViewsHidden:YES];
-//
-//            _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
-//            _tapRecognizer.cancelsTouchesInView = YES;
-//            _tapRecognizer.delegate = self;
-//            [self addGestureRecognizer:_tapRecognizer];
-//}
-//
-//-(void) hideSwipeOverlayIfNeeded
-//    {
-//        if (!_overlayEnabled) {
-//            return;
-//        }
-//        _overlayEnabled = NO;
-//        _swipeOverlay.hidden = YES;
-//        _swipeView.image = nil;
-//        if (_swipeContentView) {
-//            [_swipeContentView removeFromSuperview];
-//            [self.contentView addSubview:_swipeContentView];
-//        }
-//
-//        if (_tableInputOverlay) {
-//            [_tableInputOverlay removeFromSuperview];
-//            _tableInputOverlay = nil;
-//        }
-//
+    
+    fileprivate func hideSwipeOverlayIfNeeded() {
+        if (!self.overlayEnabled) {
+            return
+        }
+        self.overlayEnabled = false
+        self.swipeOverlay.isHidden = true
+        self.swipeView.image = nil
+        if self._swipeContentView != nil {
+            self._swipeContentView.removeFromSuperview()
+            self.addSubview(self._swipeContentView)
+        }
+        if self.tableInputOverlay != nil {
+            self.tableInputOverlay.removeFromSuperview()
+            self.tableInputOverlay = nil
+        }
+        
+        self.setAccesoryViewsHidden(false)
+        if let delegate = self.delegate {
+            delegate.swipeTableCellWillEndSwiping(self)
+        }
+        if self.tapRecognizer != nil {
+            self.removeGestureRecognizer(self.tapRecognizer)
+            self.tapRecognizer = nil
+        }
+    }
+    
+    fileprivate func cleanViews() {
+        self.hideSwipe(animated: false)
+        if self.displayLink != nil {
+            self.displayLink.invalidate()
+            self.displayLink = nil
+        }
+        if self.swipeOverlay != nil {
+            self.swipeOverlay.removeFromSuperview()
+            self.swipeOverlay = nil
+        }
+        self.leftView = nil
+        self.rightView = nil
+        
+        if self.panRecognizer != nil {
+            self.panRecognizer.delegate = nil
+            self.removeGestureRecognizer(self.panRecognizer)
+            self.panRecognizer = nil
+        }
+    }
+    
+    fileprivate func fixRegionAndAccesoryViews() {
+        //Fix right to left layout direction for arabic and hebrew languagues
+        if self.bounds.size.width != self.bounds.size.width && self.isRTL() {
+            self.swipeOverlay.frame = CGRect(x: -self.bounds.size.width + self.bounds.size.width, y: 0, width: swipeOverlay.bounds.size.width, height: swipeOverlay.bounds.size.height)
+        }
+    }
+    
+    fileprivate func getSafeInsets() -> UIEdgeInsets {
+        #if swift(>=3.0)
+        if #available(iOS 11.0, *) {
+            return self.safeAreaInsets
+        } else {
+            return UIEdgeInsets.zero
+        }
+        #else
+        return UIEdgeInsets.zero
+        #endif
+    }
+    
+    fileprivate func fetchButtonsIfNeeded() {
+        if (self.leftButtons.count == 0), let delegate = self.delegate {
+            self.leftButtons = delegate.canSwipe(self, direction: .leftToRight, setting: self.leftSwipeSettings, expansionSettings: self.leftExpansion) ?? []
+        }
+        
+        if (self.rightButtons.count == 0), let delegate = self.delegate {
+            self.rightButtons = delegate.canSwipe(self, direction: .rightToLeft, setting: self.rightSwipeSettings, expansionSettings: self.rightExpansion) ?? []
+        }
+    }
+    
+    fileprivate func createSwipeViewIfNeeded() {
+        let safeInsets : UIEdgeInsets = self.getSafeInsets()
+        
+        if self.swipeOverlay == nil {
+            self.swipeOverlay = UIView(frame: self.bounds)
+            self.fixRegionAndAccesoryViews()
+            self.swipeOverlay.isHidden = true
+            self.swipeOverlay.backgroundColor = self.backgroundColorForSwipe()
+            self.swipeView = UIImageView(frame: self.swipeOverlay.bounds)
+            self.swipeView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            self.swipeView.contentMode = .center
+            self.swipeView.clipsToBounds = true
+            self.swipeOverlay.addSubview(self.swipeView)
+            self.addSubview(self.swipeOverlay)
+        }
+        self.fetchButtonsIfNeeded()
+        
+        if (self.leftView == nil && self.leftButtons.count > 0) {
+            self.leftSwipeSettings.allowsButtonsWithDifferentWidth = leftSwipeSettings.allowsButtonsWithDifferentWidth || self.allowsButtonsWithDifferentWidth
+            self.leftView = WWSwipeViewButtonView(buttons: self.leftButtons, direction: .leftToRight, settings: self.leftSwipeSettings, safeInset: safeInsets.left)
+            self.leftView.currentView = self
+            self.leftView.frame = CGRect(x: -self.leftView.bounds.size.width + safeInsets.left * (self.isRTL() ? 1 : -1),
+                                         y: leftSwipeSettings.topMargin,
+                                         width: leftView.bounds.size.width,
+                                         height: self.swipeOverlay.bounds.size.height - self.leftSwipeSettings.topMargin - self.leftSwipeSettings.bottomMargin)
+            self.leftView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            self.swipeOverlay.addSubview(self.leftView)
+        }
+        
+        if (self.rightView == nil && self.rightButtons.count > 0) {
+            self.rightSwipeSettings.allowsButtonsWithDifferentWidth = rightSwipeSettings.allowsButtonsWithDifferentWidth || self.allowsButtonsWithDifferentWidth
+            self.rightView = WWSwipeViewButtonView(buttons: self.rightButtons, direction: .rightToLeft, settings: self.rightSwipeSettings, safeInset: safeInsets.right)
+            self.rightView.currentView = self
+            self.rightView.frame = CGRect(x: self.swipeOverlay.bounds.size.width + safeInsets.right * (self.isRTL() ? 1 : -1),
+                                         y: rightSwipeSettings.topMargin,
+                                         width: rightView.bounds.size.width,
+                                         height: self.swipeOverlay.bounds.size.height - self.rightSwipeSettings.topMargin - self.rightSwipeSettings.bottomMargin)
+            self.rightView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            self.swipeOverlay.addSubview(self.rightView)
+        }
+        
+        if (self.leftView != nil) {
+            self.leftView.setSafeInset(safeInsets.left, extendEdgeButton: self.leftSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
+        }
+        if (self.rightView != nil) {
+            self.rightView.setSafeInset(safeInsets.right, extendEdgeButton: self.rightSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
+        }
+    }
+    
+    fileprivate func showSwipeOverlayIfNeeded() {
+        if (self.overlayEnabled) {
+            return
+        }
+        self.overlayEnabled = true
+        ///REMOVE
+        if !self.preservesSelectionStatus {
+            //self.selected = false // if it was a cell
+        }
+        if (self._swipeContentView != nil) {
+            self._swipeContentView.removeFromSuperview()
+            self.delegate?.swipeTableCellWillBeginSwiping(self)
+        }
+        let cropSize : CGSize = self.bounds.size
+        self.swipeView.image = self.imageFromView(view: self, cropSize: cropSize)
+        self.swipeOverlay.isHidden = false
+        
+        if (self._swipeContentView != nil) {
+            self.swipeView.addSubview(self._swipeContentView)
+        }
+        
+        if self.allowsMultipleSwipe {
+            //REMOVE OR REPLAN
+            //Since this unlikely to happen, I'll code it differently
+            if (self.tableInputOverlay != nil) {
+                self.tableInputOverlay.removeFromSuperview()
+                self.tableInputOverlay = nil
+            }
+            self.tableInputOverlay = WWSwipeViewInputOverlay(frame: UIApplication.shared.keyWindow?.bounds ?? CGRect.zero)
+            self.tableInputOverlay.currentView = self
+            UIApplication.shared.keyWindow?.addSubview(self.tableInputOverlay)
+        }
 //        self.selectionStyle = _previusSelectionStyle;
 //        NSArray * selectedRows = self.parentTable.indexPathsForSelectedRows;
 //        if ([selectedRows containsObject:[self.parentTable indexPathForCell:self]]) {
 //            self.selected = NO; //Hack: in some iOS versions setting the selected property to YES own isn't enough to force the cell to redraw the chosen selectionStyle
 //            self.selected = YES;
 //        }
-//        [self setAccesoryViewsHidden:NO];
+        self.setAccesoryViewsHidden(true)
+        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapHandler(gesture:)))
+        self.tapRecognizer.cancelsTouchesInView = true
+        self.tapRecognizer.delegate = self
+        self.addGestureRecognizer(self.tapRecognizer)
+    }
+    
+    fileprivate func backgroundColorForSwipe() -> UIColor {
+        //        if (_swipeBackgroundColor) {
+        //            return _swipeBackgroundColor; //user defined color
+        //        }
+        //        else if (self.contentView.backgroundColor && ![self.contentView.backgroundColor isEqual:[UIColor clearColor]]) {
+        //            return self.contentView.backgroundColor;
+        //        }
+        //        else if (self.backgroundColor) {
+        //            return self.backgroundColor;
+        //        }
+        //        return [UIColor clearColor];
+        return UIColor.clear
+    }
+    
+    fileprivate func imageFromView(view: UIView, cropSize: CGSize) -> UIImage {
+        
+        //    UIGraphicsBeginImageContextWithOptions(cropSize, NO, 0);
+        //    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
+        //    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+        //    UIGraphicsEndImageContext();
+        //    return image;
+        return UIImage()
+    }
+    
+    fileprivate func setAccesoryViewsHidden(_ hidden: Bool) {
+        
+        //    if (self.accessoryView) {
+        //        self.accessoryView.hidden = hidden;
+        //    }
+        //    for (UIView * view in self.contentView.superview.subviews) {
+        //        if (view != self.contentView && ([view isKindOfClass:[UIButton class]] || [NSStringFromClass(view.class) rangeOfString:@"Disclosure"].location != NSNotFound)) {
+        //            view.hidden = hidden;
+        //        }
+        //    }
+        //
+        //    for (UIView * view in self.contentView.subviews) {
+        //        if (view == _swipeOverlay || view == _swipeContentView) continue;
+        //        if (hidden && !view.hidden) {
+        //            view.hidden = YES;
+        //            [_previusHiddenViews addObject:view];
+        //        }
+        //        else if (!hidden && [_previusHiddenViews containsObject:view]) {
+        //            view.hidden = NO;
+        //        }
+        //    }
+        //
+        //    if (!hidden) {
+        //        [_previusHiddenViews removeAllObjects];
+        //    }
+    }
+        
+}
+
+//MARK: Gestures
+extension WWSwipeView : UIGestureRecognizerDelegate {
+    //(void) panHandler: (UIPanGestureRecognizer *)gesture
+    @objc func panHandler(gesture: UIPanGestureRecognizer) {
+    }
+    
+    @objc func tapHandler(gesture: UITapGestureRecognizer) {
+    }
+}
+
+//#pragma mark MGSwipeTableCell Implementation
 //
-//        if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCellWillEndSwiping:)]) {
-//            [_delegate swipeTableCellWillEndSwiping:self];
-//        }
 //
-//        if (_tapRecognizer) {
-//            [self removeGestureRecognizer:_tapRecognizer];
-//            _tapRecognizer = nil;
-//        }
-//}
-//
-//-(void) refreshContentView
-//    {
-//        CGFloat currentOffset = _swipeOffset;
-//        BOOL prevValue = _triggerStateChanges;
-//        _triggerStateChanges = NO;
-//        self.swipeOffset = 0;
-//        self.swipeOffset = currentOffset;
-//        _triggerStateChanges = prevValue;
-//}
-//
-//-(void) refreshButtons: (BOOL) usingDelegate
-//{
-//    if (usingDelegate) {
-//        self.leftButtons = @[];
-//        self.rightButtons = @[];
-//    }
-//    if (_leftView) {
-//        [_leftView removeFromSuperview];
-//        _leftView = nil;
-//    }
-//    if (_rightView) {
-//        [_rightView removeFromSuperview];
-//        _rightView = nil;
-//    }
-//    [self createSwipeViewIfNeeded];
-//    [self refreshContentView];
-//}
+//@implementation MGSwipeTableCell
 //
 //#pragma mark Handle Table Events
 //
@@ -539,54 +529,7 @@ class WWSwipeView : UIView {
 //
 //#pragma mark Some utility methods
 //
-//- (UIImage *)imageFromView:(UIView *)view cropSize:(CGSize)cropSize{
-//    UIGraphicsBeginImageContextWithOptions(cropSize, NO, 0);
-//    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
-//    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    return image;
-//}
 //
-//-(void) setAccesoryViewsHidden: (BOOL) hidden
-//{
-//    if (self.accessoryView) {
-//        self.accessoryView.hidden = hidden;
-//    }
-//    for (UIView * view in self.contentView.superview.subviews) {
-//        if (view != self.contentView && ([view isKindOfClass:[UIButton class]] || [NSStringFromClass(view.class) rangeOfString:@"Disclosure"].location != NSNotFound)) {
-//            view.hidden = hidden;
-//        }
-//    }
-//
-//    for (UIView * view in self.contentView.subviews) {
-//        if (view == _swipeOverlay || view == _swipeContentView) continue;
-//        if (hidden && !view.hidden) {
-//            view.hidden = YES;
-//            [_previusHiddenViews addObject:view];
-//        }
-//        else if (!hidden && [_previusHiddenViews containsObject:view]) {
-//            view.hidden = NO;
-//        }
-//    }
-//
-//    if (!hidden) {
-//        [_previusHiddenViews removeAllObjects];
-//    }
-//}
-//
-//-(UIColor *) backgroundColorForSwipe
-//    {
-//        if (_swipeBackgroundColor) {
-//            return _swipeBackgroundColor; //user defined color
-//        }
-//        else if (self.contentView.backgroundColor && ![self.contentView.backgroundColor isEqual:[UIColor clearColor]]) {
-//            return self.contentView.backgroundColor;
-//        }
-//        else if (self.backgroundColor) {
-//            return self.backgroundColor;
-//        }
-//        return [UIColor clearColor];
-//}
 //
 //-(UITableView *) parentTable
 //    {
@@ -997,19 +940,19 @@ class WWSwipeView : UIView {
 //    }
 //}
 //
-//#pragma mark Accessibility
-//
-//- (NSInteger)accessibilityElementCount {
-//    return _swipeOffset == 0 ? [super accessibilityElementCount] : 1;
-//    }
-//
-//    - (id)accessibilityElementAtIndex:(NSInteger)index {
-//        return _swipeOffset == 0  ? [super accessibilityElementAtIndex:index] : self.contentView;
-//        }
-//
-//        - (NSInteger)indexOfAccessibilityElement:(id)element {
-//            return _swipeOffset == 0  ? [super indexOfAccessibilityElement:element] : 0;
-//}
-//
-//
 //@end
+
+//MARK: Accessibility
+extension WWSwipeView {
+    override func accessibilityElementCount() -> Int {
+        return self.swipeOffset == 0 ? super.accessibilityElementCount() : 1
+    }
+    
+    override func accessibilityElement(at index: Int) -> Any? {
+        return self.swipeOffset == 0 ? super.accessibilityElement(at: index) : self
+    }
+    
+    override func index(ofAccessibilityElement element: Any) -> Int {
+        return self.swipeOffset == 0 ? super.index(ofAccessibilityElement: element) : 0
+    }
+}
