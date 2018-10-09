@@ -170,21 +170,20 @@ class WWSwipeView : UIView {
         }
     }
     
-    //MARK: Internal functions
-    func hideSwipe(animated: Bool, completion: ((Bool) ->Void)? = nil) {
-        
-    }
-    
-    func showSwipe(direction: WWSwipeViewDirection, animated: Bool, completion: ((Bool) ->Void)? = nil) {
-        
-    }
-    
-    func setSwipeOffset(offset:CGFloat, animated: Bool, animation: WWSwipeViewAnimation? = nil, completion: ((Bool) ->Void)? = nil) {
-        
-    }
-    
-    func expandSwipe(direction: WWSwipeViewDirection, animated: Bool) {
-        
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if !self.isHidden && self.swipeOverlay != nil && !self.swipeOverlay.isHidden {
+            let targets : [UIView?] = [self.leftView, self.rightView]
+            for i in 0..<2 {
+                guard let target : UIView = targets[i] else {
+                    continue
+                }
+                let p : CGPoint = self.convert(point, to: target)
+                if target.bounds.contains(p){
+                    return target.hitTest(p, with: event)
+                }
+            }
+        }
+        return super.hitTest(point, with: event)
     }
     
     func refreshContentView() {
@@ -455,6 +454,223 @@ class WWSwipeView : UIView {
         
 }
 
+//MARK: Table View Cell function. Might not need them
+extension WWSwipeView {
+    func prepareForReuse() {
+        self.cleanViews()
+        if self.swipeState != .none {
+            self.triggerStateChanges = true
+            self.update(state: .none)
+        }
+        let cleanButtons : Bool = self.delegate != nil
+        self.initialize(cleanButtons: cleanButtons)
+    }
+    
+    func update(state: WWSwipeViewState) {
+        if !self.triggerStateChanges || self.swipeState == state {
+            return
+        }
+        self.swipeState = state
+        self.delegate?.didChangeSwipeState(self, state: state, isGestureActive: self.isSwipeGestureActive)
+    }
+    
+    func setEditing(_ editing: Bool, animated: Bool = false) {
+        if editing {
+            self.swipeOffset = 0
+        }
+    }
+    
+    func parentTable() -> UITableView? {
+        var view : UIView? = self.superview
+        while view != nil {
+            if view is UITableView {
+                return view as? UITableView
+            }
+            view = view?.superview
+        }
+        return nil
+    }
+}
+
+//MARK: Animations
+extension WWSwipeView  {
+    func setSwipeOffset(newOffset:CGFloat, animation: WWSwipeViewAnimation?, completion: ((Bool) ->Void)? = nil) {
+        if self.displayLink != nil {
+            self.displayLink.invalidate()
+            self.displayLink = nil
+        }
+        
+        if self.animationCompletion != nil {
+            let callbackCopy = self.animationCompletion
+            self.animationCompletion = nil
+            callbackCopy?(true)
+        }
+        
+        if newOffset != 0 {
+            self.createSwipeViewIfNeeded()
+        }
+        
+        if animation != nil {
+            self.swipeOffset = newOffset
+            completion?(true)
+            return
+        }
+        self.animationCompletion = completion;
+        self.triggerStateChanges = false;
+        self.animationData.from = self.swipeOffset;
+        self.animationData.to = newOffset;
+        self.animationData.duration = CFTimeInterval(animation?.duration ?? 0);
+        self.animationData.start = 0;
+        self.animationData.animation = animation;
+        
+        
+        self.displayLink = CADisplayLink(target: self, selector: #selector(self.animationTick(timer:)))
+        self.displayLink.add(to: RunLoop.main, forMode: .commonModes)
+    }
+    
+    func setSwipeOffset(newOffset:CGFloat, animated: Bool, completion: ((Bool) ->Void)? = nil) {
+        let animation : WWSwipeViewAnimation? = animated ? WWSwipeViewAnimation() : nil
+        self.setSwipeOffset(newOffset: newOffset, animation: animation, completion: completion)
+    }
+    
+    func setSwipeOffset(newOffset:CGFloat, animated: Bool, animation: WWSwipeViewAnimation?, completion: ((Bool) ->Void)? = nil) {
+        let sign : CGFloat = newOffset > 0 ? 1 : -1
+        let activeButtons : WWSwipeViewButtonView! = sign < 0 ? self.rightView : self.leftView
+        let activeSettings : WWSwipeViewSettings = sign < 0 ? self.rightSwipeSettings : self.leftSwipeSettings
+        
+        if activeSettings.enableSwipeBounces {
+            self.swipeOffset = newOffset
+            let maxUnbouncedOffset : CGFloat = sign * activeButtons.bounds.size.width
+            
+            if ((sign > 0 && newOffset > maxUnbouncedOffset) || (sign < 0 && newOffset < maxUnbouncedOffset)) {
+                self.swipeOffset = maxUnbouncedOffset + (newOffset - maxUnbouncedOffset) * activeSettings.swipeBounceRate
+            }
+        } else {
+            let maxOffset : CGFloat = sign * activeButtons.bounds.size.width
+            self.swipeOffset = sign > 0 ? min(newOffset, maxOffset) : max(newOffset, maxOffset)
+        }
+        let offset : CGFloat = fabs(self.swipeOffset)
+        if (activeButtons == nil || offset == 0) {
+            if self.leftView != nil {
+                self.leftView.endExpansionAnimated(animated: false)
+            }
+            if self.rightView != nil {
+                self.rightView.endExpansionAnimated(animated: false)
+            }
+            self.targetOffset = 0
+            self.update(state: .none)
+            return
+        } else {
+            self.showSwipeOverlayIfNeeded()
+            let swipeThreshold : CGFloat = activeSettings.threshold
+            let keepButtons : Bool = activeSettings.keepButtonsSwiped
+            self.targetOffset = keepButtons && offset > activeButtons.bounds.size.width * swipeThreshold ? activeButtons.bounds.size.width * sign : 0
+        }
+        let onlyButtons : Bool = activeSettings.onlySwipeButtons
+        let safeInsets : UIEdgeInsets = self.getSafeInsets()
+        let safeInset : CGFloat = self.isRTL() ? safeInsets.right :  -safeInsets.left
+        self.swipeView.transform = self.swipeView.transform.translatedBy(x: safeInset + (onlyButtons ? 0 : self.swipeOffset), y: 0)
+        
+        //animate existing buttons
+        let but: [WWSwipeViewButtonView?] = [self.leftView , self.rightView]
+        let settings: [WWSwipeViewSettings] = [self.leftSwipeSettings , self.rightSwipeSettings]
+        let expansions: [WWSwipeViewExpansionSettings] = [self.leftExpansion , self.rightExpansion]
+        
+        for i in 0..<2 {
+            guard let view : WWSwipeViewButtonView = but[i] else {
+                continue
+            }
+            let translation : CGFloat = min(offset, view.bounds.size.width) * sign + settings[i].offset * sign
+            view.transform = view.transform.translatedBy(x: translation, y: 0)
+            
+            if view != activeButtons {
+                continue
+            }
+            let expand = expansions[i].buttonIndex >= 0 && offset > view.bounds.size.width * expansions[i].threshold
+            if expand {
+                view.expandToOffset(offset, settings: expansions[i])
+                self.targetOffset = expansions[i].fillOnTrigger ? self.bounds.size.width * sign : 0
+                self.activeExpansion = view
+                
+                self.update(state: Bool(exactly: NSNumber(integerLiteral: i)) ?? false ? .expandingRightToLeft : .expandingLeftToRight)
+            } else {
+                view.endExpansionAnimated(animated: true)
+                self.activeExpansion = nil
+                let t : CGFloat = min(1, offset/view.bounds.size.width)
+                view.transition(settings[i].transition, percent: t)
+                self.update(state: Bool(exactly: NSNumber(integerLiteral: i)) ?? false ? .swipingRightToLeft : .swipingLeftToRight)
+            }
+        }
+    }
+    
+    func hideSwipe(animated: Bool, completion: ((Bool) ->Void)? = nil) {
+        let animation : WWSwipeViewAnimation? = animated ? (self.swipeOffset > 0 ? self.leftSwipeSettings.hideAnimation : self.rightSwipeSettings.hideAnimation) : nil
+        self.setSwipeOffset(newOffset: 0, animated: animated, animation: animation, completion: completion)
+    }
+    
+    func showSwipe(direction: WWSwipeViewDirection, animated: Bool, completion: ((Bool) ->Void)? = nil) {
+        self.createSwipeViewIfNeeded()
+        self.allowSwipeLeftToRight = self.leftButtons.count > 0
+        self.allowSwipeRightToLeft = self.rightButtons.count > 0
+        let buttonsView : UIView! = direction == .leftToRight ? self.leftView : self.rightView
+        
+        if buttonsView != nil {
+            let s : CGFloat = direction == .leftToRight ? 1 : -1
+             let animation : WWSwipeViewAnimation? = animated ? (direction == .leftToRight ? self.leftSwipeSettings.showAnimation : self.rightSwipeSettings.showAnimation) : nil
+            self.setSwipeOffset(newOffset: buttonsView.bounds.size.width * s, animation: animation, completion: nil)
+        }
+    }
+    
+    func expandSwipe(direction: WWSwipeViewDirection, animated: Bool) {
+        let s : CGFloat = direction == .leftToRight ? 1 : -1
+        let expSetting : WWSwipeViewExpansionSettings = direction == .leftToRight ? self.leftExpansion : self.rightExpansion
+        
+        if (self.activeExpansion != nil && expSetting.fillOnTrigger) {
+            self.createSwipeViewIfNeeded()
+            self.allowSwipeLeftToRight = self.leftButtons.count > 0
+            self.allowSwipeRightToLeft = self.rightButtons.count > 0
+            let buttonsView : UIView! = direction == .leftToRight ? self.leftView : self.rightView
+            
+            if buttonsView != nil {
+                let expansionView : WWSwipeViewButtonView? = buttonsView as? WWSwipeViewButtonView
+                self.setSwipeOffset(newOffset: buttonsView.bounds.size.width * s * expSetting.threshold * 2, animation: expSetting.triggerAnimation) { (_) in
+                    expansionView?.endExpansionAnimated(animated: true)
+                    self.setSwipeOffset(newOffset: 0, animated: false, completion: nil)
+                }
+            }
+        }
+    }
+    
+    @objc func animationTick(timer: CADisplayLink) {
+        if self.animationData.start != 0 {
+            self.animationData.start = timer.timestamp
+        }
+        let elapsed : CFTimeInterval = timer.timestamp - self.animationData.start
+        let  completed : Bool = elapsed >= self.animationData.duration
+        
+        if (completed) {
+            self.triggerStateChanges = true
+        }
+        self.swipeOffset = self.animationData.animation.value(elapsed: CGFloat(elapsed), duration: self.animationData.duration, from: self.animationData.from, to: self.animationData.to)
+        
+        if (completed) {
+            timer.invalidate()
+            self.invalidateDisplayLink()
+        }
+    }
+    
+    func invalidateDisplayLink() {
+        self.displayLink.invalidate()
+        self.displayLink = nil
+        if self.animationCompletion != nil {
+            let callbackCopy = self.animationCompletion
+            self.animationCompletion = nil
+            callbackCopy?(true)
+        }
+    }
+}
+
+
 //MARK: Gestures
 extension WWSwipeView : UIGestureRecognizerDelegate {
     //(void) panHandler: (UIPanGestureRecognizer *)gesture
@@ -469,280 +685,6 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
 //
 //
 //@implementation MGSwipeTableCell
-//
-//#pragma mark Handle Table Events
-//
-//-(void) prepareForReuse
-//    {
-//        [super prepareForReuse];
-//        [self cleanViews];
-//        if (_swipeState != MGSwipeStateNone) {
-//            _triggerStateChanges = YES;
-//            [self updateState:MGSwipeStateNone];
-//        }
-//        BOOL cleanButtons = _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)];
-//        [self initViews:cleanButtons];
-//}
-//
-//-(void) setEditing:(BOOL)editing animated:(BOOL)animated
-//{
-//    [super setEditing:editing animated:animated];
-//    if (editing) { //disable swipe buttons when the user sets table editing mode
-//        self.swipeOffset = 0;
-//    }
-//}
-//
-//-(void) setEditing:(BOOL)editing
-//{
-//    [super setEditing:YES];
-//    if (editing) { //disable swipe buttons when the user sets table editing mode
-//        self.swipeOffset = 0;
-//    }
-//}
-//
-//-(UIView *) hitTest:(CGPoint)point withEvent:(UIEvent *)event
-//{
-//    if (!self.hidden && _swipeOverlay && !_swipeOverlay.hidden) {
-//        //override hitTest to give swipe buttons a higher priority (diclosure buttons can steal input)
-//        UIView * targets[] = {_leftView, _rightView};
-//        for (int i = 0; i< 2; ++i) {
-//            UIView * target = targets[i];
-//            if (!target) continue;
-//
-//            CGPoint p = [self convertPoint:point toView:target];
-//            if (CGRectContainsPoint(target.bounds, p)) {
-//                return [target hitTest:p withEvent:event];
-//            }
-//        }
-//    }
-//    return [super hitTest:point withEvent:event];
-//}
-//
-//#pragma mark Some utility methods
-//
-//
-//
-//-(UITableView *) parentTable
-//    {
-//        UIView * view = self.superview;
-//        while(view != nil) {
-//            if([view isKindOfClass:[UITableView class]]) {
-//                return (UITableView*) view;
-//            }
-//            view = view.superview;
-//        }
-//        return nil;
-//}
-//
-//-(void) updateState: (MGSwipeState) newState;
-//{
-//    if (!_triggerStateChanges || _swipeState == newState) {
-//        return;
-//    }
-//    _swipeState = newState;
-//    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:didChangeSwipeState:gestureIsActive:)]) {
-//        [_delegate swipeTableCell:self didChangeSwipeState:_swipeState gestureIsActive: self.isSwipeGestureActive] ;
-//    }
-//}
-//
-//#pragma mark Swipe Animation
-//
-//- (void)setSwipeOffset:(CGFloat) newOffset;
-//{
-//    CGFloat sign = newOffset > 0 ? 1.0 : -1.0;
-//    MGSwipeButtonsView * activeButtons = sign < 0 ? _rightView : _leftView;
-//    MGSwipeSettings * activeSettings = sign < 0 ? _rightSwipeSettings : _leftSwipeSettings;
-//
-//    if(activeSettings.enableSwipeBounces) {
-//        _swipeOffset = newOffset;
-//
-//        CGFloat maxUnbouncedOffset = sign * activeButtons.bounds.size.width;
-//
-//        if ((sign > 0 && newOffset > maxUnbouncedOffset) || (sign < 0 && newOffset < maxUnbouncedOffset)) {
-//            _swipeOffset = maxUnbouncedOffset + (newOffset - maxUnbouncedOffset) * activeSettings.swipeBounceRate;
-//        }
-//    }
-//    else {
-//        CGFloat maxOffset = sign * activeButtons.bounds.size.width;
-//        _swipeOffset = sign > 0 ? MIN(newOffset, maxOffset) : MAX(newOffset, maxOffset);
-//    }
-//    CGFloat offset = fabs(_swipeOffset);
-//
-//
-//    if (!activeButtons || offset == 0) {
-//        if (_leftView)
-//        [_leftView endExpansionAnimated:NO];
-//        if (_rightView)
-//        [_rightView endExpansionAnimated:NO];
-//        [self hideSwipeOverlayIfNeeded];
-//        _targetOffset = 0;
-//        [self updateState:MGSwipeStateNone];
-//        return;
-//    }
-//    else {
-//        [self showSwipeOverlayIfNeeded];
-//        CGFloat swipeThreshold = activeSettings.threshold;
-//        BOOL keepButtons = activeSettings.keepButtonsSwiped;
-//        _targetOffset = keepButtons && offset > activeButtons.bounds.size.width * swipeThreshold ? activeButtons.bounds.size.width * sign : 0;
-//    }
-//
-//    BOOL onlyButtons = activeSettings.onlySwipeButtons;
-//    UIEdgeInsets safeInsets = [self getSafeInsets];
-//    CGFloat safeInset = [self isRTLLocale] ? safeInsets.right :  -safeInsets.left;
-//    _swipeView.transform = CGAffineTransformMakeTranslation(safeInset + (onlyButtons ? 0 : _swipeOffset), 0);
-//
-//    //animate existing buttons
-//    MGSwipeButtonsView* but[2] = {_leftView, _rightView};
-//    MGSwipeSettings* settings[2] = {_leftSwipeSettings, _rightSwipeSettings};
-//    MGSwipeExpansionSettings * expansions[2] = {_leftExpansion, _rightExpansion};
-//
-//    for (int i = 0; i< 2; ++i) {
-//        MGSwipeButtonsView * view = but[i];
-//        if (!view) continue;
-//
-//        //buttons view position
-//        CGFloat translation = MIN(offset, view.bounds.size.width) * sign + settings[i].offset * sign;
-//        view.transform = CGAffineTransformMakeTranslation(translation, 0);
-//
-//        if (view != activeButtons) continue; //only transition if active (perf. improvement)
-//        bool expand = expansions[i].buttonIndex >= 0 && offset > view.bounds.size.width * expansions[i].threshold;
-//        if (expand) {
-//            [view expandToOffset:offset settings:expansions[i]];
-//            _targetOffset = expansions[i].fillOnTrigger ? self.bounds.size.width * sign : 0;
-//            _activeExpansion = view;
-//            [self updateState:i ? MGSwipeStateExpandingRightToLeft : MGSwipeStateExpandingLeftToRight];
-//        }
-//        else {
-//            [view endExpansionAnimated:YES];
-//            _activeExpansion = nil;
-//            CGFloat t = MIN(1.0f, offset/view.bounds.size.width);
-//            [view transition:settings[i].transition percent:t];
-//            [self updateState:i ? MGSwipeStateSwipingRightToLeft : MGSwipeStateSwipingLeftToRight];
-//        }
-//    }
-//}
-//
-//-(void) hideSwipeAnimated: (BOOL) animated completion:(void(^)(BOOL finished)) completion
-//{
-//    MGSwipeAnimation * animation = animated ? (_swipeOffset > 0 ? _leftSwipeSettings.hideAnimation: _rightSwipeSettings.hideAnimation) : nil;
-//    [self setSwipeOffset:0 animation:animation completion:completion];
-//}
-//
-//-(void) hideSwipeAnimated: (BOOL) animated
-//{
-//    [self hideSwipeAnimated:animated completion:nil];
-//}
-//
-//-(void) showSwipe: (MGSwipeDirection) direction animated: (BOOL) animated
-//{
-//    [self showSwipe:direction animated:animated completion:nil];
-//}
-//
-//-(void) showSwipe: (MGSwipeDirection) direction animated: (BOOL) animated completion:(void(^)(BOOL finished)) completion
-//{
-//    [self createSwipeViewIfNeeded];
-//    _allowSwipeLeftToRight = _leftButtons.count > 0;
-//    _allowSwipeRightToLeft = _rightButtons.count > 0;
-//    UIView * buttonsView = direction == MGSwipeDirectionLeftToRight ? _leftView : _rightView;
-//
-//    if (buttonsView) {
-//        CGFloat s = direction == MGSwipeDirectionLeftToRight ? 1.0 : -1.0;
-//        MGSwipeAnimation * animation = animated ? (direction == MGSwipeDirectionLeftToRight ? _leftSwipeSettings.showAnimation : _rightSwipeSettings.showAnimation) : nil;
-//        [self setSwipeOffset:buttonsView.bounds.size.width * s animation:animation completion:completion];
-//    }
-//}
-//
-//-(void) expandSwipe: (MGSwipeDirection) direction animated: (BOOL) animated
-//{
-//    CGFloat s = direction == MGSwipeDirectionLeftToRight ? 1.0 : -1.0;
-//    MGSwipeExpansionSettings* expSetting = direction == MGSwipeDirectionLeftToRight ? _leftExpansion : _rightExpansion;
-//
-//    // only perform animation if there's no pending expansion animation and requested direction has fillOnTrigger enabled
-//    if(!_activeExpansion && expSetting.fillOnTrigger) {
-//        [self createSwipeViewIfNeeded];
-//        _allowSwipeLeftToRight = _leftButtons.count > 0;
-//        _allowSwipeRightToLeft = _rightButtons.count > 0;
-//        UIView * buttonsView = direction == MGSwipeDirectionLeftToRight ? _leftView : _rightView;
-//
-//        if (buttonsView) {
-//            __weak MGSwipeButtonsView * expansionView = direction == MGSwipeDirectionLeftToRight ? _leftView : _rightView;
-//            __weak MGSwipeTableCell * weakself = self;
-//            [self setSwipeOffset:buttonsView.bounds.size.width * s * expSetting.threshold * 2 animation:expSetting.triggerAnimation completion:^(BOOL finished){
-//                [expansionView endExpansionAnimated:YES];
-//                [weakself setSwipeOffset:0 animated:NO completion:nil];
-//                }];
-//        }
-//    }
-//}
-//
-//-(void) animationTick: (CADisplayLink *) timer
-//{
-//    if (!_animationData.start) {
-//        _animationData.start = timer.timestamp;
-//    }
-//    CFTimeInterval elapsed = timer.timestamp - _animationData.start;
-//    bool completed = elapsed >= _animationData.duration;
-//    if (completed) {
-//        _triggerStateChanges = YES;
-//    }
-//    self.swipeOffset = [_animationData.animation value:elapsed duration:_animationData.duration from:_animationData.from to:_animationData.to];
-//
-//    //call animation completion and invalidate timer
-//    if (completed){
-//        [timer invalidate];
-//        [self invalidateDisplayLink];
-//    }
-//}
-//
-//-(void)invalidateDisplayLink {
-//    [_displayLink invalidate];
-//    _displayLink = nil;
-//    if (_animationCompletion) {
-//        void (^callbackCopy)(BOOL finished) = _animationCompletion; //copy to avoid duplicated callbacks
-//        _animationCompletion = nil;
-//        callbackCopy(YES);
-//    }
-//}
-//
-//-(void) setSwipeOffset:(CGFloat)offset animated: (BOOL) animated completion:(void(^)(BOOL finished)) completion
-//{
-//    MGSwipeAnimation * animation = animated ? [[MGSwipeAnimation alloc] init] : nil;
-//    [self setSwipeOffset:offset animation:animation completion:completion];
-//}
-//
-//-(void) setSwipeOffset:(CGFloat)offset animation: (MGSwipeAnimation *) animation completion:(void(^)(BOOL finished)) completion
-//{
-//    if (_displayLink) {
-//        [_displayLink invalidate];
-//        _displayLink = nil;
-//    }
-//    if (_animationCompletion) { //notify previous animation cancelled
-//        void (^callbackCopy)(BOOL finished) = _animationCompletion; //copy to avoid duplicated callbacks
-//        _animationCompletion = nil;
-//        callbackCopy(NO);
-//    }
-//    if (offset !=0) {
-//        [self createSwipeViewIfNeeded];
-//    }
-//
-//    if (!animation) {
-//        self.swipeOffset = offset;
-//        if (completion) {
-//            completion(YES);
-//        }
-//        return;
-//    }
-//
-//    _animationCompletion = completion;
-//    _triggerStateChanges = NO;
-//    _animationData.from = _swipeOffset;
-//    _animationData.to = offset;
-//    _animationData.duration = animation.duration;
-//    _animationData.start = 0;
-//    _animationData.animation = animation;
-//    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animationTick:)];
-//    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-//}
 //
 //#pragma mark Gestures
 //
