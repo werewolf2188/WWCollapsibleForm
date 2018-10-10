@@ -9,8 +9,8 @@
 import Foundation
 
 protocol WWSwipeViewDelegate : NSObjectProtocol {
-    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection, from point: CGPoint) -> Bool
-    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection) -> Bool
+    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection, from point: CGPoint) -> Bool?
+    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection) -> Bool?
     
     func didChangeSwipeState(_ swipeView: WWSwipeView, state: WWSwipeViewState, isGestureActive: Bool)
     func tappedButtonAtIndex(_ swipeView: WWSwipeView, index: Int, direction: WWSwipeViewDirection, fromExpansion: Bool) -> Bool

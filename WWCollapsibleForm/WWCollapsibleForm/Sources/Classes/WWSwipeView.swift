@@ -56,7 +56,12 @@ class WWSwipeView : UIView {
     var leftExpansion : WWSwipeViewExpansionSettings!
     var rightExpansion : WWSwipeViewExpansionSettings!
     
-    var isSwipeGestureActive : Bool = false
+    var isSwipeGestureActive : Bool {
+        if self.panRecognizer == nil {
+            return false
+        }
+        return self.panRecognizer.state == .began || self.panRecognizer.state == .changed;
+    }
     var allowsMultipleSwipe : Bool = false
     var allowsButtonsWithDifferentWidth : Bool = false
     
@@ -66,6 +71,13 @@ class WWSwipeView : UIView {
     var touchOnDismissSwipe : Bool = false
     
     var swipeBackgroundColor : UIColor!
+    {
+        didSet {
+            if (self.swipeOverlay != nil) {
+                self.swipeOverlay.backgroundColor = swipeBackgroundColor;
+            }
+        }
+    }
     var swipeOffset : CGFloat = 0
     var swipeState: WWSwipeViewState!
     
@@ -255,7 +267,12 @@ class WWSwipeView : UIView {
             self.tableInputOverlay.removeFromSuperview()
             self.tableInputOverlay = nil
         }
-        
+        //        self.selectionStyle = _previusSelectionStyle;
+        //        NSArray * selectedRows = self.parentTable.indexPathsForSelectedRows;
+        //        if ([selectedRows containsObject:[self.parentTable indexPathForCell:self]]) {
+        //            self.selected = NO; //Hack: in some iOS versions setting the selected property to YES own isn't enough to force the cell to redraw the chosen selectionStyle
+        //            self.selected = YES;
+        //        }
         self.setAccesoryViewsHidden(false)
         if let delegate = self.delegate {
             delegate.swipeTableCellWillEndSwiping(self)
@@ -396,12 +413,9 @@ class WWSwipeView : UIView {
             self.tableInputOverlay.currentView = self
             UIApplication.shared.keyWindow?.addSubview(self.tableInputOverlay)
         }
-//        self.selectionStyle = _previusSelectionStyle;
-//        NSArray * selectedRows = self.parentTable.indexPathsForSelectedRows;
-//        if ([selectedRows containsObject:[self.parentTable indexPathForCell:self]]) {
-//            self.selected = NO; //Hack: in some iOS versions setting the selected property to YES own isn't enough to force the cell to redraw the chosen selectionStyle
-//            self.selected = YES;
-//        }
+
+//        _previusSelectionStyle = self.selectionStyle;
+//        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.setAccesoryViewsHidden(true)
         self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapHandler(gesture:)))
         self.tapRecognizer.cancelsTouchesInView = true
@@ -673,207 +687,161 @@ extension WWSwipeView  {
 
 //MARK: Gestures
 extension WWSwipeView : UIGestureRecognizerDelegate {
-    //(void) panHandler: (UIPanGestureRecognizer *)gesture
+    
+    func cancelPanGesture() {
+        if self.panRecognizer.state != .ended && self.panRecognizer.state != .possible {
+            self.panRecognizer.isEnabled = false
+            self.panRecognizer.isEnabled = true
+            if self.swipeOffset != 0 {
+                self.hideSwipe(animated: true)
+            }
+        }
+    }
+    
+    func filterSwipe(offset: CGFloat) -> CGFloat {
+        let allowed : Bool = offset > 0 ? self.allowSwipeLeftToRight : self.allowSwipeRightToLeft
+        let buttons : UIView! = offset > 0 ? self.leftView : self.rightView
+        var tOffset : CGFloat = offset
+        if buttons == nil || !allowed {
+            tOffset = 0
+        }
+        else if !self.allowsOppositeSwipe && self.firstSwipeState == .swipingLeftToRight && offset < 0 {
+            tOffset = 0
+        }
+        else if !self.allowsOppositeSwipe && self.firstSwipeState == .swipingRightToLeft && offset > 0 {
+            tOffset = 0
+        }
+        return tOffset
+    }
+    
     @objc func panHandler(gesture: UIPanGestureRecognizer) {
+        let current : CGPoint = gesture.location(in: self)
+        if (gesture.state == .began) {
+            self.invalidateDisplayLink()
+            if !self.preservesSelectionStatus {
+                //self.highlighted = false
+            }
+            self.createSwipeViewIfNeeded()
+            self.panStartPoint = current
+            self.panStartOffset = self.swipeOffset
+            if self.swipeOffset != 0 {
+                self.firstSwipeState = self.swipeOffset > 0 ? .swipingLeftToRight : .swipingRightToLeft
+            }
+//            if !self.allowsMultipleSwipe {
+//                if let cells = self.parentTable()?.visibleCells {
+//                    for cell in cells {
+//                        if cell is WWSwipeView {
+//                            (cell as? WWSwipeView)?.cancelPanGesture()
+//                        }
+//                    }
+//                }
+//            }
+        } else if gesture.state == .changed {
+            let offset : CGFloat = self.panStartOffset + current.x - self.panStartPoint.x
+            if self.firstSwipeState == .none {
+                self.firstSwipeState = offset > 0 ? .swipingLeftToRight : .swipingRightToLeft
+            }
+            self.swipeOffset = self.filterSwipe(offset: offset)
+        } else {
+            let expansion : WWSwipeViewButtonView! = self.activeExpansion
+            if expansion != nil {
+                let expandedButton : UIView! = expansion.getExpandedButton()
+                let expSettings : WWSwipeViewExpansionSettings = self.swipeOffset > 0 ? self.leftExpansion : self.rightExpansion
+                var backgroundColor : UIColor? = nil
+                if (!expSettings.fillOnTrigger && expSettings.expansionColor != nil) {
+                    backgroundColor = expansion.backgroundColorCopy
+                    expansion.backgroundColorCopy = expSettings.expansionColor
+                }
+                self.setSwipeOffset(newOffset: self.targetOffset, animation: expSettings.triggerAnimation) { (finished) in
+                    if (!finished || self.isHidden || expansion != nil) {
+                        return
+                    }
+                    let autoHide : Bool = expansion.handleClick(sender: expandedButton, fromExpansion: true)
+                    if autoHide {
+                        expansion.endExpansionAnimated(animated: false)
+                    }
+                    if (backgroundColor != nil && expandedButton != nil) {
+                        expandedButton.backgroundColor = backgroundColor;
+                    }
+                }
+            } else {
+                let velocity : CGFloat = self.panRecognizer.velocity(in: self).x
+                let inertiaThreshold : CGFloat = 100
+                
+                if (velocity > inertiaThreshold) {
+                    self.targetOffset = self.swipeOffset < 0 ? 0 : (self.leftView != nil && self.leftSwipeSettings.keepButtonsSwiped ? self.leftView.bounds.size.width : self.targetOffset)
+                } else if (velocity < -inertiaThreshold) {
+                    self.targetOffset = self.swipeOffset > 0 ? 0 : (self.rightView != nil && self.rightSwipeSettings.keepButtonsSwiped ? self.rightView.bounds.size.width : self.targetOffset)
+                }
+                
+                self.targetOffset = self.filterSwipe(offset: self.targetOffset)
+                let settings : WWSwipeViewSettings = self.swipeOffset > 0 ? self.leftSwipeSettings : self.rightSwipeSettings
+                var animation : WWSwipeViewAnimation
+                if self.targetOffset == 0 {
+                    animation = settings.hideAnimation
+                } else if fabs(self.swipeOffset) > fabs(self.targetOffset) {
+                    animation = settings.stretchAnimation
+                } else {
+                    animation = settings.showAnimation
+                }
+                self.setSwipeOffset(newOffset: self.targetOffset, animation: animation, completion: nil)
+            }
+            self.firstSwipeState = .none
+        }
     }
     
     @objc func tapHandler(gesture: UITapGestureRecognizer) {
+        let hide : Bool = self.delegate?.shouldHideSwipeOnTap(self, point: gesture.location(in: self)) ?? true
+        
+        if hide {
+            self.hideSwipe(animated: true)
+        }
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if (gestureRecognizer == self.panRecognizer) {
+            //            if (self.isEditing) {
+            //                return false; //do not swipe while editing table
+            //            }
+            let translation : CGPoint = self.panRecognizer.translation(in: self)
+            if (fabs(translation.y) > fabs(translation.x)) {
+                return false
+            }
+            if self.swipeView != nil {
+                let point : CGPoint = self.tapRecognizer.location(in: self.swipeView)
+                if self.swipeView.bounds.contains(point) {
+                    return self.allowsSwipeWhenTappingButtons
+                }
+            }
+            if self.swipeOffset != 0 {
+                return false
+            }
+            
+            //make a decision according to existing buttons or using the optional delegate
+            if let delegate = self.delegate {
+                let point : CGPoint = self.panRecognizer.location(in: self)
+                self.allowSwipeLeftToRight = delegate.canSwipe(self, direction: .leftToRight, from: point) ?? delegate.canSwipe(self, direction: .leftToRight) ?? self.allowSwipeLeftToRight
+                self.allowSwipeRightToLeft = delegate.canSwipe(self, direction: .rightToLeft, from: point) ?? delegate.canSwipe(self, direction: .rightToLeft) ?? self.allowSwipeRightToLeft
+                
+                if delegate.canSwipe(self, direction: .leftToRight, from: point) == nil &&
+                    delegate.canSwipe(self, direction: .leftToRight) == nil &&
+                    delegate.canSwipe(self, direction: .rightToLeft, from: point) == nil &&
+                    delegate.canSwipe(self, direction: .rightToLeft) == nil {
+                    self.fetchButtonsIfNeeded()
+                    self.allowSwipeLeftToRight = self.leftButtons.count > 0
+                    self.allowSwipeRightToLeft = self.rightButtons.count > 0
+                }
+            }
+            return (self.allowSwipeLeftToRight && translation.x > 0) || (self.allowSwipeRightToLeft && translation.x < 0);
+            
+            
+        } else if (gestureRecognizer == self.tapRecognizer) {
+            let point : CGPoint = self.tapRecognizer.location(in: self.swipeView)
+            return self.swipeView.bounds.contains(point)
+        }
+        return true
     }
 }
-
-//#pragma mark MGSwipeTableCell Implementation
-//
-//
-//@implementation MGSwipeTableCell
-//
-//#pragma mark Gestures
-//
-//-(void) cancelPanGesture
-//{
-//    if (_panRecognizer.state != UIGestureRecognizerStateEnded && _panRecognizer.state != UIGestureRecognizerStatePossible) {
-//        _panRecognizer.enabled = NO;
-//        _panRecognizer.enabled = YES;
-//        if (self.swipeOffset) {
-//            [self hideSwipeAnimated:YES];
-//        }
-//    }
-//}
-//
-//-(void) tapHandler: (UITapGestureRecognizer *) recognizer
-//{
-//    BOOL hide = YES;
-//    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:shouldHideSwipeOnTap:)]) {
-//        hide = [_delegate swipeTableCell:self shouldHideSwipeOnTap:[recognizer locationInView:self]];
-//    }
-//    if (hide) {
-//        [self hideSwipeAnimated:YES];
-//    }
-//}
-//
-//-(CGFloat) filterSwipe: (CGFloat) offset
-//{
-//    bool allowed = offset > 0 ? _allowSwipeLeftToRight : _allowSwipeRightToLeft;
-//    UIView * buttons = offset > 0 ? _leftView : _rightView;
-//    if (!buttons || ! allowed) {
-//        offset = 0;
-//    }
-//    else if (!_allowsOppositeSwipe && _firstSwipeState == MGSwipeStateSwipingLeftToRight && offset < 0) {
-//        offset = 0;
-//    }
-//    else if (!_allowsOppositeSwipe && _firstSwipeState == MGSwipeStateSwipingRightToLeft && offset > 0 ) {
-//        offset = 0;
-//    }
-//    return offset;
-//}
-//
-//-(void) panHandler: (UIPanGestureRecognizer *)gesture
-//{
-//    CGPoint current = [gesture translationInView:self];
-//
-//    if (gesture.state == UIGestureRecognizerStateBegan) {
-//        [self invalidateDisplayLink];
-//
-//        if (!_preservesSelectionStatus)
-//        self.highlighted = NO;
-//        [self createSwipeViewIfNeeded];
-//        _panStartPoint = current;
-//        _panStartOffset = _swipeOffset;
-//        if (_swipeOffset != 0) {
-//            _firstSwipeState = _swipeOffset > 0 ? MGSwipeStateSwipingLeftToRight : MGSwipeStateSwipingRightToLeft;
-//        }
-//
-//        if (!_allowsMultipleSwipe) {
-//            NSArray * cells = [self parentTable].visibleCells;
-//            for (MGSwipeTableCell * cell in cells) {
-//                if ([cell isKindOfClass:[MGSwipeTableCell class]] && cell != self) {
-//                    [cell cancelPanGesture];
-//                }
-//            }
-//        }
-//    }
-//    else if (gesture.state == UIGestureRecognizerStateChanged) {
-//        CGFloat offset = _panStartOffset + current.x - _panStartPoint.x;
-//        if (_firstSwipeState == MGSwipeStateNone) {
-//            _firstSwipeState = offset > 0 ? MGSwipeStateSwipingLeftToRight : MGSwipeStateSwipingRightToLeft;
-//        }
-//        self.swipeOffset = [self filterSwipe:offset];
-//    }
-//    else {
-//        __weak MGSwipeButtonsView * expansion = _activeExpansion;
-//        if (expansion) {
-//            __weak UIView * expandedButton = [expansion getExpandedButton];
-//            MGSwipeExpansionSettings * expSettings = _swipeOffset > 0 ? _leftExpansion : _rightExpansion;
-//            UIColor * backgroundColor = nil;
-//            if (!expSettings.fillOnTrigger && expSettings.expansionColor) {
-//                backgroundColor = expansion.backgroundColorCopy; //keep expansion background color
-//                expansion.backgroundColorCopy = expSettings.expansionColor;
-//            }
-//            [self setSwipeOffset:_targetOffset animation:expSettings.triggerAnimation completion:^(BOOL finished){
-//                if (!finished || self.hidden || !expansion) {
-//                return; //cell might be hidden after a delete row animation without being deallocated (to be reused later)
-//                }
-//                BOOL autoHide = [expansion handleClick:expandedButton fromExpansion:YES];
-//                if (autoHide) {
-//                [expansion endExpansionAnimated:NO];
-//                }
-//                if (backgroundColor && expandedButton) {
-//                expandedButton.backgroundColor = backgroundColor;
-//                }
-//                }];
-//        }
-//        else {
-//            CGFloat velocity = [_panRecognizer velocityInView:self].x;
-//            CGFloat inertiaThreshold = 100.0; //points per second
-//
-//            if (velocity > inertiaThreshold) {
-//                _targetOffset = _swipeOffset < 0 ? 0 : (_leftView  && _leftSwipeSettings.keepButtonsSwiped ? _leftView.bounds.size.width : _targetOffset);
-//            }
-//            else if (velocity < -inertiaThreshold) {
-//                _targetOffset = _swipeOffset > 0 ? 0 : (_rightView && _rightSwipeSettings.keepButtonsSwiped ? -_rightView.bounds.size.width : _targetOffset);
-//            }
-//            _targetOffset = [self filterSwipe:_targetOffset];
-//            MGSwipeSettings * settings = _swipeOffset > 0 ? _leftSwipeSettings : _rightSwipeSettings;
-//            MGSwipeAnimation * animation = nil;
-//            if (_targetOffset == 0) {
-//                animation = settings.hideAnimation;
-//            }
-//            else if (fabs(_swipeOffset) > fabs(_targetOffset)) {
-//                animation = settings.stretchAnimation;
-//            }
-//            else {
-//                animation = settings.showAnimation;
-//            }
-//            [self setSwipeOffset:_targetOffset animation:animation completion:nil];
-//        }
-//
-//        _firstSwipeState = MGSwipeStateNone;
-//    }
-//    }
-//
-//    - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-//
-//        if (gestureRecognizer == _panRecognizer) {
-//
-//            if (self.isEditing) {
-//                return NO; //do not swipe while editing table
-//            }
-//
-//            CGPoint translation = [_panRecognizer translationInView:self];
-//            if (fabs(translation.y) > fabs(translation.x)) {
-//                return NO; // user is scrolling vertically
-//            }
-//            if (_swipeView) {
-//                CGPoint point = [_tapRecognizer locationInView:_swipeView];
-//                if (!CGRectContainsPoint(_swipeView.bounds, point)) {
-//                    return _allowsSwipeWhenTappingButtons; //user clicked outside the cell or in the buttons area
-//                }
-//            }
-//
-//            if (_swipeOffset != 0.0) {
-//                return YES; //already swiped, don't need to check buttons or canSwipe delegate
-//            }
-//
-//            //make a decision according to existing buttons or using the optional delegate
-//            if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:canSwipe:fromPoint:)]) {
-//                CGPoint point = [_panRecognizer locationInView:self];
-//                _allowSwipeLeftToRight = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight fromPoint:point];
-//                _allowSwipeRightToLeft = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft fromPoint:point];
-//            }
-//            else if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:canSwipe:)]) {
-//                #pragma clang diagnostic push
-//                #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-//                _allowSwipeLeftToRight = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight];
-//                _allowSwipeRightToLeft = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft];
-//                #pragma clang diagnostic pop
-//            }
-//            else {
-//                [self fetchButtonsIfNeeded];
-//                _allowSwipeLeftToRight = _leftButtons.count > 0;
-//                _allowSwipeRightToLeft = _rightButtons.count > 0;
-//            }
-//
-//            return (_allowSwipeLeftToRight && translation.x > 0) || (_allowSwipeRightToLeft && translation.x < 0);
-//        }
-//        else if (gestureRecognizer == _tapRecognizer) {
-//            CGPoint point = [_tapRecognizer locationInView:_swipeView];
-//            return CGRectContainsPoint(_swipeView.bounds, point);
-//        }
-//        return YES;
-//}
-//
-//-(BOOL) isSwipeGestureActive
-//    {
-//        return _panRecognizer.state == UIGestureRecognizerStateBegan || _panRecognizer.state == UIGestureRecognizerStateChanged;
-//}
-//
-//-(void)setSwipeBackgroundColor:(UIColor *)swipeBackgroundColor {
-//    _swipeBackgroundColor = swipeBackgroundColor;
-//    if (_swipeOverlay) {
-//        _swipeOverlay.backgroundColor = swipeBackgroundColor;
-//    }
-//}
-//
-//@end
 
 //MARK: Accessibility
 extension WWSwipeView {
