@@ -107,7 +107,12 @@ public class WWSection : NSObject {
         (childrenView as? WWItemView)?.reference = form
         (childrenView as? WWItemView)?.indexPath = IndexPath(row: row, section: self.section)
         (childrenView as? WWItemView)?.applyStatus(status: self.status)
-        cell.contentView.addSubViewWithConstraints(childrenView, edgeInsets: UIEdgeInsets(top: 0, left: CGFloat(self.views[row].level ?? 0) * self.leftSpacing, bottom: 0, right: 0))
+        
+        cell.contentView.addSubViewWithConstraints(self.applyOptions(to: childrenView, data: self.views[row].data, row: row),
+                                                   edgeInsets: UIEdgeInsets(top: 0,
+                                                                            left: CGFloat(self.views[row].level ?? 0) * self.leftSpacing,
+                                                                            bottom: 0,
+                                                                            right: 0))
         cell.contentView.backgroundColor = childrenView.backgroundColor
         self.setSeparator(childrenView: childrenView, row: row)
         
@@ -126,6 +131,18 @@ public class WWSection : NSObject {
                 }
             })
             
+        }
+        return childrenView
+    }
+    
+    internal func applyOptions(to childrenView: UIView, data: WWDataObject, row: Int) -> UIView {
+        if data.options.count > 0 {
+            let optionsView : WWSwipeView = WWSwipeView(options: data.options)
+            optionsView.swipeContentView.addSubViewWithConstraints(childrenView)
+            optionsView.tag = childrenView.tag
+            childrenView.tag = 0
+            
+            return optionsView
         }
         return childrenView
     }

@@ -14,7 +14,7 @@ class WWOptionButton: UIButton {
     
     var tempTitleEdgeInsets : UIEdgeInsets!
     var tempImageEdgeInsets : UIEdgeInsets!
-    
+    var buttonWidth : CGFloat = 50
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -36,6 +36,7 @@ class WWOptionButton: UIButton {
         self.tempImageEdgeInsets = self.imageEdgeInsets
         self.tempTitleEdgeInsets = self.titleEdgeInsets
         self.setEdgeInsets()
+        self.setButtonWidth(buttonWidth: self.buttonWidth)
     }
     
     func setEdgeInsets(){
@@ -64,20 +65,16 @@ class WWOptionButton: UIButton {
         }
     }
     
-    func setButtonWidth() {
-        /*
-         _buttonWidth = buttonWidth;
-         if (_buttonWidth > 0)
-         {
-         CGRect frame = self.frame;
-         frame.size.width = _buttonWidth;
-         self.frame = frame;
-         }
-         else
-         {
-         [self sizeToFit];
-         }
-         */
+    func setButtonWidth(buttonWidth: CGFloat) {
+        
+        self.buttonWidth = buttonWidth
+        if (self.buttonWidth > 0) {
+            var frame = self.frame
+            frame.size.width = self.buttonWidth
+            self.frame = frame
+        } else {
+            self.sizeToFit()
+        }
     }
     
     func setTintColor() {

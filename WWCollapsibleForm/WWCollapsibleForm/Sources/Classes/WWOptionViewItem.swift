@@ -19,7 +19,9 @@ public class WWOptionViewItem : NSObject {
     
     public var backgroundColor : UIColor? {
         didSet {
-            self.optionView.backgroundColor = self.backgroundColor
+            if self.backgroundColor != nil {
+                self.optionView.backgroundColor = self.backgroundColor
+            }
         }
     }
     public var title : String! {

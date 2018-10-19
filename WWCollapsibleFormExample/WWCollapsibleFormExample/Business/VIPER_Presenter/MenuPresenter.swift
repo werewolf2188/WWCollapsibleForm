@@ -100,6 +100,12 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
                 (item.children?.count ?? 0) > 0 ? WWSubGroupDataObject(template: WWViewRepresentation(view: CellView()), headerTemplate : WWViewRepresentation(view: CellView())) : WWTemplateDataObject()
             let presenter : MenuItemPresenter = MenuItemPresenter()
             presenter.item = item
+            
+            //FOR TESTING
+            if (sectionNum == MenuPresenter.BURGER_SECTION && rowCount == 0) {
+                data.appendOptions(option: WWOptionViewItem(title: "Test"))
+            }
+            
             self.rowPresenters.append((section: sectionNum, data: data, presenter: presenter))
             rowCount = rowCount + 1            
             for children in item.children ?? [] {

@@ -78,7 +78,15 @@ class WWSwipeView : UIView {
             }
         }
     }
-    var swipeOffset : CGFloat = 0
+    var _swipeOffset : CGFloat = 0
+    var swipeOffset  : CGFloat {
+        get {
+            return self._swipeOffset
+        }
+        set {
+            self.setSwipeOffset(newOffset: newValue)
+        }
+    }
     var swipeState: WWSwipeViewState!
     
     //MARK: Private properties
@@ -89,7 +97,7 @@ class WWSwipeView : UIView {
     fileprivate var panRecognizer :UIPanGestureRecognizer!
     fileprivate var panStartPoint : CGPoint!
     fileprivate var panStartOffset: CGFloat!
-    fileprivate var targetOffset: CGFloat!
+    fileprivate var targetOffset: CGFloat! = 0
     
     fileprivate var swipeOverlay: UIView!
     fileprivate var swipeView: UIImageView!
@@ -101,7 +109,7 @@ class WWSwipeView : UIView {
     fileprivate weak var activeExpansion : WWSwipeViewButtonView!
     
     fileprivate var tableInputOverlay: WWSwipeViewInputOverlay!
-    fileprivate var overlayEnabled: Bool!
+    fileprivate var overlayEnabled: Bool! = false
     //fileprivate var previusSelectionStyle: UITableViewCellSelectionStyle!
     fileprivate var previousHiddenViews: Set<UIView>!
     fileprivate var triggerStateChanges: Bool!
@@ -524,7 +532,7 @@ extension WWSwipeView  {
             self.createSwipeViewIfNeeded()
         }
         
-        if animation != nil {
+        if animation == nil {
             self.swipeOffset = newOffset
             completion?(true)
             return
@@ -547,23 +555,23 @@ extension WWSwipeView  {
         self.setSwipeOffset(newOffset: newOffset, animation: animation, completion: completion)
     }
     
-    func setSwipeOffset(newOffset:CGFloat, animated: Bool, animation: WWSwipeViewAnimation?, completion: ((Bool) ->Void)? = nil) {
+    func setSwipeOffset(newOffset:CGFloat) {
         let sign : CGFloat = newOffset > 0 ? 1 : -1
         let activeButtons : WWSwipeViewButtonView! = sign < 0 ? self.rightView : self.leftView
         let activeSettings : WWSwipeViewSettings = sign < 0 ? self.rightSwipeSettings : self.leftSwipeSettings
         
         if activeSettings.enableSwipeBounces {
-            self.swipeOffset = newOffset
+            self._swipeOffset = newOffset
             let maxUnbouncedOffset : CGFloat = sign * activeButtons.bounds.size.width
             
             if ((sign > 0 && newOffset > maxUnbouncedOffset) || (sign < 0 && newOffset < maxUnbouncedOffset)) {
-                self.swipeOffset = maxUnbouncedOffset + (newOffset - maxUnbouncedOffset) * activeSettings.swipeBounceRate
+                self._swipeOffset = maxUnbouncedOffset + (newOffset - maxUnbouncedOffset) * activeSettings.swipeBounceRate
             }
         } else {
             let maxOffset : CGFloat = sign * activeButtons.bounds.size.width
-            self.swipeOffset = sign > 0 ? min(newOffset, maxOffset) : max(newOffset, maxOffset)
+            self._swipeOffset = sign > 0 ? min(newOffset, maxOffset) : max(newOffset, maxOffset)
         }
-        let offset : CGFloat = fabs(self.swipeOffset)
+        let offset : CGFloat = fabs(self._swipeOffset)
         if (activeButtons == nil || offset == 0) {
             if self.leftView != nil {
                 self.leftView.endExpansionAnimated(animated: false)
@@ -583,7 +591,7 @@ extension WWSwipeView  {
         let onlyButtons : Bool = activeSettings.onlySwipeButtons
         let safeInsets : UIEdgeInsets = self.getSafeInsets()
         let safeInset : CGFloat = self.isRTL() ? safeInsets.right :  -safeInsets.left
-        self.swipeView.transform = self.swipeView.transform.translatedBy(x: safeInset + (onlyButtons ? 0 : self.swipeOffset), y: 0)
+        self.swipeView.transform = self.swipeView.transform.translatedBy(x: safeInset + (onlyButtons ? 0 : self._swipeOffset), y: 0)
         
         //animate existing buttons
         let but: [WWSwipeViewButtonView?] = [self.leftView , self.rightView]
@@ -619,7 +627,7 @@ extension WWSwipeView  {
     
     func hideSwipe(animated: Bool, completion: ((Bool) ->Void)? = nil) {
         let animation : WWSwipeViewAnimation? = animated ? (self.swipeOffset > 0 ? self.leftSwipeSettings.hideAnimation : self.rightSwipeSettings.hideAnimation) : nil
-        self.setSwipeOffset(newOffset: 0, animated: animated, animation: animation, completion: completion)
+        self.setSwipeOffset(newOffset: 0, animation: animation, completion: completion)
     }
     
     func showSwipe(direction: WWSwipeViewDirection, animated: Bool, completion: ((Bool) ->Void)? = nil) {
@@ -666,7 +674,7 @@ extension WWSwipeView  {
             self.triggerStateChanges = true
         }
         self.swipeOffset = self.animationData.animation.value(elapsed: CGFloat(elapsed), duration: self.animationData.duration, from: self.animationData.from, to: self.animationData.to)
-        
+        self.setSwipeOffset(newOffset: self.swipeOffset)
         if (completed) {
             timer.invalidate()
             self.invalidateDisplayLink()
@@ -674,7 +682,9 @@ extension WWSwipeView  {
     }
     
     func invalidateDisplayLink() {
-        self.displayLink.invalidate()
+        if (self.displayLink != nil) {
+            self.displayLink.invalidate()
+        }
         self.displayLink = nil
         if self.animationCompletion != nil {
             let callbackCopy = self.animationCompletion
@@ -766,12 +776,12 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
                 }
             } else {
                 let velocity : CGFloat = self.panRecognizer.velocity(in: self).x
-                let inertiaThreshold : CGFloat = 100
+                let inertiaThreshold : CGFloat = 10
                 
                 if (velocity > inertiaThreshold) {
                     self.targetOffset = self.swipeOffset < 0 ? 0 : (self.leftView != nil && self.leftSwipeSettings.keepButtonsSwiped ? self.leftView.bounds.size.width : self.targetOffset)
                 } else if (velocity < -inertiaThreshold) {
-                    self.targetOffset = self.swipeOffset > 0 ? 0 : (self.rightView != nil && self.rightSwipeSettings.keepButtonsSwiped ? self.rightView.bounds.size.width : self.targetOffset)
+                    self.targetOffset = self.swipeOffset > 0 ? 0 : (self.rightView != nil && self.rightSwipeSettings.keepButtonsSwiped ? -self.rightView.bounds.size.width : self.targetOffset)
                 }
                 
                 self.targetOffset = self.filterSwipe(offset: self.targetOffset)
@@ -807,7 +817,7 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
             if (fabs(translation.y) > fabs(translation.x)) {
                 return false
             }
-            if self.swipeView != nil {
+            if self.swipeView != nil && self.tapRecognizer != nil {
                 let point : CGPoint = self.tapRecognizer.location(in: self.swipeView)
                 if self.swipeView.bounds.contains(point) {
                     return self.allowsSwipeWhenTappingButtons
@@ -831,6 +841,10 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
                     self.allowSwipeLeftToRight = self.leftButtons.count > 0
                     self.allowSwipeRightToLeft = self.rightButtons.count > 0
                 }
+            } else {
+                self.fetchButtonsIfNeeded()
+                self.allowSwipeLeftToRight = self.leftButtons.count > 0
+                self.allowSwipeRightToLeft = self.rightButtons.count > 0
             }
             return (self.allowSwipeLeftToRight && translation.x > 0) || (self.allowSwipeRightToLeft && translation.x < 0);
             
