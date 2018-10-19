@@ -163,8 +163,8 @@ class WWSwipeView : UIView {
                     let width : CGFloat = self.leftView.bounds.size.width
                     self.leftView.setSafeInset(safeInsets.left, extendEdgeButton: self.leftSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
                     
-                    if self.swipeOffset > 0 && self.leftView.bounds.size.width != width {
-                        self.swipeOffset += self.leftView.bounds.size.width - width
+                    if self._swipeOffset > 0 && self.leftView.bounds.size.width != width {
+                        self._swipeOffset += self.leftView.bounds.size.width - width
                     }
                 }
                 
@@ -172,8 +172,8 @@ class WWSwipeView : UIView {
                     let width : CGFloat = self.rightView.bounds.size.width
                     self.rightView.setSafeInset(safeInsets.right, extendEdgeButton: self.rightSwipeSettings.expandLastButtonBySafeAreaInsets, isRTL: self.isRTL())
                     
-                    if self.swipeOffset < 0 && self.rightView.bounds.size.width != width {
-                        self.swipeOffset -= self.rightView.bounds.size.width - width
+                    if self._swipeOffset < 0 && self.rightView.bounds.size.width != width {
+                        self._swipeOffset -= self.rightView.bounds.size.width - width
                     }
                 }
                 
@@ -207,7 +207,7 @@ class WWSwipeView : UIView {
     }
     
     func refreshContentView() {
-        let currentOffset : CGFloat = self.swipeOffset
+        let currentOffset : CGFloat = self._swipeOffset
         let prevValue : Bool = self.triggerStateChanges
         self.triggerStateChanges = false
         self.swipeOffset = 0
@@ -539,7 +539,7 @@ extension WWSwipeView  {
         }
         self.animationCompletion = completion;
         self.triggerStateChanges = false;
-        self.animationData.from = self.swipeOffset;
+        self.animationData.from = self._swipeOffset;
         self.animationData.to = newOffset;
         self.animationData.duration = CFTimeInterval(animation?.duration ?? 0);
         self.animationData.start = 0;
@@ -591,7 +591,8 @@ extension WWSwipeView  {
         let onlyButtons : Bool = activeSettings.onlySwipeButtons
         let safeInsets : UIEdgeInsets = self.getSafeInsets()
         let safeInset : CGFloat = self.isRTL() ? safeInsets.right :  -safeInsets.left
-        self.swipeView.transform = self.swipeView.transform.translatedBy(x: safeInset + (onlyButtons ? 0 : self._swipeOffset), y: 0)
+        
+        self.swipeView.transform = CGAffineTransform(translationX: safeInset + (onlyButtons ? 0 : self._swipeOffset), y: 0)
         
         //animate existing buttons
         let but: [WWSwipeViewButtonView?] = [self.leftView , self.rightView]
@@ -603,7 +604,7 @@ extension WWSwipeView  {
                 continue
             }
             let translation : CGFloat = min(offset, view.bounds.size.width) * sign + settings[i].offset * sign
-            view.transform = view.transform.translatedBy(x: translation, y: 0)
+            view.transform = CGAffineTransform(translationX: translation, y: 0)
             
             if view != activeButtons {
                 continue
@@ -626,7 +627,7 @@ extension WWSwipeView  {
     }
     
     func hideSwipe(animated: Bool, completion: ((Bool) ->Void)? = nil) {
-        let animation : WWSwipeViewAnimation? = animated ? (self.swipeOffset > 0 ? self.leftSwipeSettings.hideAnimation : self.rightSwipeSettings.hideAnimation) : nil
+        let animation : WWSwipeViewAnimation? = animated ? (self._swipeOffset > 0 ? self.leftSwipeSettings.hideAnimation : self.rightSwipeSettings.hideAnimation) : nil
         self.setSwipeOffset(newOffset: 0, animation: animation, completion: completion)
     }
     
@@ -674,7 +675,7 @@ extension WWSwipeView  {
             self.triggerStateChanges = true
         }
         self.swipeOffset = self.animationData.animation.value(elapsed: CGFloat(elapsed), duration: self.animationData.duration, from: self.animationData.from, to: self.animationData.to)
-        self.setSwipeOffset(newOffset: self.swipeOffset)
+        self.setSwipeOffset(newOffset: self._swipeOffset)
         if (completed) {
             timer.invalidate()
             self.invalidateDisplayLink()
@@ -733,9 +734,9 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
             }
             self.createSwipeViewIfNeeded()
             self.panStartPoint = current
-            self.panStartOffset = self.swipeOffset
-            if self.swipeOffset != 0 {
-                self.firstSwipeState = self.swipeOffset > 0 ? .swipingLeftToRight : .swipingRightToLeft
+            self.panStartOffset = self._swipeOffset
+            if self._swipeOffset != 0 {
+                self.firstSwipeState = self._swipeOffset > 0 ? .swipingLeftToRight : .swipingRightToLeft
             }
 //            if !self.allowsMultipleSwipe {
 //                if let cells = self.parentTable()?.visibleCells {
@@ -756,7 +757,7 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
             let expansion : WWSwipeViewButtonView! = self.activeExpansion
             if expansion != nil {
                 let expandedButton : UIView! = expansion.getExpandedButton()
-                let expSettings : WWSwipeViewExpansionSettings = self.swipeOffset > 0 ? self.leftExpansion : self.rightExpansion
+                let expSettings : WWSwipeViewExpansionSettings = self._swipeOffset > 0 ? self.leftExpansion : self.rightExpansion
                 var backgroundColor : UIColor? = nil
                 if (!expSettings.fillOnTrigger && expSettings.expansionColor != nil) {
                     backgroundColor = expansion.backgroundColorCopy
@@ -779,17 +780,17 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
                 let inertiaThreshold : CGFloat = 10
                 
                 if (velocity > inertiaThreshold) {
-                    self.targetOffset = self.swipeOffset < 0 ? 0 : (self.leftView != nil && self.leftSwipeSettings.keepButtonsSwiped ? self.leftView.bounds.size.width : self.targetOffset)
+                    self.targetOffset = self._swipeOffset < 0 ? 0 : (self.leftView != nil && self.leftSwipeSettings.keepButtonsSwiped ? self.leftView.bounds.size.width : self.targetOffset)
                 } else if (velocity < -inertiaThreshold) {
-                    self.targetOffset = self.swipeOffset > 0 ? 0 : (self.rightView != nil && self.rightSwipeSettings.keepButtonsSwiped ? -self.rightView.bounds.size.width : self.targetOffset)
+                    self.targetOffset = self._swipeOffset > 0 ? 0 : (self.rightView != nil && self.rightSwipeSettings.keepButtonsSwiped ? -self.rightView.bounds.size.width : self.targetOffset)
                 }
                 
                 self.targetOffset = self.filterSwipe(offset: self.targetOffset)
-                let settings : WWSwipeViewSettings = self.swipeOffset > 0 ? self.leftSwipeSettings : self.rightSwipeSettings
+                let settings : WWSwipeViewSettings = self._swipeOffset > 0 ? self.leftSwipeSettings : self.rightSwipeSettings
                 var animation : WWSwipeViewAnimation
                 if self.targetOffset == 0 {
                     animation = settings.hideAnimation
-                } else if fabs(self.swipeOffset) > fabs(self.targetOffset) {
+                } else if fabs(self._swipeOffset) > fabs(self.targetOffset) {
                     animation = settings.stretchAnimation
                 } else {
                     animation = settings.showAnimation
@@ -823,7 +824,7 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
                     return self.allowsSwipeWhenTappingButtons
                 }
             }
-            if self.swipeOffset != 0 {
+            if self._swipeOffset != 0 {
                 return false
             }
             
@@ -860,14 +861,14 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
 //MARK: Accessibility
 extension WWSwipeView {
     override func accessibilityElementCount() -> Int {
-        return self.swipeOffset == 0 ? super.accessibilityElementCount() : 1
+        return self._swipeOffset == 0 ? super.accessibilityElementCount() : 1
     }
     
     override func accessibilityElement(at index: Int) -> Any? {
-        return self.swipeOffset == 0 ? super.accessibilityElement(at: index) : self
+        return self._swipeOffset == 0 ? super.accessibilityElement(at: index) : self
     }
     
     override func index(ofAccessibilityElement element: Any) -> Int {
-        return self.swipeOffset == 0 ? super.index(ofAccessibilityElement: element) : 0
+        return self._swipeOffset == 0 ? super.index(ofAccessibilityElement: element) : 0
     }
 }
