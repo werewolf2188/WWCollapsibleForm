@@ -19,9 +19,10 @@ public class WWOptionViewItem : NSObject {
     
     public var backgroundColor : UIColor? {
         didSet {
-            if self.backgroundColor != nil {
+            if self.backgroundColor != nil && optionView != nil{
                 self.optionView.backgroundColor = self.backgroundColor
             }
+            
         }
     }
     public var title : String! {
@@ -83,14 +84,15 @@ public class WWOptionViewItem : NSObject {
         return WWOptionButton(option: self)
     }
     
-    private func initialize(title: String, backgroundColor: UIColor? = nil, image : UIImage? = nil, insets : UIEdgeInsets?) {
+    private func initialize(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, insets : UIEdgeInsets?) {
         self.title = title
         self.backgroundColor = backgroundColor
         self.image = image
         self.insets = insets
+        
     }
     
-    public init(title: String, backgroundColor: UIColor? = nil, image : UIImage? = nil, padding : CGFloat = -1) {
+    public init(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, padding : CGFloat = -1) {
         super.init()
         var insets : UIEdgeInsets?
         if padding > -1 {
