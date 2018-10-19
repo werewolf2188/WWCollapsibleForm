@@ -14,7 +14,7 @@ class WWOptionButton: UIButton {
     
     var tempTitleEdgeInsets : UIEdgeInsets!
     var tempImageEdgeInsets : UIEdgeInsets!
-    var buttonWidth : CGFloat = 50
+    var buttonWidth : CGFloat = 0
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
