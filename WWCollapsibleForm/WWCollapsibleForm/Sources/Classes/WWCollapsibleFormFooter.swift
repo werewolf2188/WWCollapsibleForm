@@ -15,6 +15,7 @@ class WWCollapsibleFormFooter : UIView {
     private var heightC: NSLayoutConstraint!
     private var didSetupConstraints = false
     private var subFooter : UIView!
+    internal var isOnScreen : Bool = false
     
     private override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,5 +52,26 @@ class WWCollapsibleFormFooter : UIView {
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         self.addConstraints()
+    }
+    
+    func move(show: Bool, animated: Bool = true) {
+        if show && !self.isOnScreen{
+            self.isOnScreen = true
+            self.bottomC.constant = 0
+        } else if !show && self.isOnScreen {
+            self.isOnScreen = false
+            self.bottomC.constant = self.subFooter.frame.height
+        } else {
+            return
+        }
+        
+        if (animated) {
+            UIView.animate(withDuration: CATransaction.animationDuration(), animations: {
+                self.superview?.layoutIfNeeded()
+            })
+        }
+        else {
+            self.superview?.layoutIfNeeded()
+        }
     }
 }
