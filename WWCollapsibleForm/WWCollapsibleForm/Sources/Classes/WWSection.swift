@@ -171,10 +171,10 @@ public class WWSection : NSObject {
     
     internal func removeItem(form: WWCollapsibleForm, indexPath: IndexPath, dataObject: WWDataObject) {
         if (!(dataObject is WWSubGroupDataObject)) {
-            //One item
             self.removeOneItem(form: form, indexPath: indexPath, dataObject: dataObject)
+        } else if let subGroupDataObject = dataObject as? WWSubGroupDataObject {
+            self.removeGroupItem(form: form, indexPath: indexPath, dataObject: subGroupDataObject)
         }
-        print("delete")
     }
     
     private func removeOneItem(form: WWCollapsibleForm, indexPath: IndexPath, dataObject: WWDataObject) {
@@ -187,17 +187,61 @@ public class WWSection : NSObject {
         
         if dataIndex != -1 && viewIndex != -1 {
             self.data.remove(at: dataIndex)
-            let tempIndexPath : IndexPath = (self.views[viewIndex].view as? WWItemView)?.indexPath ?? IndexPath(row: -1, section: self.section)
             self.views.remove(at: viewIndex)
             self.views.forEach { (viewInfo) in
                 if let itemView = viewInfo.view as? WWItemView {
-                    if itemView.indexPath.row > tempIndexPath.row {
+                    if itemView.indexPath.row > indexPath.row {
                         itemView.indexPath = IndexPath(row: itemView.indexPath.row - 1, section: self.section)
                     }
                 }
             }
             form.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+    }
+    
+    private func removeGroupItem(form: WWCollapsibleForm, indexPath: IndexPath, dataObject: WWSubGroupDataObject) {
+        let dataIndex : Int = self.data.firstIndex { (object) -> Bool in
+            return object == dataObject
+            } ?? -1
+        var viewIndex : [Int] = [self.views.firstIndex { (object) -> Bool in
+            return object.data == dataObject
+            } ?? -1]
+        if dataIndex != -1 && viewIndex[0] != -1 {
+            var tempIndexPath : [IndexPath] = [indexPath]
+            viewIndex.append(contentsOf: self.getViewIndexes(dataObjects: dataObject.data))
+            for index in viewIndex {
+                if index == viewIndex[0] {
+                    continue
+                }
+                tempIndexPath.append((self.views[index].view as? WWItemView)?.indexPath ?? IndexPath(row: -1, section: self.section))
+            }
+            tempIndexPath.sort()
+            self.data.remove(at: dataIndex)
+            for index in viewIndex.reversed() {
+                self.views.remove(at: index)
+            }
+            self.views.forEach { (viewInfo) in
+                if let itemView = viewInfo.view as? WWItemView, let lastIndexPath = tempIndexPath.last {
+                    if itemView.indexPath.row > lastIndexPath.row {
+                        itemView.indexPath = IndexPath(row: itemView.indexPath.row - tempIndexPath.count, section: self.section)
+                    }
+                }
+            }
+            form.tableView.deleteRows(at: tempIndexPath, with: .automatic)
+        }
+    }
+    
+    private func getViewIndexes(dataObjects : [WWDataObject]) -> [Int] {
+        var viewIndex : [Int] = []
+        for dataObject in dataObjects {
+            viewIndex.append(self.views.firstIndex { (object) -> Bool in
+                return object.data == dataObject
+                } ?? -1)
+            if let subGroupDataObject = dataObject as? WWSubGroupDataObject{
+                viewIndex.append(contentsOf: self.getViewIndexes(dataObjects: subGroupDataObject.data))
+            }
+        }
+        return viewIndex
     }
     
     public convenience init(header: WWViewRepresentation?, template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
