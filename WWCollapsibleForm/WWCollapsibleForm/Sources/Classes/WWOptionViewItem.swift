@@ -84,27 +84,27 @@ public class WWOptionViewItem : NSObject {
         return WWOptionButton(option: self)
     }
     
-    private func initialize(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, insets : UIEdgeInsets?) {
+    private func initialize(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, insets : UIEdgeInsets?, side: WWOptionViewItemSide) {
         self.title = title
         self.backgroundColor = backgroundColor
         self.image = image
         self.insets = insets
-        
+        self.side = side
     }
     
-    public init(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, padding : CGFloat = -1) {
+    public init(title: String, backgroundColor: UIColor? = UIColor.blue, image : UIImage? = nil, padding : CGFloat = -1, side: WWOptionViewItemSide = .right) {
         super.init()
         var insets : UIEdgeInsets?
         if padding > -1 {
             self.padding = padding
             insets = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
         }
-        self.initialize(title: title, backgroundColor: backgroundColor, image: image, insets: insets)
+        self.initialize(title: title, backgroundColor: backgroundColor, image: image, insets: insets, side: side)
     }
 
-    public init(title: String, backgroundColor: UIColor? = nil, image : UIImage? = nil, insets : UIEdgeInsets?) {
+    public init(title: String, backgroundColor: UIColor? = nil, image : UIImage? = nil, insets : UIEdgeInsets?, side: WWOptionViewItemSide = .right) {
         super.init()
-        self.initialize(title: title, backgroundColor: backgroundColor, image: image, insets: insets)
+        self.initialize(title: title, backgroundColor: backgroundColor, image: image, insets: insets, side: side)
     }
     
     public override var hash: Int {

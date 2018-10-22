@@ -61,3 +61,41 @@ open class WWItemView : UIView, WWStatusApplier {
         self.reference.collapse(indexPath: indexPath)
     }
 }
+
+extension WWItemView : WWSwipeViewDelegate {
+    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection, from point: CGPoint) -> Bool? {
+        return nil
+    }
+    
+    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection) -> Bool? {
+        return nil
+    }
+    
+    func didChangeSwipeState(_ swipeView: WWSwipeView, state: WWSwipeViewState, isGestureActive: Bool) {
+        
+    }
+    
+    func tappedButtonAtIndex(_ swipeView: WWSwipeView, index: Int, direction: WWSwipeViewDirection, fromExpansion: Bool) -> Bool {
+        let section : WWSection = self.reference.sections[self.indexPath.section]
+        let dataObject : WWDataObject = section.getDataObject(row: self.indexPath.row)
+        let option : WWOptionViewItem =  dataObject.options.filter({ $0.side.rawValue == direction.rawValue})[index]
+        reference.formDelegate?.optionSelected?(option: option, data: dataObject, section: self.indexPath.section)
+        return true
+    }
+    
+    func canSwipe(_ swipeView: WWSwipeView, direction: WWSwipeViewDirection, setting: WWSwipeViewSettings, expansionSettings: WWSwipeViewExpansionSettings) -> [UIView]? {
+        return nil
+    }
+    
+    func shouldHideSwipeOnTap(_ swipeView: WWSwipeView, point: CGPoint) -> Bool {
+        return true
+    }
+    
+    func swipeTableCellWillBeginSwiping(_ swipeView: WWSwipeView) {
+        
+    }
+    
+    func swipeTableCellWillEndSwiping(_ swipeView: WWSwipeView) {
+        
+    }
+}

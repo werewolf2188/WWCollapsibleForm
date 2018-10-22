@@ -141,7 +141,9 @@ public class WWSection : NSObject {
             optionsView.swipeContentView.addSubViewWithConstraints(childrenView)
             optionsView.tag = childrenView.tag
             childrenView.tag = 0
-            
+            if let delegate = childrenView as? WWSwipeViewDelegate {
+                optionsView.delegate = delegate
+            }
             return optionsView
         }
         return childrenView

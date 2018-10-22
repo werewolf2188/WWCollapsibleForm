@@ -262,7 +262,7 @@ extension WWSwipeViewButtonView {
         }
     }
     
-    func getExpandedButton() -> UIView {
+    func getExpandedButton() -> UIView? {
         return self.expandedButton
     }
 }
@@ -355,7 +355,7 @@ extension WWSwipeViewButtonView {
     
     func transition3D(t: CGFloat) {
         let invert : CGFloat = self.fromLeft ? 1.0 : -1.0
-        let angle : CGFloat = CGFloat.pi * (1.0 - t) * invert
+        let angle : CGFloat = (CGFloat.pi / 2) * (1.0 - t) * invert
         var transform : CATransform3D = CATransform3DIdentity
         transform.m34 = -1.0/400.0; //perspective 1/z
         let dx : CGFloat = self.container.bounds.size.width * 0.5 * invert

@@ -557,7 +557,9 @@ extension WWSwipeView  {
     
     func setSwipeOffset(newOffset:CGFloat) {
         let sign : CGFloat = newOffset > 0 ? 1 : -1
-        let activeButtons : WWSwipeViewButtonView! = sign < 0 ? self.rightView : self.leftView
+        let activeButtons : WWSwipeViewButtonView! = sign < 0 ?
+            (self.rightView != nil ? self.rightView : self.leftView) :
+            (self.leftView != nil ? self.leftView : self.rightView)
         let activeSettings : WWSwipeViewSettings = sign < 0 ? self.rightSwipeSettings : self.leftSwipeSettings
         
         if activeSettings.enableSwipeBounces {
@@ -579,6 +581,7 @@ extension WWSwipeView  {
             if self.rightView != nil {
                 self.rightView.endExpansionAnimated(animated: false)
             }
+            self.hideSwipeOverlayIfNeeded()
             self.targetOffset = 0
             self.update(state: .none)
             return
@@ -675,7 +678,6 @@ extension WWSwipeView  {
             self.triggerStateChanges = true
         }
         self.swipeOffset = self.animationData.animation.value(elapsed: CGFloat(elapsed), duration: self.animationData.duration, from: self.animationData.from, to: self.animationData.to)
-        self.setSwipeOffset(newOffset: self._swipeOffset)
         if (completed) {
             timer.invalidate()
             self.invalidateDisplayLink()
@@ -755,8 +757,9 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
             self.swipeOffset = self.filterSwipe(offset: offset)
         } else {
             let expansion : WWSwipeViewButtonView! = self.activeExpansion
-            if expansion != nil {
-                let expandedButton : UIView! = expansion.getExpandedButton()
+            if expansion != nil,
+                let expandedButton : UIView = expansion.getExpandedButton(){
+                
                 let expSettings : WWSwipeViewExpansionSettings = self._swipeOffset > 0 ? self.leftExpansion : self.rightExpansion
                 var backgroundColor : UIColor? = nil
                 if (!expSettings.fillOnTrigger && expSettings.expansionColor != nil) {
@@ -771,7 +774,7 @@ extension WWSwipeView : UIGestureRecognizerDelegate {
                     if autoHide {
                         expansion.endExpansionAnimated(animated: false)
                     }
-                    if (backgroundColor != nil && expandedButton != nil) {
+                    if (backgroundColor != nil) {
                         expandedButton.backgroundColor = backgroundColor;
                     }
                 }
