@@ -82,7 +82,7 @@ extension WWItemView : WWSwipeViewDelegate {
         if option != dataObject.deleteOption {
             reference.formDelegate?.optionSelected?(option: option, data: dataObject, section: self.indexPath.section)
         } else {
-            print("delete")
+            section.removeItem(form: self.reference, indexPath: self.indexPath, dataObject: dataObject)
         }
         return true
     }

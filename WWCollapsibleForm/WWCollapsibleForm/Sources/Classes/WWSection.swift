@@ -169,6 +169,37 @@ public class WWSection : NSObject {
         }
     }
     
+    internal func removeItem(form: WWCollapsibleForm, indexPath: IndexPath, dataObject: WWDataObject) {
+        if (!(dataObject is WWSubGroupDataObject)) {
+            //One item
+            self.removeOneItem(form: form, indexPath: indexPath, dataObject: dataObject)
+        }
+        print("delete")
+    }
+    
+    private func removeOneItem(form: WWCollapsibleForm, indexPath: IndexPath, dataObject: WWDataObject) {
+        let dataIndex : Int = self.data.firstIndex { (object) -> Bool in
+            return object == dataObject
+            } ?? -1
+        let viewIndex : Int = self.views.firstIndex { (object) -> Bool in
+            return object.data == dataObject
+            } ?? -1
+        
+        if dataIndex != -1 && viewIndex != -1 {
+            self.data.remove(at: dataIndex)
+            let tempIndexPath : IndexPath = (self.views[viewIndex].view as? WWItemView)?.indexPath ?? IndexPath(row: -1, section: self.section)
+            self.views.remove(at: viewIndex)
+            self.views.forEach { (viewInfo) in
+                if let itemView = viewInfo.view as? WWItemView {
+                    if itemView.indexPath.row > tempIndexPath.row {
+                        itemView.indexPath = IndexPath(row: itemView.indexPath.row - 1, section: self.section)
+                    }
+                }
+            }
+            form.tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
     public convenience init(header: WWViewRepresentation?, template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
         self.init()
         self.header = header
