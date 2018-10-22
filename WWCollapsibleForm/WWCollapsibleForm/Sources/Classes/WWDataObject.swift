@@ -18,6 +18,7 @@ public class WWDataObject : NSObject {
         super.init()
     }
     
+    internal var deleteOption : WWOptionViewItem!
     internal var internalParent : WWSubGroupDataObject?
     public var parent: WWSubGroupDataObject? {
         get {
@@ -27,7 +28,21 @@ public class WWDataObject : NSObject {
     
     var options : [WWOptionViewItem] = []
     
+    public func createDeleteOption(title: String = "Delete", backgroundColor: UIColor? = UIColor.red, image : UIImage? = nil, padding : CGFloat = 10) -> WWOptionViewItem {
+        if deleteOption == nil {
+            deleteOption = WWOptionViewItem(title: title, backgroundColor: backgroundColor, image: image, padding: padding)
+        }
+        
+        return deleteOption
+    }
+    
     public func appendOptions(option : WWOptionViewItem) {
+        if option == deleteOption {
+            let searchedDeleteOption : WWOptionViewItem? = self.options.filter({ $0 == option }).first
+            if searchedDeleteOption != nil {
+                return
+            }
+        }
         self.options.append(option)
     }
     

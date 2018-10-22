@@ -79,7 +79,11 @@ extension WWItemView : WWSwipeViewDelegate {
         let section : WWSection = self.reference.sections[self.indexPath.section]
         let dataObject : WWDataObject = section.getDataObject(row: self.indexPath.row)
         let option : WWOptionViewItem =  dataObject.options.filter({ $0.side.rawValue == direction.rawValue})[index]
-        reference.formDelegate?.optionSelected?(option: option, data: dataObject, section: self.indexPath.section)
+        if option != dataObject.deleteOption {
+            reference.formDelegate?.optionSelected?(option: option, data: dataObject, section: self.indexPath.section)
+        } else {
+            print("delete")
+        }
         return true
     }
     
