@@ -101,18 +101,9 @@ class MenuPresenter : NSObject, MenuOutput, MenuViewEventHandler {
             let presenter : MenuItemPresenter = MenuItemPresenter()
             presenter.item = item
             
-            //FOR TESTING
-//            if (sectionNum == MenuPresenter.BURGER_SECTION && rowCount == 0) {
-//
-//                data.appendOptions(option: data.createDeleteOption())
-//                data.appendOptions(option: WWOptionViewItem(title: "Test1", backgroundColor: UIColor.blue, side: .left))
-//                data.appendOptions(option: WWOptionViewItem(title: "Test2", backgroundColor: UIColor.red, side: .left))
-//                data.appendOptions(option: WWOptionViewItem(title: "Test3", backgroundColor: UIColor.green, side: .left))
-//                
-//                data.appendOptions(option: WWOptionViewItem(title: "Test4", backgroundColor: UIColor.blue, side: .right))
-//                
-//                data.appendOptions(option: WWOptionViewItem(title: "Test6", backgroundColor: UIColor.green, side: .right))
-//            }
+            if (sectionNum == MenuPresenter.BANKPRODUCT_SECTION && rowCount != 0) {
+                data.appendOptions(option: data.createDeleteOption())
+            }
             
             self.rowPresenters.append((section: sectionNum, data: data, presenter: presenter))
             rowCount = rowCount + 1            
