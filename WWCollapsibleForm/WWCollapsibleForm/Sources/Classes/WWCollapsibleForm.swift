@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+extension String: Error {}
+
 public class WWCollapsibleForm : UIView {
     
     var tableView : UITableView!
@@ -20,6 +22,34 @@ public class WWCollapsibleForm : UIView {
 
     public var formDelegate : WWCollapsibleFormDelegate?
     public var collapseDelegate: WWCollapsibleFormCollapseDelegate?
+    
+    internal var footerContainer: WWCollapsibleFormFooter!
+    internal var _footer : UIView?
+    public var footer : UIView? {
+        get {
+            return _footer
+        }
+    }
+    
+    public func setFooter(newFooter: UIView?) throws {
+        if _footer != nil && _footer != newFooter {
+            _footer?.removeFromSuperview()
+            
+        }
+        if footerContainer != nil {
+            footerContainer.removeFromSuperview()
+            footerContainer = nil
+        }
+        if let frame = newFooter?.frame,
+            frame.size.height == 0{
+            throw "Height cannot be 0"
+        }
+        _footer = newFooter
+        
+        if let f = _footer {
+            self.footerContainer = WWCollapsibleFormFooter(subView: f, superView: self)
+        }
+    }
     
     private func initialize() {
         self.tableView = UITableView(frame: self.bounds, style: .grouped)
@@ -41,6 +71,9 @@ public class WWCollapsibleForm : UIView {
     public override func didMoveToSuperview() {
         self.tableView.frame = self.bounds
         self.addSubViewWithConstraints(self.tableView)
+        if (self.footerContainer != nil) {
+            self.bringSubview(toFront: self.footerContainer)
+        }
         self.tableView.separatorStyle = .none
         self.tableView.dataSource = self.privateForm
         self.tableView.delegate = self.privateForm
