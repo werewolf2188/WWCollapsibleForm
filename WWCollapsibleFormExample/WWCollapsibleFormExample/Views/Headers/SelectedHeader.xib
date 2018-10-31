@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -44,6 +44,9 @@
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJb-Sg-j9W">
                             <rect key="frame" x="60" y="0.0" width="55" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="0fA-XR-Nrc"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -67,7 +70,6 @@
                 <constraint firstItem="xvd-U8-i8W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="PcK-em-Yii"/>
                 <constraint firstItem="xvd-U8-i8W" firstAttribute="top" secondItem="SYI-ix-x1W" secondAttribute="bottom" constant="10" id="aeN-Fq-ztw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vdV-D2-vdO" secondAttribute="trailing" constant="30" id="jBV-wa-LuA"/>
-                <constraint firstAttribute="bottom" secondItem="xvd-U8-i8W" secondAttribute="bottom" constant="20" symbolic="YES" id="lWO-8K-smO"/>
                 <constraint firstItem="SYI-ix-x1W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="uJJ-SZ-JYa"/>
                 <constraint firstItem="vdV-D2-vdO" firstAttribute="top" secondItem="OJd-mY-tH9" secondAttribute="bottom" constant="16" id="vav-JL-DZ7"/>
             </constraints>

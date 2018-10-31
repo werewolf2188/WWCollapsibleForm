@@ -26,7 +26,8 @@ class WWCollapsibleFormFooter : UIView {
     }
     
     convenience init(subView: UIView, superView: UIView) {
-        self.init(frame: CGRect(x: 0, y: UIScreen.main.bounds.height + subView.frame.height, width: UIScreen.main.bounds.width, height: subView.frame.height))
+        self.init(frame: CGRect.zero)
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.subFooter = subView
         superView.addSubview(self)
     }
@@ -52,6 +53,10 @@ class WWCollapsibleFormFooter : UIView {
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         self.addConstraints()
+    }
+    
+    func getHeight() -> CGFloat {
+        return self.heightC.constant
     }
     
     func move(show: Bool, animated: Bool = true) {

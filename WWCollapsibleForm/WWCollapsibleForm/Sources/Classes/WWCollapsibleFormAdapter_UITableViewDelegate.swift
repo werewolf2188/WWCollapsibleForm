@@ -15,6 +15,10 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
             }.first?.section ?? -1
     }
     
+    internal func areAllSelected() -> Bool {
+        return self.sections.filter({$0.status == .selected}).count == self.sections.count
+    }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let view = self.sections[indexPath.section].addView(form: self.publicForm, cell: cell, row: indexPath.row) {
             self.formDelegate?.modifyItem(item: view, data: self.sections[indexPath.section].getDataObject(row: indexPath.row), section: indexPath.section)
@@ -57,6 +61,12 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if (self.sections[section].status == .selected) {
+            
+            if (self.areAllSelected() && self.publicForm.footer != nil && section == self.sections.count - 1
+                && self.sections[section].selectedHeader?.height != nil
+                && self.sections[section].selectedHeader?.height != UITableViewAutomaticDimension) {
+                return ((self.sections[section].selectedHeader?.height ?? 0) + self.publicForm.footerContainer.getHeight())
+            }
             return self.sections[section].selectedHeader?.height ?? UITableViewAutomaticDimension // Improve
         }
         return self.sections[section].header?.height ?? UITableViewAutomaticDimension // Improve
@@ -84,5 +94,19 @@ extension WWCollapsibleFormAdapter : UITableViewDelegate {
             self.tableView.reloadRows(at: items, with: .bottom)
             self.tableView.endUpdates()
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if (self.areAllSelected() && self.publicForm.footer != nil) {
+            let velocity : CGPoint = self.tableView.panGestureRecognizer.velocity(in: self.publicForm)
+            if velocity.y < 0 && !self.publicForm.footerContainer.isOnScreen {
+                self.publicForm.footerContainer.move(show: true)
+            }
+            else if velocity.y > 0 && self.publicForm.footerContainer.isOnScreen {
+                self.publicForm.footerContainer.move(show: false)
+            }
+        }
+        
     }
 }
