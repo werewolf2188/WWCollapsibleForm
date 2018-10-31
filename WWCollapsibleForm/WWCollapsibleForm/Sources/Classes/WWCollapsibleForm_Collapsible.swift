@@ -34,9 +34,11 @@ extension WWCollapsibleForm {
                 self.collapseDelegate?.didCollapse(section: section, form: self)
             } else {
                 if self.footer != nil {
-                    self.footerContainer.move(show: true)
+                    self.footerContainer.move(show: true, animated: self.configuration.animateFooter)
+                    //BUG HERE
                     let bottomOffset : CGPoint = CGPoint(x: 0, y: self.tableView.contentSize.height - self.tableView.bounds.size.height - self.footerContainer.getHeight() / 2)
-                    self.tableView.setContentOffset(bottomOffset, animated: true)
+                    self.tableView.setContentOffset(bottomOffset, animated: self.configuration.animateFooter)
+                    //
                 }               
             }
         }
@@ -53,7 +55,7 @@ extension WWCollapsibleForm {
     public func expand(section : Int) {
         self.collapseDelegate?.willExpand(section: section, form: self)
         if self.footer != nil && self.footerContainer.isOnScreen {
-            self.footerContainer.move(show: false)
+            self.footerContainer.move(show: false, animated: self.configuration.animateFooter)
         }
         
         CATransaction.begin()

@@ -13,15 +13,15 @@ extension String: Error {}
 
 public class WWCollapsibleForm : UIView {
     
+    var privateForm : WWCollapsibleFormAdapter!
     var tableView : UITableView!
     var sections : [WWSection] = []
     let cellString : String = "cell"
-    let minimumFooterHeight : CGFloat = 20
     let itemTag : Int = 1000
-    var privateForm : WWCollapsibleFormAdapter!
 
     public var formDelegate : WWCollapsibleFormDelegate?
     public var collapseDelegate: WWCollapsibleFormCollapseDelegate?
+    public var configuration : WWCollapsibleFormConfiguration = WWCollapsibleFormConfiguration()
     
     internal var footerContainer: WWCollapsibleFormFooter!
     internal var _footer : UIView?
@@ -54,8 +54,8 @@ public class WWCollapsibleForm : UIView {
     private func initialize() {
         self.tableView = UITableView(frame: self.bounds, style: .grouped)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellString)
+        self.tableView.backgroundColor = self.configuration.containerBackgroundColor
         self.privateForm = WWCollapsibleFormAdapter(form: self)
-        
     }
     
     public override init(frame: CGRect) {

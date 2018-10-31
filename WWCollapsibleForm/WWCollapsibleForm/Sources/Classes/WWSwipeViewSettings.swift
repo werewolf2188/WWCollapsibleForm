@@ -45,6 +45,4 @@ class WWSwipeViewSettings : NSObject {
     
     var swipeBounceRate : CGFloat = 1.0
     var allowsButtonsWithDifferentWidth : Bool = false
-    
-    
 }

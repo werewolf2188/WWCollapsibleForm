@@ -114,7 +114,7 @@ public class WWSection : NSObject {
                                                                             bottom: 0,
                                                                             right: 0))
         cell.contentView.backgroundColor = childrenView.backgroundColor
-        self.setSeparator(childrenView: childrenView, row: row)
+        self.setSeparator(childrenView: childrenView, row: row, configuration: form.configuration)
         
         if let subGroup = self.views[row].data as? WWSubGroupDataObject,
             subGroup.collapse == .byButton {
@@ -274,12 +274,12 @@ public class WWSection : NSObject {
         self.selectedHeader = selectedHeader
     }
     
-    private func setSeparator(childrenView: UIView, row: Int) {
+    private func setSeparator(childrenView: UIView, row: Int, configuration: WWCollapsibleFormConfiguration) {
         //It does not have any parents
         childrenView.removeSeparator()
         if (self.views.filter({ $0 is WWParentViewInfo }).count == 0) {
             if (row != self.views.count - 1) {
-                UIView.addSeparator(subView: childrenView)
+                UIView.addSeparator(subView: childrenView, color: configuration.separatorColor, leading: configuration.separatorLeading, trailing: configuration.separatorTrailing)
             }
         } else {
             let numberOfParents : Int = self.views.filter({ $0 is WWParentViewInfo }).count
@@ -290,11 +290,11 @@ public class WWSection : NSObject {
                     if let parent = element as? WWParentViewInfo,
                         let indexOfParent = self.views.firstIndex(of: self.views[row]),
                         parent.isCollapsed && indexOfParent < (numberOfParents - 1) {
-                        UIView.addSeparator(subView: childrenView)
+                        UIView.addSeparator(subView: childrenView, color: configuration.separatorColor, leading: configuration.separatorLeading, trailing: configuration.separatorTrailing)
                     } else if let lastIndexPath = (element.parent?.children?.last?.view as? WWItemView)?.indexPath,
                         let indexPath = (element.view as? WWItemView)?.indexPath,
                         indexPath != lastIndexPath {
-                        UIView.addSeparator(subView: childrenView)
+                        UIView.addSeparator(subView: childrenView, color: configuration.separatorColor, leading: configuration.separatorLeading, trailing: configuration.separatorTrailing)
                     }
                 }
             }

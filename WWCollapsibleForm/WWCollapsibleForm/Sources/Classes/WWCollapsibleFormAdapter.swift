@@ -36,7 +36,7 @@ class WWCollapsibleFormAdapter : NSObject {
     }
     var minimumFooterHeight : CGFloat {
         get {
-            return self.publicForm.minimumFooterHeight
+            return self.publicForm.configuration.minimumFooterHeight
         }
     }
     var itemTag : Int {
