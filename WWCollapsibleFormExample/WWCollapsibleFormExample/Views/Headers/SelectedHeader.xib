@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SelectedHeader" customModule="WWCollapsibleFormExample" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="136"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="User: Jesus Enrique Ricalde Moises" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYI-ix-x1W">
+                    <rect key="frame" x="30" y="30" width="243" height="26"/>
+                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJd-mY-tH9">
+                    <rect key="frame" x="323" y="27" width="47" height="32"/>
+                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                    <state key="normal" title="Modify">
+                        <color key="titleColor" red="1" green="0.1764705882352941" blue="0.031372549019607843" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="OnModify:" destination="iN0-l3-epB" eventType="touchUpInside" id="SG2-QD-6hn"/>
+                    </connections>
+                </button>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xvd-U8-i8W">
+                    <rect key="frame" x="30" y="66" width="115" height="50"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="epk-9d-Bqm">
+                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="7ck-Sr-bet"/>
+                                <constraint firstAttribute="width" constant="50" id="zed-Yg-c6P"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJb-Sg-j9W">
+                            <rect key="frame" x="60" y="0.0" width="55" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="0fA-XR-Nrc"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdV-D2-vdO">
+                    <rect key="frame" x="320.5" y="75" width="49.5" height="22"/>
+                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="19"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.99607843137254903" green="0.76078431372549016" blue="0.031372549019607843" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="xvd-U8-i8W" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="66" id="07K-XC-XmU"/>
+                <constraint firstItem="OJd-mY-tH9" firstAttribute="centerY" secondItem="SYI-ix-x1W" secondAttribute="centerY" id="593-Fz-o9V"/>
+                <constraint firstItem="OJd-mY-tH9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SYI-ix-x1W" secondAttribute="trailing" constant="50" id="5mg-F5-vIp"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OJd-mY-tH9" secondAttribute="trailing" constant="30" id="I9A-cf-sjB"/>
+                <constraint firstItem="SYI-ix-x1W" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="30" id="O7g-yI-x60"/>
+                <constraint firstItem="xvd-U8-i8W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="PcK-em-Yii"/>
+                <constraint firstItem="xvd-U8-i8W" firstAttribute="top" secondItem="SYI-ix-x1W" secondAttribute="bottom" constant="10" id="aeN-Fq-ztw"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vdV-D2-vdO" secondAttribute="trailing" constant="30" id="jBV-wa-LuA"/>
+                <constraint firstItem="SYI-ix-x1W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="uJJ-SZ-JYa"/>
+                <constraint firstItem="vdV-D2-vdO" firstAttribute="top" secondItem="OJd-mY-tH9" secondAttribute="bottom" constant="16" id="vav-JL-DZ7"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="imageView" destination="epk-9d-Bqm" id="uyu-Ke-GQR"/>
+                <outlet property="modifyButton" destination="OJd-mY-tH9" id="o4H-lc-F4H"/>
+                <outlet property="moneyLabel" destination="vdV-D2-vdO" id="Naj-Nf-sNW"/>
+                <outlet property="productName" destination="eJb-Sg-j9W" id="3js-QQ-IU0"/>
+                <outlet property="titleLabel" destination="SYI-ix-x1W" id="Rjb-FK-6VO"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="89"/>
+        </view>
+    </objects>
+</document>
