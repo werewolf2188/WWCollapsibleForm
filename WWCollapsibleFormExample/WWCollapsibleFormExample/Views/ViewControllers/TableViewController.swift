@@ -16,14 +16,12 @@ class ViewController: UIViewController, MenuView {
         super.viewDidLoad()
         self.eventHandler?.loadSections()
         self.form.formDelegate = self
-        //FOR TESTING
-//        let foo =  UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
-//        foo.backgroundColor = UIColor.blue
-//        do {
-//            try self.form.setFooter(newFooter:foo)
-//        } catch {
-//        
-//        }
+        let foo =  Footer.getFooter()
+        do {
+            try self.form.setFooter(newFooter:foo)
+        } catch {
+        
+        }
         //
         // Do any additional setup after loading the view, typically from a nib.
     }

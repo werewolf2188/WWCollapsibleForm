@@ -41,6 +41,8 @@
 		B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */; };
 		B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F05214C446900251E82 /* IUnitOfWork.swift */; };
 		B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */; };
+		C25BBC9B218969070055462A /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BBC9A218969070055462A /* Footer.swift */; };
+		C25BBC9D218969110055462A /* Footer.xib in Resources */ = {isa = PBXBuildFile; fileRef = C25BBC9C218969110055462A /* Footer.xib */; };
 		C286AB472158634E00ACF338 /* AlternateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C286AB462158634E00ACF338 /* AlternateCell.swift */; };
 		C286AB492158635B00ACF338 /* AlternateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C286AB482158635B00ACF338 /* AlternateCell.xib */; };
 /* End PBXBuildFile section */
@@ -108,6 +110,8 @@
 		B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwinjectStoryboard.swift; sourceTree = "<group>"; };
 		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
 		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
+		C25BBC9A218969070055462A /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
+		C25BBC9C218969110055462A /* Footer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Footer.xib; sourceTree = "<group>"; };
 		C286AB462158634E00ACF338 /* AlternateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateCell.swift; sourceTree = "<group>"; };
 		C286AB482158635B00ACF338 /* AlternateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlternateCell.xib; sourceTree = "<group>"; };
 		C67A3BB7330CE3F8A2034D70 /* Pods_WWCollapsibleFormExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWCollapsibleFormExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,6 +293,7 @@
 		B0BE4EEF214C3DEA00251E82 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C25BBC99218968EF0055462A /* Footer */,
 				B017E71F214A16D800353957 /* Cells */,
 				B017E720214A17EF00353957 /* Headers */,
 				B000DEFF21542729003B7886 /* Protocols */,
@@ -338,6 +343,15 @@
 				B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */,
 			);
 			path = Context;
+			sourceTree = "<group>";
+		};
+		C25BBC99218968EF0055462A /* Footer */ = {
+			isa = PBXGroup;
+			children = (
+				C25BBC9A218969070055462A /* Footer.swift */,
+				C25BBC9C218969110055462A /* Footer.xib */,
+			);
+			path = Footer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -429,6 +443,7 @@
 				B0672A04214C303C008D123C /* mcdonalds_menu.json in Resources */,
 				B017E72C214A1C0600353957 /* SelectedHeader.xib in Resources */,
 				C286AB492158635B00ACF338 /* AlternateCell.xib in Resources */,
+				C25BBC9D218969110055462A /* Footer.xib in Resources */,
 				B075F5D22149BD1F00659691 /* LaunchScreen.storyboard in Resources */,
 				B017E728214A1A7700353957 /* CellView.xib in Resources */,
 				B075F5CF2149BD1F00659691 /* Assets.xcassets in Resources */,
@@ -496,6 +511,7 @@
 				B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */,
 				B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */,
 				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
+				C25BBC9B218969070055462A /* Footer.swift in Sources */,
 				B017E726214A19D900353957 /* CellView.swift in Sources */,
 				B075F5CA2149BD1E00659691 /* TableViewController.swift in Sources */,
 				C286AB472158634E00ACF338 /* AlternateCell.swift in Sources */,
