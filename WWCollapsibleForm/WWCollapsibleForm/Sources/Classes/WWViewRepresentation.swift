@@ -8,11 +8,16 @@
 
 import Foundation
 
+/// This class represents a template of a view that will be use during the creation of an item, header or selected header. This only contains the basic information needed for the view to be created.
 public class WWViewRepresentation : NSObject {
+    /// The height of the template. This has to be greater than zero or an automatic dimension.
     public var height : CGFloat = UITableViewAutomaticDimension
     private var bundle : Bundle!
     private var viewName : String!
     
+    /// Instantiates a template based on a view that subclass `WWItemView` with a specific height.
+    /// - Parameter view: An instance of a view that can be used as a template.
+    /// - Parameter height: The height that will be used for that view.
     public init(view: WWItemView, height: CGFloat = UITableViewAutomaticDimension) {
         super.init()
         self.bundle = Bundle(for: type(of: view))
@@ -25,6 +30,8 @@ public class WWViewRepresentation : NSObject {
         }
     }
     
+    /// Instantiates a template based on a view that subclass `WWHeaderView`. It will take the height of the view used in a nib.
+    /// - Parameter headerView: An instance of a view that can be used as a template of the header.
     public init(headerView: WWHeaderView) {
         super.init()
         self.bundle = Bundle(for: type(of: headerView))

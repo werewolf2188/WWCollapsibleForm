@@ -7,6 +7,8 @@
 //
 
 import Foundation
+/// This class helps views to be configured as item of a data object. It gives the basic functionality of what a view can
+/// do. Data object does not have to related to a subclass of this class, but it will definetily help.
 open class WWItemView : UIView, WWStatusApplier {
     
     private var _subGroupButton : UIButton?
@@ -14,13 +16,19 @@ open class WWItemView : UIView, WWStatusApplier {
     internal var reference: WWCollapsibleForm!
     internal var indexPath: IndexPath!
     
+    /// The decorator that will be applied when a section is enabled.
     public var enableDecorator: WWStatusDecorator?
+    /// The decorator that will be applied when a section is disabled.
     public var disableDecorator: WWStatusDecorator?
+    /// If a view becomes the header of a group, this button will be instantiated and it will become useful for modifications
     public var subGroupButton : UIButton? { get { return _subGroupButton } }
     
+    /// If a view becomes the header of a group, the `subGroupButton` property will be instantiated and it will become useful for modifications. This image will be used when the sub groups collapses.
     public var collapseImage : UIImage?
+    /// If a view becomes the header of a group, the `subGroupButton` property will be instantiated and it will become useful for modifications. This image will be used when the sub groups expands.
     public var expandImage : UIImage?
     
+    /// If a view becomes the header of a group, the `subGroupButton` property will be instantiated and it will become useful for modifications. If true, the sub group will collapse, but it is false, it will expand.
     public var isCollapsed : Bool! {
         didSet {
             if (self.isCollapsed){
@@ -57,6 +65,7 @@ open class WWItemView : UIView, WWStatusApplier {
         }
     }
     
+    /// Allows an item to collapse its section.
     public func collapse() {
         self.reference.collapse(indexPath: indexPath)
     }

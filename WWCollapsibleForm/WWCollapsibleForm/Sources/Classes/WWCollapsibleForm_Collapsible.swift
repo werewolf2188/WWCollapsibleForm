@@ -22,6 +22,8 @@ extension WWCollapsibleForm {
         self.collapse(section: indexPath.section)
     }
     
+    /// Allows the form to collapse section by its index.
+    /// - Parameter index: The index of the section to be collapsed.
     public func collapse(section : Int) {
         self.collapseDelegate?.willCollapse(section: section, form: self)
         CATransaction.begin()
@@ -52,6 +54,8 @@ extension WWCollapsibleForm {
         self.expand(section: indexPath.section)
     }
     
+    /// Allows the form to expand section by its index.
+    /// - Parameter index: The index of the section to be expanded.
     public func expand(section : Int) {
         self.collapseDelegate?.willExpand(section: section, form: self)
         if self.footer != nil && self.footerContainer.isOnScreen {

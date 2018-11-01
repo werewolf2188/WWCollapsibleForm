@@ -7,7 +7,10 @@
 //
 
 import Foundation
+
+/// This class represents an item that will use the template of a section.
 public class WWTemplateDataObject : WWDataObject, WWAutoCollapsable {
+    /// If it auto collapses when the item is pressed.
     public var autoCollapse : Bool = true
     public override init() {
         super.init()

@@ -7,15 +7,25 @@
 //
 
 import Foundation
+
+/// This class is the container of all the information regarding a section of a form. It represents a section that can be enabled, disabled or selected during the flow of the form. The form needs to have at least one section to render and the first one will always be enabled while the rest will be disabled.
 public class WWSection : NSObject {
     
+    /// This enumeration represent the different states of a section.
     public enum WWStatus : Int {
+        /// When the state is disabled, the section will called the disable decorator on the headers and items to modify its style accordingly.
         case disabled
+        /// When the state is enabled, the section will called the enable decorator on the headers and items to modify its style accordingly.
         case enabled
+        /// When the state is selected, only the selected header will appear.
         case selected
     }
+    
+    /// Represents the status and any moment. Default: disabled.
     public var status : WWStatus = .disabled
+    /// If the section gets enabled and this propety is true, all subsequent sections will be disabled.
     public var resetOnForward : Bool = false
+    /// If this propety is set to true, and the section is selected, it wont be modified when a section with the property `resetOnForward` at true, gets enabled again.
     public var unmutableOnceSelected : Bool = false
     
     private var _headerView : UIView!
@@ -244,17 +254,28 @@ public class WWSection : NSObject {
         return viewIndex
     }
     
+    /// Initializes a section with a header template, an item template and a selected item template that will be use. The item template will be use only in data objects of type `WWTemplateDataObject`.
+    /// - Parameters:
+    ///     - header: The template that will be used for headers.
+    ///     - template: The template that will be used for items that are related to a data object of type WWTemplateDataObject.
+    ///     - selectedHeader: The template that will be used for selected headers.
     public convenience init(header: WWViewRepresentation?, template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
         self.init()
         self.header = header
         self.initialize(template: template, selectedHeader: selectedHeader)
     }
     
+    /// Initializes a section with an item template and a selected item template that will be use. The item template will be use only in data objects of type `WWTemplateDataObject`.
+    /// - Parameters:
+    ///     - template: The template that will be used for items that are related to a data object of type WWTemplateDataObject.
+    ///     - selectedHeader: The template that will be used for selected headers.
     public convenience init(template: WWViewRepresentation, selectedHeader: WWViewRepresentation) {
         self.init()
         self.initialize(template: template, selectedHeader: selectedHeader)
     }
     
+    /// Adds a new data object to the process. This function should be called during loading time.
+    /// - Parameter data: the data object to be appended.
     public func appendData(data: WWDataObject) {
         
         self.data.append(data)
