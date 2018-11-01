@@ -60,6 +60,8 @@ This object is going to take its own template from a view.
 section.appendData(data: WWNonTemplateDataObject(view: AlternateCell()))
 ```
 
+![](./example_assets/alternate.png)
+
 > The view needs to inherit from `WWItemView`.
 
 ### WWSubGroupDataObject
@@ -72,6 +74,8 @@ subGroup.appendData(object: WWTemplateDataObject())
 subGroup.appendData(object: WWTemplateDataObject())
 section.appendData(data: subGroup)
 ```
+
+![](./example_assets/group.png)
 
 > The views need to inherit from `WWItemView`.
 
@@ -104,6 +108,53 @@ The delete option is a special one, so the form doesn't allow to create one by i
 data.appendOptions(option: data.createDeleteOption())
 ```
 
+![](./example_assets/options.png)
+
 > It can modify every property as any other option, but it won't raise an event when the delete happen.
 
 ### Delegates
+
+There are two important delegates, the form will use to send events to the container or delegate class.
+
+* `WWCollapsibleFormCollapseDelegate`: It allows to inform when a collapse/expand is about to happen or it already happen.
+* `WWCollapsibleFormDelegate`: It sends the header and the items to be modified by the real data, separating the UI from the model. It does not return the index of the item, but rather the data object related to it. The data object works as the index. The functions in this delegate are:
+	* `Modify Header`: When a header needs to relate the model to the view. Gets the header view and the section index.
+	* `Modify Item`: When an item needs to relate the model to the view. Gets the item view, the data object index and the section index.
+	* `Item selected`: It occurs when an item is pressed. Gets the data object index and the section index.
+	* `Option selecred`: When an option of an item gets pressed, this function will return the option pressed. Gets the data object index, the option object index and the section index.
+	
+### Footer
+
+After all sections select an item, a footer can appear from the bottom to allow to show that the flow has ended. In order to add a footer, the form has to called it's function `setFooter`.
+
+```swift
+do {
+	try self.form.setFooter(newFooter:UIView())
+} catch {
+        
+}
+
+```
+
+> It throws an error if the view has a height of 0.
+
+![](./example_assets/footer.png)
+
+## Next steps
+
+The widget still has to go to several changes. Here are the next steps that will occur:
+
+1. Add objects after loading time and animated. These objects are:
+	1. Sections
+	2. Items
+	3. Items inside groups
+	4. Options
+2. Scroll on to the next section after selecting the previous one.
+3. Bug fix
+	 1. The options close if the scroll hides the item and shows it again.
+	 2. The footer shows but the final scroll is scrolling too far.
+4. For the next version, the inner container, which is a UITableView, will be replaced with UIViews and UIStackViews. There's a playground called `WWCollapsibleFormV2` with this ide.
+
+## Revision
+
+* 0.1.0 First commit with initial features.
