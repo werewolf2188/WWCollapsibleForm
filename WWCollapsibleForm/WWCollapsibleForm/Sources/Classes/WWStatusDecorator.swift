@@ -7,15 +7,19 @@
 //
 
 import Foundation
+
+/// A status decorator is a class that will be used to decorate the style of the view and its propeties, whenever a section changes its status.
 public class WWStatusDecorator : NSObject {
     internal var decoratorFunction : ((_:UIView) -> Void)?
     
+    /// Initializes the decorator with a function to be used whenever the decorator is being executed (that is, when the
+    /// section changes state).
     public init(decoratorFunction: @escaping ((_:UIView) -> Void)) {
         super.init()
         self.decoratorFunction = decoratorFunction
     }
     
-    public func decorate(view : UIView) {
+    func decorate(view : UIView) {
         self.decoratorFunction?(view)
     }
 }
