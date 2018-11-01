@@ -142,7 +142,7 @@ do {
 
 > It throws an error if the view has a height of 0.
 
-![](./example_assets/footer.png)
+![](./example_assets/Footer.png)
 
 ## Next steps
 
