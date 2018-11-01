@@ -21,7 +21,7 @@ pod "WWCollapsibleForm"
 
 ## Screenshot
 
-![](./example_assets/WWCollapsibleForm.gif=375x)
+![](./example_assets/WWCollapsibleForm.gif)
 
 ## Basic usage
 
