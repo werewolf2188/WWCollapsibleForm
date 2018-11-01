@@ -1,9 +1,7 @@
 # WWCollapsibleForm
 
 [![Version](https://img.shields.io/cocoapods/v/WWCollapsibleForm.svg?style=flat)](http://cocoapods.org/pods/WWCollapsibleForm)
-7
 [![License](https://img.shields.io/cocoapods/l/WWCollapsibleForm.svg?style=flat)](http://cocoapods.org/pods/WWCollapsibleForm)
-8
 [![Platform](https://img.shields.io/cocoapods/p/WWCollapsibleForm.svg?style=flat)](http://cocoapods.org/pods/WWCollapsibleForm)
 
 Based on the idea of the collapsible panels from jquery ui, and created for the only purpose to build a wizard of steps, the collapsible form helps the user to go into a flow of steps until it finishes the wizard and get all the options selected.
