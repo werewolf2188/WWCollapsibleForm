@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
+			A collapsible form that allows to set sections, select items and show the selected option. Allows different sections with items and subgroups. The items can also have options to work with.
                    DESC
 
   s.homepage     = "https://github.com/werewolf2188/WWCollapsibleForm"
@@ -134,5 +135,6 @@ Pod::Spec.new do |s|
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
+  s.requires_arc = true
 
 end
