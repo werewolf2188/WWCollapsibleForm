@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -38,7 +38,6 @@
 		B0BE4EFD214C420600251E82 /* BankProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFC214C420600251E82 /* BankProduct.swift */; };
 		B0BE4EFF214C428C00251E82 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4EFE214C428C00251E82 /* User.swift */; };
 		B0BE4F01214C42BD00251E82 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F00214C42BD00251E82 /* Database.swift */; };
-		B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */; };
 		B0BE4F06214C446900251E82 /* IUnitOfWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F05214C446900251E82 /* IUnitOfWork.swift */; };
 		B0BE4F09214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */; };
 		C25BBC9B218969070055462A /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BBC9A218969070055462A /* Footer.swift */; };
@@ -107,7 +106,6 @@
 		B0BE4EFC214C420600251E82 /* BankProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankProduct.swift; sourceTree = "<group>"; };
 		B0BE4EFE214C428C00251E82 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B0BE4F00214C42BD00251E82 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwinjectStoryboard.swift; sourceTree = "<group>"; };
 		B0BE4F05214C446900251E82 /* IUnitOfWork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUnitOfWork.swift; sourceTree = "<group>"; };
 		B0BE4F08214C44CD00251E82 /* WWCollapsibleFormExampleContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWCollapsibleFormExampleContext.swift; sourceTree = "<group>"; };
 		C25BBC9A218969070055462A /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
@@ -264,7 +262,6 @@
 				B0BE4EF0214C3DF400251E82 /* Models */,
 				B0BE4EEF214C3DEA00251E82 /* Views */,
 				B075F5C72149BD1E00659691 /* AppDelegate.swift */,
-				B0BE4F02214C438100251E82 /* SwinjectStoryboard.swift */,
 				B075F5CB2149BD1E00659691 /* Main.storyboard */,
 				B075F5CE2149BD1F00659691 /* Assets.xcassets */,
 				B075F5D02149BD1F00659691 /* LaunchScreen.storyboard */,
@@ -467,19 +464,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
-				"${BUILT_PRODUCTS_DIR}/SwinjectStoryboard/SwinjectStoryboard.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectStoryboard.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WWCollapsibleFormExample/Pods-WWCollapsibleFormExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		84219939358BF429E7FF2305 /* [CP] Check Pods Manifest.lock */ = {
@@ -508,7 +502,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0B77BB821547C03006F174A /* MenuHeaderPresenter.swift in Sources */,
-				B0BE4F03214C438200251E82 /* SwinjectStoryboard.swift in Sources */,
 				B0BE4EF9214C3F5A00251E82 /* MultipleSizeProduct.swift in Sources */,
 				B0BE4EF7214C3F1F00251E82 /* ProductSize.swift in Sources */,
 				C25BBC9B218969070055462A /* Footer.swift in Sources */,
