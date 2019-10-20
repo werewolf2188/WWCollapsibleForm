@@ -7,14 +7,61 @@
 //
 
 import UIKit
+import Swinject
 import WWCollapsibleForm
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let container: Container = {
+        let defaultContainer = Container()
+        defaultContainer.register(IUnitOfWork.self) { _ in
+            WWCollapsibleFormExampleContext()
+            }.inObjectScope(.container)
+        
+        defaultContainer.register(MenuProvider.self, factory: { r in
+            let interactor : MenuInteractor = MenuInteractor()
+            interactor.context = r.resolve(IUnitOfWork.self)
+            return interactor
+        }).inObjectScope(.graph)
+        
+        defaultContainer.register(MenuViewEventHandler.self, factory: { r in
+            let presenter : MenuPresenter = MenuPresenter()
+            let provider : MenuProvider? = r.resolve(MenuProvider.self)
+            provider?.output = presenter
+            presenter.menuProvider = provider
+            return presenter
+        }).inObjectScope(.graph)
+        
+        defaultContainer.register(ViewController.self) { r in
+            let storyboard = UIStoryboard.init(name: "Main", bundle: Bundle(for: ViewController.self))
+            let navigationController = storyboard.instantiateInitialViewController() as? UINavigationController
+            let c = navigationController?.topViewController as! ViewController
+            c.navigationItem.hidesBackButton = true
+            let ev : MenuViewEventHandler? = r.resolve(MenuViewEventHandler.self)
+            ev?.view = c
+            c.eventHandler = ev
+            return c
+        }
+        
+        
+        print("")
+        return defaultContainer
+        }()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.makeKeyAndVisible()
+        self.window = window
+
+        let storyboard = UIStoryboard.init(name: "Main", bundle: Bundle(for: ViewController.self))
+        let navigationController = storyboard.instantiateInitialViewController() as? UINavigationController
+        navigationController?.pushViewController(container.resolve(ViewController.self)!, animated: false)
+        // Instantiate the root view controller with dependencies injected by the container.
+        window.rootViewController = navigationController
         return true
     }
 

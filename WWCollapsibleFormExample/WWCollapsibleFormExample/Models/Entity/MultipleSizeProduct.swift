@@ -10,7 +10,7 @@
 import UIKit
 
 class MultipleSizeProduct: Product {
-    let children: [ProductSize]!
+    var children: [ProductSize]!
     
     private enum CodingKeys: String, CodingKey {
         case children
